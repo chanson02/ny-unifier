@@ -1,13 +1,6 @@
 {
-  "Associated Buyers": {
-    "identifier": "column",
-    "args": [
-      1,
-      0,
-      7
-    ]
-  },
   "DPI PNW & Rocky Mountains": {
+    "name_id": "DPI PNW & Rocky Mountains",
     "identifier": "column",
     "args": [
       1,
@@ -16,6 +9,7 @@
     ]
   },
   "DPI West": {
+    "name_id": "DPI West",
     "identifier": "column",
     "args": [
       1,
@@ -23,15 +17,8 @@
       6
     ]
   },
-  "Baldor YOY": {
-    "identifier": "int",
-    "args": [
-      3,
-      0,
-      0
-    ]
-  },
   "KeHE Full POD Vendor Report": {
+    "name_id": "KeHE Full POD Vendor Report",
     "identifier": "column",
     "args": [
       11,
@@ -39,15 +26,17 @@
       11
     ]
   },
-  "Hella Direct Orders": {
+  "Eagle Rock - Hella Depletions - 12.15": {
+    "name_id": "Eagle Rock - Hella Depletions - 12.15",
     "identifier": "column",
     "args": [
-      0,
       1,
-      4
+      0,
+      2
     ]
   },
   "Eagle Rock - Hella Depletions": {
+    "name_id": "Eagle Rock - Hella Depletions",
     "identifier": "column",
     "args": [
       1,
@@ -56,6 +45,7 @@
     ]
   },
   "UNFI Nationwide Individual by Store Sales Report": {
+    "name_id": "UNFI Nationwide Individual by Store Sales Report",
     "identifier": "column",
     "args": [
       1,
@@ -64,6 +54,7 @@
     ]
   },
   "Whole Foods Stop Selling stores": {
+    "name_id": "Whole Foods Stop Selling stores",
     "identifier": "column",
     "args": [
       0,
@@ -72,6 +63,7 @@
     ]
   },
   "Momentum": {
+    "name_id": "Momentum",
     "identifier": "column",
     "args": [
       1,
@@ -80,6 +72,7 @@
     ]
   },
   "Faire List": {
+    "name_id": "Faire List",
     "identifier": "column",
     "args": [
       0,
@@ -88,6 +81,7 @@
     ]
   },
   "SGWS Off-Premise Accounts": {
+    "name_id": "SGWS Off-Premise Accounts",
     "identifier": "column",
     "args": [
       0,
@@ -96,6 +90,7 @@
     ]
   },
   "Ruby Wine Account List": {
+    "name_id": "Ruby Wine Account List",
     "identifier": "column",
     "args": [
       0,
@@ -104,6 +99,7 @@
     ]
   },
   "FEDWAY ASSOCIATES": {
+    "name_id": "FEDWAY ASSOCIATES",
     "identifier": "column",
     "args": [
       1,
@@ -112,11 +108,57 @@
     ]
   },
   "Whole Foods Top Selling stores": {
+    "name_id": "Whole Foods Top Selling stores",
     "identifier": "column",
     "args": [
       0,
       1,
       2
+    ]
+  },
+  "Associated Buyers": {
+    "name_id": "Associated Buyers",
+    "identifier": "column",
+    "args": [
+      1,
+      1,
+      7
+    ]
+  },
+  "SGWS Nationwide Individual by Store Sales Report": {
+    "name_id": "SGWS Nationwide Individual by Store Sales Report",
+    "identifier": "skip",
+    "args": []
+  },
+  "Walmart": {
+    "name_id": "Walmart",
+    "identifier": "int",
+    "args": [
+      0,
+      0,
+      1,
+      6,
+      9
+    ]
+  },
+  "Baldor YOY": {
+    "name_id": "Baldor YOY",
+    "identifier": "int",
+    "args": [
+      0,
+      0,
+      3,
+      2,
+      11
+    ]
+  },
+  "Hella Direct Orders": {
+    "name_id": "Hella Direct Orders",
+    "identifier": "column",
+    "args": [
+      0,
+      0,
+      4
     ]
   }
 }

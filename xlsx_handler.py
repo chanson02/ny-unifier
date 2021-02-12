@@ -3,16 +3,25 @@ import json
 import os
 from collections import Counter
 
+import pdb
+
 
 class Handler:
     def __init__(self, path):
         self.filename = os.path.split(path)[1]
-        self.sheet = pd.ExcelFile(path).parse()
+
+        try:
+            self.sheet = pd.ExcelFile(path).parse()
+        except Exception as e:
+            self.type = {"identifier":"skip", "args":["Error loading file"], "name_id":"error"}
+            self.payload = self.empty_payload()
+            self.payload["error"] = str(e)
+            return
+
         self.sheet = self.strip_null(self.sheet)
         self.type = self.load_filetype()
         self.payload = self.empty_payload()
         self.parse()
-        # self.write()
 
     def __repr__(self):
         return f"{self.filename} file handler"
@@ -42,12 +51,14 @@ class Handler:
         if user_in != "":
             name_id = user_in
             print(f"Name Identifier: {name_id}")
+        new_type["name_id"] = name_id
 
         self.print_head()
 
         identifiers = {
+            "skip":"No arguments required: press enter to continue",
             "column":"start row, customer column, product column",
-            "int":"start row, products row, customer column"
+            "int":"products_row, cust_column, start_row, start_column, end_column"
         }
         keys = list(identifiers.keys())
         for index in range(len(keys)):
@@ -59,6 +70,12 @@ class Handler:
         filetypes[name_id] = new_type
         with open("filetypes.json", "w") as f:
             json.dump(filetypes, f, indent=2)
+
+        with open("address_book.json", "r") as f:
+            address_book = json.load(f)
+        address_book[name_id] = {}
+        with open("address_book.json", "w") as f:
+            json.dump(address_book, f, indent=2)
 
         return new_type
 
@@ -170,14 +187,20 @@ class Handler:
 
     def parse(self):
         args = self.type["args"]
-        if self.type["identifier"] == "column":
+        if self.type["identifier"] == "skip":
+            return
+        elif self.type["identifier"] == "column":
             self.identify_by_column(args[0], args[1], args[2])
         elif self.type["identifier"] == "int":
-            self.identify_by_int(args[0], args[1], args[2])
+            self.identify_by_int(args[0], args[1], args[2], args[3], args[4])
         else:
             raise f"No Identifier for {self.filename}"
 
     def add_purchase(self, customer, product):
+
+        if customer != customer:
+            return
+
         if customer in self.payload["customers"]:
             self.payload["customers"][customer].append(product)
         else:
@@ -188,28 +211,24 @@ class Handler:
         rows = self.sheet.values[start_index:]
         for row in rows:
             customer = row[cust_col]
-            product = row[prod_col]
-            self.add_purchase(customer, product)
+            products = row[prod_col]
+            if products is not None and products == products:
+                for product in products.split(", "):
+                    self.add_purchase(customer, product)
         return
 
     # Find values associated with an integer (ex: quantity)
-    def identify_by_int(self, start_index, products_index=None, cust_col=0):
-        rows = self.sheet.values[start_index:]
-
-        # Use first row as products if None assigned
-        if products_index is None:
-            products = rows[0]
-            rows = rows[1:]
-        else:
-            products = self.sheet.values[products_index]
+    def identify_by_int(self, products_row, cust_column, start_row, start_column, end_column):
+        rows = self.sheet.values[start_row:]
+        products = self.sheet.values[products_row]
 
         for row in rows:
             customer = None
-            for column in range(len(row)):
+            for column in range(end_column+1):
                 item = row[column]
-                if column == cust_col:
+                if column == cust_column:
                     customer = item
-                elif type(item) == int:
+                elif type(item) == int and column >= start_column:
                     self.add_purchase(customer, products[column])
         return
 
@@ -222,6 +241,8 @@ class Handler:
 
         with open(path, "w") as f:
             json.dump(self.payload, f, indent=2)
+
+        return path
 
 
 
