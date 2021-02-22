@@ -1,7 +1,10 @@
 __pycache__/
 drive_downloaded/
-processed/
+xlsx_extract/
+unknowns/
 credentials.json
 token.pickle
 token_gen.py
 venv/
+known.csv
+unknown.csv

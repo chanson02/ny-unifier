@@ -8,75 +8,55 @@ warnings.simplefilter("ignore") # Slicer List Extension is not supported and wil
 
 cwd = os.getcwd()
 
+def download_files():
+    downloader = DriveDownloader()
 
-######################
-### DOWNLOAD FILES ###
-######################
-downloader = DriveDownloader()
+    quarters = downloader.child_folders(downloader.root)
+    # quarter = downloader.latest_file(quarters)
+    quarter = quarters[2] # !!! testing, Q4 2020
 
-quarters = downloader.child_folders(downloader.root)
-# quarter = downloader.latest_file(quarters)
-quarter = quarters[2] # !!! testing, Q4 2020
+    lists = downloader.child_folders(downloader.folder_contents(quarter)) # November/December List
+    downloads = []
+    for lst in lists:
+        contents = downloader.folder_contents(lst)
+        for item in contents:
+            try:
+                download = downloader.download_file(item, out_path=cwd + "/drive_downloaded/")
+                downloads.append(download)
+            except Exception as e:
+                print("\nFailed to download", item["name"])
+                print(e)
+                print("\n")
+    return downloads
 
-lists = downloader.child_folders(downloader.folder_contents(quarter)) # November/December List
-downloads = []
-for lst in lists:
-    contents = downloader.folder_contents(lst)
-    for item in contents:
-        try:
-            download = downloader.download_file(item, out_path=cwd + "/drive_downloaded/")
-            downloads.append(download)
-        except Exception as e:
-            print("\nFailed to download", item["name"])
-            print(e)
-            print("\n")
+# Open the address book
+with open("address_book.json", "r") as f:
+    address_book = json.load(f)
 
+# Setup output files
+known_file = csv.writer(open("known.csv", "w"))
+unknown_file = csv.writer(open("unknown.csv", "w"))
+known_file.writerow(["Source", "Customer", "Address", "Product"])
+unknown_file.writerow(["Source", "Customer", "Address", "Product"])
 
-
-downloads = ["drive_downloaded/" + file for file in os.listdir('drive_downloaded/') if file!=".gitkeep"]
+downloads = download_files()
 # downloads = ["drive_downloaded/Hella Direct Orders.xlsx"]
-for i in range(len(downloads)):
-    download = downloads[i]
-    file = Handler(download)
-    dir = file.write(path=cwd + "/xlsx_extract/")
-    downloads[i] = dir
-
 for download in downloads:
-    addresses = {}
-    # Open file and address book
-    with open(download, "r") as f:
-        payload = json.load(f)
-    name_id = payload["source_file_type"]["name_id"]
-    if name_id == "error":
+    file = Handler(download)
+    if file.payload["source_file_type"]["identifier"] == "skip":
+        print("skipping", download)
         continue
-    with open("address_book.json", "r") as f:
-        customers = json.load(f)[name_id]
+    source = file.payload["source_file_name"]
+    customers = list(file.payload["customers"].keys())
 
-    # Check to see if customer has address
-    if len(customers.keys()) > 0:
-        known_customers = list(customers.keys())
-    else:
-        known_customers = []
-    unknown_customers = []
-    for customer in list(payload["customers"].keys()):
+    file_address_book = address_book[file.payload["source_file_type"]["name_id"]]
 
-        if customer in known_customers:
-            # Replace known customers
-            addresses[customers[customer]] = payload["customers"][customer]
-        else:
-            # Save unknown customers
-            unknown_customers.append(customer)
-            addresses[customer] = payload["customers"][customer]
-
-    payload["customers"] = addresses
-    with open(download, "w") as f:
-        json.dump(payload, f, indent=2)
-
-    # Make CSV file for unknown customers
-    if len(unknown_customers) > 0:
-        writer = csv.writer(open(download.replace("xlsx_extract", "unknowns").replace("json", "csv"), "w"))
-        writer.writerow(["Customer", "Address"])
-        for customer in unknown_customers:
-            writer.writerow([customer])
-
-print("Done")
+    for customer in customers:
+        products = file.payload["customers"][customer]
+        for product in products:
+            row = [source, customer, "", product]
+            try:
+                row[2] = file_address_book[customer]
+                known_file.writerow(row)
+            except KeyError:
+                unknown_file.writerow(row)
