@@ -36,11 +36,11 @@ with open("address_book.json", "r") as f:
 # Setup output files
 known_file = csv.writer(open("known.csv", "w"))
 unknown_file = csv.writer(open("unknown.csv", "w"))
-known_file.writerow(["Source", "Customer", "Address", "Product"])
-unknown_file.writerow(["Source", "Customer", "Address", "Product"])
+known_file.writerow(["Source", "Name ID", "Customer", "Address", "City", "State", "Zip", "Product"])
+unknown_file.writerow(["Source", "Name ID", "Customer", "Address", "City", "State", "Zip", "Product"])
 
-downloads = download_files()
-# downloads = ["drive_downloaded/Hella Direct Orders.xlsx"]
+downloads = ["drive_downloaded/Hella Direct Orders.xlsx"]
+# downloads = download_files()
 for download in downloads:
     file = Handler(download)
     if file.payload["source_file_type"]["identifier"] == "skip":
@@ -48,15 +48,19 @@ for download in downloads:
         continue
     source = file.payload["source_file_name"]
     customers = list(file.payload["customers"].keys())
-
-    file_address_book = address_book[file.payload["source_file_type"]["name_id"]]
+    name_id = file.payload["source_file_type"]["name_id"]
+    file_address_book = address_book[name_id]
 
     for customer in customers:
         products = file.payload["customers"][customer]
         for product in products:
-            row = [source, customer, "", product]
+            row = [source, name_id, customer, "", "", "", "", product]
             try:
-                row[2] = file_address_book[customer]
+                address_info = file_address_book[customer]
+                row[3] = address_info["address"]
+                row[4] = address_info["city"]
+                row[5] = address_info["state"]
+                row[6] = address_info["zip"]
                 known_file.writerow(row)
             except KeyError:
                 unknown_file.writerow(row)
