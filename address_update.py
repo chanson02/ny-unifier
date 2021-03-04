@@ -4,32 +4,41 @@ import pdb
 
 """
 0 - source
-1 - name_id
-2 - customer
-3 - address
-4 - city
-5 - state
-6 - zip
-7 - product
+1 - customer
+2 - address
+3 - city
+4 - state
+5 - zip
+6 - product
+7 - comment
 """
+
+def valid(value):
+    if value is not None and value == value:
+        return True
+    else:
+        return False
 
 known_file = csv.writer(open("known.csv", "r+"))
 with open("address_book.json", "r") as f:
     address_book = json.load(f)
 
-rows = pd.read_csv("unknown.csv").values[1:]
+# rows = pd.read_csv("unknown.csv").values[1:]
+rows = pd.ExcelFile("Ryan.F_Missing Information.xlsx").parse().values[1:]
 for row in rows:
-    # Add to address book
-    address_book[row[1]][row[2]] = {
-        "address": row[3],
-        "city": row[4],
-        "state": row[5],
-        "zip": row[6]
-    }
+    if False not in [valid(column) for column in row[:-1]]:
+        print("This got called")
+        # Add to address book
+        address_book[str(row[1])] = {
+            "address": str(row[2]),
+            "city": str(row[3]),
+            "state": str(row[4]),
+            "zip": str(row[5])
+        }
 
-    # Inject into known file
-    known_file.writerow(row)
+        # Inject into known file
+        known_file.writerow(row)
 
 with open("address_book.json", "w") as f:
     json.dump(address_book, f, indent=2)
-os.remove("unknown.csv")
+# os.remove("unknown.csv")

@@ -1,471 +1,3716 @@
 {
-  "Hella Direct Orders": {
-    "Alambika": {
-      "address": "215 Saint-Zotique",
-      "city": "West Montreal",
-      "state": "Quebec",
-      "zip": "H2V 4S23"
-    },
-    "Amanti Vino": {
-      "address": "62a South Street",
-      "city": "Morristown",
-      "state": "NJ",
-      "zip": "7964"
-    },
-    "Andale Market": {
-      "address": "5232 N. Clark St.",
-      "city": "Chicago",
-      "state": "IL",
-      "zip": "60640"
-    },
-    "Astor Wines & Spirits": {
-      "address": "399 Lafayette Street",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10003"
-    },
-    "Astoria Bier And Cheese": {
-      "address": "34-14 Broadway",
-      "city": "Astoria",
-      "state": "NY",
-      "zip": "11106"
-    },
-    "Brier Creek Ale House": {
-      "address": "7981 Skyland Ridge Pkwy",
-      "city": "Raleigh",
-      "state": "NC",
-      "zip": "27617"
-    },
-    "BB Riverboats": {
-      "address": "101 Riverboats Row",
-      "city": "Newport",
-      "state": "KY",
-      "zip": "41071-1069"
-    },
-    "BevMo! Goodyear": {
-      "address": "15405 W. McDowell Rd",
-      "city": "Goodyear",
-      "state": "AZ",
-      "zip": "85395-2525"
-    },
-    "BevMo! Peoria": {
-      "address": "24650 N. Lake Pleasant Pkwy Suite 104",
-      "city": "Peoria",
-      "state": "AZ",
-      "zip": "85383"
-    },
-    "Bitter Pops": {
-      "address": "3345 N. Lincoln Ave.",
-      "city": "Chicago",
-      "state": "IL",
-      "zip": "60657"
-    },
-    "BKLYN Larder": {
-      "address": "228 Flatbush Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11217"
-    },
-    "Bottlerocket Wine & Spirit": {
-      "address": "5 W 19th Street",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10011"
-    },
-    "Campbell & Co.": {
-      "address": "502 Lorimer St",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11211"
-    },
-    "Casa Guadalupe": {
-      "address": "2909 Mission Street",
-      "city": "San Francisco",
-      "state": "CA",
-      "zip": "94110"
-    },
-    "Catskills Regional Harvest": {
-      "address": "27905 State Highway 28",
-      "city": "Andes",
-      "state": "NY",
-      "zip": "13731"
-    },
-    "Celebration Park": {
-      "address": "2880 Becca Ave",
-      "city": "Naples",
-      "state": "FL",
-      "zip": "34112"
-    },
-    "Cellar Door": {
-      "address": "1 North Main St",
-      "city": "Ipswich",
-      "state": "MA",
-      "zip": "1983"
-    },
-    "Chelsea Market Baskets - Jersey City": {
-      "address": "234 16th Street",
-      "city": "Jersey City",
-      "state": "NJ",
-      "zip": "7310"
-    },
-    "Cigars International, Tampa Super-Store": {
-      "address": "10660 Palm River Rd ",
-      "city": "Tampa",
-      "state": "FL",
-      "zip": "33619-4571"
-    },
-    "Collins & Coupe": {
-      "address": "2876 El Cajon Blvd #100",
-      "city": "San Diego",
-      "state": "CA",
-      "zip": "92104"
-    },
-    "Di Bruno Bros. - Rittenhouse": {
-      "address": "1730 Chestnut St",
-      "city": "Philadelphia",
-      "state": "PA",
-      "zip": "19103"
-    },
-    "Di Bruno Bros. - Morris St": {
-      "address": "2514 Morris St",
-      "city": "Philadelphia",
-      "state": "PA",
-      "zip": "19145"
-    },
-    "Everyman Espresso Park Slope": {
-      "address": "162 5th Ave",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11217"
-    },
-    "Festival Cafe": {
-      "address": "1155 2nd Avenue",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10065"
-    },
-    "Flag Hill Distillery & Winery": {
-      "address": "297 North River Road",
-      "city": "Lee",
-      "state": "NH",
-      "zip": "3861"
-    },
-    "Food Garden Market": {
-      "address": "608 Franklin Ave",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11238"
-    },
-    "General Irving": {
-      "address": "1210 Halsey Street",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11207"
-    },
-    "Golden Years": {
-      "address": "221 N 4th St",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11211"
-    },
-    "Haworth Wine & Spirits": {
-      "address": "155 Terrace Street",
-      "city": "Haworth",
-      "state": "NJ",
-      "zip": "7641"
-    },
-    "Healthy Living Market & Cafe VT": {
-      "address": "222 Dorset St",
-      "city": "South Burlington",
-      "state": "VT",
-      "zip": "5403"
-    },
-    "Herman's Coffee": {
-      "address": "1313 S 3rd Street",
-      "city": "Philadelphia",
-      "state": "PA",
-      "zip": "19147"
-    },
-    "Hilton Garden Inn Kalamazoo": {
-      "address": "303 N Rose St",
-      "city": "St. Kalamazoo",
-      "state": "MI",
-      "zip": "49007"
-    },
-    "Home Goods of Margaretville": {
-      "address": "784 Main Street",
-      "city": "Margaretville",
-      "state": "NY",
-      "zip": "12455"
-    },
-    "Hudson Valley Distillers": {
-      "address": "1727 Route 9",
-      "city": "Germantown",
-      "state": "NY",
-      "zip": "12526"
-    },
-    "LocoPops": {
-      "address": "2618 Hillsborough Road ",
-      "city": "Durham",
-      "state": "NC",
-      "zip": "27705"
-    },
-    "Loggerhead Distillery": {
-      "address": "5399 Glenlake Place",
-      "city": "Sanford",
-      "state": "FL",
-      "zip": "32771"
-    },
-    "Manzanita Fresh Foods": {
-      "address": "730 Manzanita Ave",
-      "city": "Manzanita",
-      "state": "OR",
-      "zip": "97130"
-    },
-    "Maxwells on Main": {
-      "address": "37 N Main St",
-      "city": "Doylestown",
-      "state": "PA",
-      "zip": "18901"
-    },
-    "Mekelburg's Clinton Hill": {
-      "address": "293 Grand Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11238"
-    },
-    "The Melting Pot - Raleigh": {
-      "address": "3100 Wake Forest Rd",
-      "city": "Raleigh",
-      "state": "NC",
-      "zip": "27609"
-    },
-    "Kickin' Crab - Meridian": {
-      "address": "207 S. Frontage Rd ",
-      "city": "Meridian",
-      "state": "MS",
-      "zip": "39301-6105"
-    },
-    "Metro Home Style": {
-      "address": "689 North Clinton Street",
-      "city": "Syracuse",
-      "state": "NY",
-      "zip": "13204"
-    },
-    "Mountain Mama Natural Foods": {
-      "address": "1625 Suite A. West Uintah St",
-      "city": "Colorado Springs",
-      "state": "CO",
-      "zip": "80904"
-    },
-    "Nori's Village Market": {
-      "address": "138 Church Street",
-      "city": "Saranac Lake",
-      "state": "NY",
-      "zip": "12983"
-    },
-    "Oregon Spirit Distillers Tasting Room": {
-      "address": "740 Northeast 1st Street",
-      "city": "Bend",
-      "state": "OR",
-      "zip": "97701"
-    },
-    "Partners Coffee": {
-      "address": "125 North 6 Street",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11249"
-    },
-    "Porter": {
-      "address": "1100 Avenue",
-      "city": "Weekhawken",
-      "state": "NJ",
-      "zip": "7086"
-    },
-    "Queens Room": {
-      "address": "3602 Ditmars Blvd",
-      "city": "Astoria",
-      "state": "NY",
-      "zip": "11105"
-    },
-    "Rebel House": {
-      "address": "297 E. Palmetto Park Rd",
-      "city": "Boca Raton",
-      "state": "FL",
-      "zip": "33432-5013"
-    },
-    "Red Ginger Dimsum & Tapas": {
-      "address": "82 PATTON AVENUE",
-      "city": "Asheville",
-      "state": "NC",
-      "zip": "28801"
-    },
-    "Red Robin - Greenville": {
-      "address": "1125 Woodruff Rd Suite 1400",
-      "city": "Greenville",
-      "state": "SC",
-      "zip": "29607-4113"
-    },
-    "Sahadi's Atlantic": {
-      "address": "187 Atlantic Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11201"
-    },
-    "Sahadi's Industry City": {
-      "address": "34-35th St Building 4, Suite 04-1-B12",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11232"
-    },
-    "Schaller & Weber": {
-      "address": "1654 2nd Avenue",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10028"
-    },
-    "The Meat Market - Baraboo": {
-      "address": "700 Lincoln Avenue",
-      "city": "Baraboo",
-      "state": "WI",
-      "zip": "53913"
-    },
-    "Slope Cellars": {
-      "address": "436 7th Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11215"
-    },
-    "Hampton Inn Key Largo": {
-      "address": "102400 Overseas",
-      "city": "Key Largo",
-      "state": "FL",
-      "zip": "33037"
-    },
-    "Snowshoe Mountain Resort": {
-      "address": "10 Snowshoe Dr",
-      "city": "Slatyfork",
-      "state": "WV",
-      "zip": "26209"
-    },
-    "Spirited Away": {
-      "address": "153 Ludlow Street",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10002"
-    },
-    "SquareWine & Spirits": {
-      "address": "24-20 Jackson Avenue",
-      "city": "Long Island City",
-      "state": "NY",
-      "zip": "11101"
-    },
-    "Steve's Snappin' Dogs": {
-      "address": "Denver International Airport, Concourse B, 8500 Pe\u00f1a Blvd",
-      "city": "Denver",
-      "state": "CO",
-      "zip": "80249"
-    },
-    "Sussex Wines & Spirits - DIA": {
-      "address": "300 E 42nd Street",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10017"
-    },
-    "Taste NY at the Capital Region Welcome Center": {
-      "address": "I-87N - Milepost 127 C/O Capital Region Welcome Center",
-      "city": "Hannacroix",
-      "state": "NY",
-      "zip": "12087"
-    },
-    "Taste NY Market at Todd Hill": {
-      "address": "275 Manchester Rd Unit 178 ",
-      "city": "Poughkeepsie",
-      "state": "NY",
-      "zip": "12603"
-    },
-    "The Gilded Grape": {
-      "address": "727 Church Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11218"
-    },
-    "The Jones Assembly": {
-      "address": "901 W. Sheridan Ave",
-      "city": "Oklahoma City",
-      "state": "OK",
-      "zip": "73106"
-    },
-    "The Keg Steakhouse + Bar - Chandler": {
-      "address": "3065 W. Chandler Blvd",
-      "city": "Chandler",
-      "state": "AZ",
-      "zip": "85226-5220"
-    },
-    "The Savory Pantry": {
-      "address": "486 Broadway",
-      "city": "Saratoga Springs",
-      "state": "NY",
-      "zip": "12866"
-    },
-    "The Stanford Steakhouse": {
-      "address": "734 Station Street",
-      "city": "Waynesboro",
-      "state": "MS",
-      "zip": "39367"
-    },
-    "Tuthilltown Spirits Distillery": {
-      "address": "14 Grist Mill Lane",
-      "city": "Gardiner",
-      "state": "NY",
-      "zip": "12525"
-    },
-    "Vino By The Sea": {
-      "address": "190 Beach 69th Street",
-      "city": "Averne",
-      "state": "NY",
-      "zip": "11692"
-    },
-    "Vino Fine Wine & Spirits": {
-      "address": "121 E. 27th Street",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10016"
-    },
-    "Wahlburgers - Cleveland": {
-      "address": "2105 Ontario St",
-      "city": "Cleveland",
-      "state": "OH",
-      "zip": "44115"
-    },
-    "Whisk NYC": {
-      "address": "197 Atlantic Avenue",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11201"
-    },
-    "White's Liquor Store": {
-      "address": "771 Montauk Hwy",
-      "city": "Montauk",
-      "state": "NY",
-      "zip": "11954"
-    }
+  "Alambika": {
+    "address": "215 Saint-Zotique",
+    "city": "West Montreal",
+    "state": "Quebec",
+    "zip": "H2V 4S23"
   },
-  "DPI PNW & Rocky Mountains": {},
-  "DPI West": {},
-  "KeHE Full POD Vendor Report": {},
-  "Eagle Rock - Hella Depletions - 12.15": {},
-  "Eagle Rock - Hella Depletions": {},
-  "UNFI Nationwide Individual by Store Sales Report": {},
-  "Whole Foods Stop Selling stores": {},
-  "Momentum": {},
-  "Faire List": {},
-  "SGWS Off-Premise Accounts": {},
-  "Ruby Wine Account List": {},
-  "FEDWAY ASSOCIATES": {},
-  "Whole Foods Top Selling stores": {},
-  "Associated Buyers": {},
-  "SGWS Nationwide Individual by Store Sales Report": {},
-  "Walmart": {},
-  "Baldor YOY": {}
+  "Amanti Vino": {
+    "address": "62a South Street",
+    "city": "Morristown",
+    "state": "NJ",
+    "zip": "7964"
+  },
+  "Andale Market": {
+    "address": "5232 N. Clark St.",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60640"
+  },
+  "Astor Wines & Spirits": {
+    "address": "399 Lafayette Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10003"
+  },
+  "Astoria Bier And Cheese": {
+    "address": "34-14 Broadway",
+    "city": "Astoria",
+    "state": "NY",
+    "zip": "11106"
+  },
+  "Brier Creek Ale House": {
+    "address": "7981 Skyland Ridge Pkwy",
+    "city": "Raleigh",
+    "state": "NC",
+    "zip": "27617"
+  },
+  "BB Riverboats": {
+    "address": "101 Riverboats Row",
+    "city": "Newport",
+    "state": "KY",
+    "zip": "41071-1069"
+  },
+  "BevMo! Goodyear": {
+    "address": "15405 W. McDowell Rd",
+    "city": "Goodyear",
+    "state": "AZ",
+    "zip": "85395-2525"
+  },
+  "BevMo! Peoria": {
+    "address": "24650 N. Lake Pleasant Pkwy Suite 104",
+    "city": "Peoria",
+    "state": "AZ",
+    "zip": "85383"
+  },
+  "Bitter Pops": {
+    "address": "3345 N. Lincoln Ave.",
+    "city": "Chicago",
+    "state": "IL",
+    "zip": "60657"
+  },
+  "BKLYN Larder": {
+    "address": "228 Flatbush Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11217"
+  },
+  "Bottlerocket Wine & Spirit": {
+    "address": "5 W 19th Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10011"
+  },
+  "Campbell & Co.": {
+    "address": "502 Lorimer St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211"
+  },
+  "Casa Guadalupe": {
+    "address": "2909 Mission Street",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94110"
+  },
+  "Catskills Regional Harvest": {
+    "address": "27905 State Highway 28",
+    "city": "Andes",
+    "state": "NY",
+    "zip": "13731"
+  },
+  "Celebration Park": {
+    "address": "2880 Becca Ave",
+    "city": "Naples",
+    "state": "FL",
+    "zip": "34112"
+  },
+  "Cellar Door": {
+    "address": "1 North Main St",
+    "city": "Ipswich",
+    "state": "MA",
+    "zip": "1983"
+  },
+  "Chelsea Market Baskets - Jersey City": {
+    "address": "234 16th Street",
+    "city": "Jersey City",
+    "state": "NJ",
+    "zip": "7310"
+  },
+  "Cigars International, Tampa Super-Store": {
+    "address": "10660 Palm River Rd ",
+    "city": "Tampa",
+    "state": "FL",
+    "zip": "33619-4571"
+  },
+  "Collins & Coupe": {
+    "address": "2876 El Cajon Blvd #100",
+    "city": "San Diego",
+    "state": "CA",
+    "zip": "92104"
+  },
+  "Di Bruno Bros. - Rittenhouse": {
+    "address": "1730 Chestnut St",
+    "city": "Philadelphia",
+    "state": "PA",
+    "zip": "19103"
+  },
+  "Di Bruno Bros. - Morris St": {
+    "address": "2514 Morris St",
+    "city": "Philadelphia",
+    "state": "PA",
+    "zip": "19145"
+  },
+  "Everyman Espresso Park Slope": {
+    "address": "162 5th Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11217"
+  },
+  "Festival Cafe": {
+    "address": "1155 2nd Avenue",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10065"
+  },
+  "Flag Hill Distillery & Winery": {
+    "address": "297 North River Road",
+    "city": "Lee",
+    "state": "NH",
+    "zip": "3861"
+  },
+  "Food Garden Market": {
+    "address": "608 Franklin Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11238"
+  },
+  "General Irving": {
+    "address": "1210 Halsey Street",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11207"
+  },
+  "Golden Years": {
+    "address": "221 N 4th St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211"
+  },
+  "Haworth Wine & Spirits": {
+    "address": "155 Terrace Street",
+    "city": "Haworth",
+    "state": "NJ",
+    "zip": "7641"
+  },
+  "Healthy Living Market & Cafe VT": {
+    "address": "222 Dorset St",
+    "city": "South Burlington",
+    "state": "VT",
+    "zip": "5403"
+  },
+  "Herman's Coffee": {
+    "address": "1313 S 3rd Street",
+    "city": "Philadelphia",
+    "state": "PA",
+    "zip": "19147"
+  },
+  "Hilton Garden Inn Kalamazoo": {
+    "address": "303 N Rose St",
+    "city": "St. Kalamazoo",
+    "state": "MI",
+    "zip": "49007"
+  },
+  "Home Goods of Margaretville": {
+    "address": "784 Main Street",
+    "city": "Margaretville",
+    "state": "NY",
+    "zip": "12455"
+  },
+  "Hudson Valley Distillers": {
+    "address": "1727 Route 9",
+    "city": "Germantown",
+    "state": "NY",
+    "zip": "12526"
+  },
+  "LocoPops": {
+    "address": "2618 Hillsborough Road ",
+    "city": "Durham",
+    "state": "NC",
+    "zip": "27705"
+  },
+  "Loggerhead Distillery": {
+    "address": "5399 Glenlake Place",
+    "city": "Sanford",
+    "state": "FL",
+    "zip": "32771"
+  },
+  "Manzanita Fresh Foods": {
+    "address": "730 Manzanita Ave",
+    "city": "Manzanita",
+    "state": "OR",
+    "zip": "97130"
+  },
+  "Maxwells on Main": {
+    "address": "37 N Main St",
+    "city": "Doylestown",
+    "state": "PA",
+    "zip": "18901"
+  },
+  "Mekelburg's Clinton Hill": {
+    "address": "293 Grand Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11238"
+  },
+  "The Melting Pot - Raleigh": {
+    "address": "3100 Wake Forest Rd",
+    "city": "Raleigh",
+    "state": "NC",
+    "zip": "27609"
+  },
+  "Kickin' Crab - Meridian": {
+    "address": "207 S. Frontage Rd ",
+    "city": "Meridian",
+    "state": "MS",
+    "zip": "39301-6105"
+  },
+  "Metro Home Style": {
+    "address": "689 North Clinton Street",
+    "city": "Syracuse",
+    "state": "NY",
+    "zip": "13204"
+  },
+  "Mountain Mama Natural Foods": {
+    "address": "1625 Suite A. West Uintah St",
+    "city": "Colorado Springs",
+    "state": "CO",
+    "zip": "80904"
+  },
+  "Nori's Village Market": {
+    "address": "138 Church Street",
+    "city": "Saranac Lake",
+    "state": "NY",
+    "zip": "12983"
+  },
+  "Oregon Spirit Distillers Tasting Room": {
+    "address": "740 Northeast 1st Street",
+    "city": "Bend",
+    "state": "OR",
+    "zip": "97701"
+  },
+  "Partners Coffee": {
+    "address": "125 North 6 Street",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11249"
+  },
+  "Porter": {
+    "address": "1100 Avenue",
+    "city": "Weekhawken",
+    "state": "NJ",
+    "zip": "7086"
+  },
+  "Queens Room": {
+    "address": "3602 Ditmars Blvd",
+    "city": "Astoria",
+    "state": "NY",
+    "zip": "11105"
+  },
+  "Rebel House": {
+    "address": "297 E. Palmetto Park Rd",
+    "city": "Boca Raton",
+    "state": "FL",
+    "zip": "33432-5013"
+  },
+  "Red Ginger Dimsum & Tapas": {
+    "address": "82 PATTON AVENUE",
+    "city": "Asheville",
+    "state": "NC",
+    "zip": "28801"
+  },
+  "Red Robin - Greenville": {
+    "address": "1125 Woodruff Rd Suite 1400",
+    "city": "Greenville",
+    "state": "SC",
+    "zip": "29607-4113"
+  },
+  "Sahadi's Atlantic": {
+    "address": "187 Atlantic Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11201"
+  },
+  "Sahadi's Industry City": {
+    "address": "34-35th St Building 4, Suite 04-1-B12",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11232"
+  },
+  "Schaller & Weber": {
+    "address": "1654 2nd Avenue",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10028"
+  },
+  "The Meat Market - Baraboo": {
+    "address": "700 Lincoln Avenue",
+    "city": "Baraboo",
+    "state": "WI",
+    "zip": "53913"
+  },
+  "Slope Cellars": {
+    "address": "436 7th Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11215"
+  },
+  "Hampton Inn Key Largo": {
+    "address": "102400 Overseas",
+    "city": "Key Largo",
+    "state": "FL",
+    "zip": "33037"
+  },
+  "Snowshoe Mountain Resort": {
+    "address": "10 Snowshoe Dr",
+    "city": "Slatyfork",
+    "state": "WV",
+    "zip": "26209"
+  },
+  "Spirited Away": {
+    "address": "153 Ludlow Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10002"
+  },
+  "SquareWine & Spirits": {
+    "address": "24-20 Jackson Avenue",
+    "city": "Long Island City",
+    "state": "NY",
+    "zip": "11101"
+  },
+  "Steve's Snappin' Dogs": {
+    "address": "Denver International Airport, Concourse B, 8500 Pe\u00f1a Blvd",
+    "city": "Denver",
+    "state": "CO",
+    "zip": "80249"
+  },
+  "Sussex Wines & Spirits - DIA": {
+    "address": "300 E 42nd Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10017"
+  },
+  "Taste NY at the Capital Region Welcome Center": {
+    "address": "I-87N - Milepost 127 C/O Capital Region Welcome Center",
+    "city": "Hannacroix",
+    "state": "NY",
+    "zip": "12087"
+  },
+  "Taste NY Market at Todd Hill": {
+    "address": "275 Manchester Rd Unit 178 ",
+    "city": "Poughkeepsie",
+    "state": "NY",
+    "zip": "12603"
+  },
+  "The Gilded Grape": {
+    "address": "727 Church Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11218"
+  },
+  "The Jones Assembly": {
+    "address": "901 W. Sheridan Ave",
+    "city": "Oklahoma City",
+    "state": "OK",
+    "zip": "73106"
+  },
+  "The Keg Steakhouse + Bar - Chandler": {
+    "address": "3065 W. Chandler Blvd",
+    "city": "Chandler",
+    "state": "AZ",
+    "zip": "85226-5220"
+  },
+  "The Savory Pantry": {
+    "address": "486 Broadway",
+    "city": "Saratoga Springs",
+    "state": "NY",
+    "zip": "12866"
+  },
+  "The Stanford Steakhouse": {
+    "address": "734 Station Street",
+    "city": "Waynesboro",
+    "state": "MS",
+    "zip": "39367"
+  },
+  "Tuthilltown Spirits Distillery": {
+    "address": "14 Grist Mill Lane",
+    "city": "Gardiner",
+    "state": "NY",
+    "zip": "12525"
+  },
+  "Vino By The Sea": {
+    "address": "190 Beach 69th Street",
+    "city": "Averne",
+    "state": "NY",
+    "zip": "11692"
+  },
+  "Vino Fine Wine & Spirits": {
+    "address": "121 E. 27th Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10016"
+  },
+  "Wahlburgers - Cleveland": {
+    "address": "2105 Ontario St",
+    "city": "Cleveland",
+    "state": "OH",
+    "zip": "44115"
+  },
+  "Whisk NYC": {
+    "address": "197 Atlantic Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11201"
+  },
+  "White's Liquor Store": {
+    "address": "771 Montauk Hwy",
+    "city": "Montauk",
+    "state": "NY",
+    "zip": "11954"
+  },
+  "1st Grand Avenue Liquors": {
+    "address": "918 Grand Ave",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55105
+  },
+  "7/8s Liquors": {
+    "address": "7920 Nicollet Ave S",
+    "city": "bloomington",
+    "state": "mn",
+    "zip": 55420
+  },
+  "99 Bottles": {
+    "address": "924 Main Ave",
+    "city": "moorhead",
+    "state": "mn",
+    "zip": 56560
+  },
+  "Andy's Liquor": {
+    "address": "3125 Wellner Dr NE",
+    "city": "rochester",
+    "state": "mn",
+    "zip": 55906
+  },
+  "Andy's Liquor Store": {
+    "address": "1201 Broadway  S",
+    "city": "rochester",
+    "state": "mn",
+    "zip": 55904
+  },
+  "Bald Eagle Liquor Shoppe": {
+    "address": "5960 Highway 61  N",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55110
+  },
+  "B & G Liquors": {
+    "address": "2201 University Ave NE",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55418
+  },
+  "Blue Max Liquors": {
+    "address": "14640 10th Ave S",
+    "city": "burnsville",
+    "state": "mn",
+    "zip": 55337
+  },
+  "Bridgeview Liquors": {
+    "address": "935 37th Ave S",
+    "city": "moorhead",
+    "state": "mn",
+    "zip": 56560
+  },
+  "Buffalo Wine & Spirits - Hwy 55": {
+    "address": "621 Hwy 55  E",
+    "city": "buffalo",
+    "state": "mn",
+    "zip": 55313
+  },
+  "Burning Brothers Brewing": {
+    "address": "1750 Thomas Ave",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55104
+  },
+  "Central Avenue Liquors": {
+    "address": "2538 Central Ave NE",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55418
+  },
+  "Chet's Liquor Drive-In": {
+    "address": "974 Sibley memorial Hwy",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55118
+  },
+  "Cold One Liquor": {
+    "address": "906 Mn-33 St",
+    "city": "cloquet",
+    "state": "mn",
+    "zip": 55720
+  },
+  "Cost Plus World Market": {
+    "address": "2401 Fairview Ave N",
+    "city": "roseville",
+    "state": "mn",
+    "zip": 55113
+  },
+  "East Lake Liquor": {
+    "address": "3916 Lake St E",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55406
+  },
+  "Edina Liquor": {
+    "address": "6755 York Ave S",
+    "city": "edina",
+    "state": "mn",
+    "zip": 55435
+  },
+  "Elevated Beer + Wine + Spirits": {
+    "address": "4135 Hiawatha Ave",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55406
+  },
+  "Fergus Liquor": {
+    "address": "2010 Lincoln Ave W",
+    "city": "fergus falls",
+    "state": "mn",
+    "zip": 99999
+  },
+  "France 44 Wines & Spirits": {
+    "address": "4351 France Ave S",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55410
+  },
+  "Fridley Liquor": {
+    "address": "264 57th Ave NE",
+    "city": "fridley",
+    "state": "mn",
+    "zip": 55432
+  },
+  "Frontier Liquor": {
+    "address": "600 3rd St NE",
+    "city": "grand rapids",
+    "state": "mn",
+    "zip": 55744
+  },
+  "George's Liquors": {
+    "address": "1340 Arrowhead Rd W",
+    "city": "duluth",
+    "state": "mn",
+    "zip": 55811
+  },
+  "Grand Marais Liquor": {
+    "address": "10 1st St",
+    "city": "grand marais",
+    "state": "mn",
+    "zip": 55604
+  },
+  "Harbor Wine And Spirits": {
+    "address": "2135 Commerce Blvd",
+    "city": "mound",
+    "state": "mn",
+    "zip": 55364
+  },
+  "Haskells Woodbury": {
+    "address": "6445 Lake Rd #200",
+    "city": "woodbury",
+    "state": "mn",
+    "zip": 55125
+  },
+  "Hiawatha Falls Liquor": {
+    "address": "4604 Minnehaha Ave",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55406
+  },
+  "House of Wines": {
+    "address": "1225 Vermillion St",
+    "city": "hastings",
+    "state": "mn",
+    "zip": 55033
+  },
+  "Hy Vee Wine & Spirits Faribault": {
+    "address": "1920 Grant St NW",
+    "city": "faribault",
+    "state": "mn",
+    "zip": 55021
+  },
+  "Ken & Norm's Liquors": {
+    "address": "4801 Chicago Ave",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55417
+  },
+  "Kowalski's Market - Oak Park Heights": {
+    "address": "5801 Neal Ave N",
+    "city": "stillwater",
+    "state": "mn",
+    "zip": 55082
+  },
+  "La Crescent Wine & Spirits": {
+    "address": "100 Twilite St",
+    "city": "la crescent",
+    "state": "mn",
+    "zip": 55947
+  },
+  "Lake Aire Bottle Shoppe": {
+    "address": "2530 London Rd",
+    "city": "duluth",
+    "state": "mn",
+    "zip": 55812
+  },
+  "Lakeside Liquors": {
+    "address": "4507 Superior St E",
+    "city": "duluth",
+    "state": "mn",
+    "zip": 55804
+  },
+  "Lake Wine & Spirits": {
+    "address": "404 Lake St W",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55408
+  },
+  "Liberty Village Wines & Spirits": {
+    "address": "105 New england Pl",
+    "city": "stillwater",
+    "state": "mn",
+    "zip": 55082
+  },
+  "Liquor Barrel Mahtomedi": {
+    "address": "3124 Century Ave N",
+    "city": "mahtomedi",
+    "state": "mn",
+    "zip": 55115
+  },
+  "Liquor Boy": {
+    "address": "5620 Cedar lake Rd",
+    "city": "saint louis park",
+    "state": "mn",
+    "zip": 55416
+  },
+  "Liquor Village": {
+    "address": "2289 Ford Pkwy",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55116
+  },
+  "Lowry Hill Liquors": {
+    "address": "1922 Hennepin Ave",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55403
+  },
+  "Lunds and Byerly\u2019s": {
+    "address": "13081 Ridgedale Dr",
+    "city": "minnetonka",
+    "state": "mn",
+    "zip": 55305
+  },
+  "MAPLE LAKE WINE and SPIRITS ": {
+    "address": "901 Hwy 55 ",
+    "city": "maple lake",
+    "state": "mn",
+    "zip": 55358
+  },
+  "Marshall Liquors": {
+    "address": "2027 Marshall Ave",
+    "city": "st paul",
+    "state": "mn",
+    "zip": 55104
+  },
+  "McDonald's Liquor": {
+    "address": "5010 34th Ave S",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55417
+  },
+  "MGM WINE and SPIRITS 230TTH": {
+    "address": "3900 Vinewood Ln N #1",
+    "city": "plymouth",
+    "state": "mn",
+    "zip": 55441
+  },
+  "Midtown Wine and Spirits": {
+    "address": "1213 Gilmore Ave",
+    "city": "winona",
+    "state": "mn",
+    "zip": 55987
+  },
+  "Midway Liquors": {
+    "address": "1955 University Ave W",
+    "city": "st paul",
+    "state": "mn",
+    "zip": 55104
+  },
+  "MIKES DRIVE-IN LIQUOR": {
+    "address": "401 Sheridan St E",
+    "city": "ely",
+    "state": "mn",
+    "zip": 55731
+  },
+  "MLS COLUMBIA HEIGHT ": {
+    "address": "4950 Central Ave NE",
+    "city": "columbia heights",
+    "state": "mn",
+    "zip": 55421
+  },
+  "Mount Royal Bottle Shoppe": {
+    "address": "1602 Woodland Ave",
+    "city": "duluth",
+    "state": "mn",
+    "zip": 55803
+  },
+  "Municipal Liquor Store": {
+    "address": "14 5th St E",
+    "city": "morris",
+    "state": "mn",
+    "zip": 56267
+  },
+  "Napa Valley Liquors": {
+    "address": "15850 87th St NE",
+    "city": "otsego",
+    "state": "mn",
+    "zip": 55330
+  },
+  "Party Time Liquor": {
+    "address": "1835 Larpenteur Ave E",
+    "city": "maplewood",
+    "state": "mn",
+    "zip": 55109
+  },
+  "Peoples' Food Co-op - Rochester": {
+    "address": "519 1st Ave SW",
+    "city": "rochester",
+    "state": "mn",
+    "zip": 55902
+  },
+  "PERRIER - ST. GRAND ": {
+    "address": "666 Grand Ave",
+    "city": "st paul",
+    "state": "mn",
+    "zip": 55105
+  },
+  "Perrier Wines & Liquors Burnsville": {
+    "address": "13720 Co rd 11 ",
+    "city": "burnsville",
+    "state": "mn",
+    "zip": 55337
+  },
+  "Pjs Liquor": {
+    "address": "407 Belgrade Ave",
+    "city": "north mankato",
+    "state": "mn",
+    "zip": 56003
+  },
+  "Plaza Liquor": {
+    "address": "400 34th Ave W",
+    "city": "alexandria",
+    "state": "mn",
+    "zip": 56308
+  },
+  "Rogers Wine & Spirits": {
+    "address": "21725 Diamond lake Rd S",
+    "city": "rogers",
+    "state": "mn",
+    "zip": 55374
+  },
+  " SAVAGE MARKETPLACE ": {
+    "address": "8200 Co rd 42 ",
+    "city": "savage",
+    "state": "mn",
+    "zip": 55378
+  },
+  "SILVER CREEK LIQUOR": {
+    "address": "5489 Hwy 7 ",
+    "city": "mountain iron",
+    "state": "mn",
+    "zip": 55768
+  },
+  "South Lyndale Liquors": {
+    "address": "5300 Lyndale Ave S",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55419
+  },
+  "St Anthony Village Wine and Spirits": {
+    "address": "2602 39th Ave NE",
+    "city": "saint anthony",
+    "state": "mn",
+    "zip": 55421
+  },
+  "Stinson Wine Beer Spirits": {
+    "address": "2315 18th Ave NE",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55418
+  },
+  "Surdyk's Liquor Store and Gourmet Cheese Shop": {
+    "address": "303 Hennepin Ave E",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55414
+  },
+  "Teal's Liquor": {
+    "address": "201 2nd Ave S",
+    "city": "cold spring",
+    "state": "mn",
+    "zip": 56320
+  },
+  "The Lowbrow": {
+    "address": "4244 Nicollet Ave",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55409
+  },
+  "Thomas Liquors": {
+    "address": "1941 Grand Ave",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55105
+  },
+  "Toasted Wine Spirits Ales": {
+    "address": "560 Como Ave",
+    "city": "saint paul",
+    "state": "mn",
+    "zip": 55103
+  },
+  "TOP TEN BLAINE 230T,TH": {
+    "address": "12513 Central Ave NE",
+    "city": "blaine",
+    "state": "mn",
+    "zip": 55449
+  },
+  "Top Ten Liquors St. Louis Park": {
+    "address": "5111 Excelsior Blvd",
+    "city": "saint louis park",
+    "state": "mn",
+    "zip": 55416
+  },
+  "Two Harbor's Liquor": {
+    "address": "632 7th Ave",
+    "city": "two harbors",
+    "state": "mn",
+    "zip": 55616
+  },
+  "Viking Liquor Barrel": {
+    "address": "16290 State hwy 13 ",
+    "city": "prior lake",
+    "state": "mn",
+    "zip": 55372
+  },
+  "Village Liquor": {
+    "address": "16731 State hwy 13 ",
+    "city": "prior lake",
+    "state": "mn",
+    "zip": 99999
+  },
+  "Village Wine and Spirits": {
+    "address": "11227 Stillwater Blvd N",
+    "city": "lake elmo",
+    "state": "mn",
+    "zip": 55042
+  },
+  "West End Liquor & Fine Cigars": {
+    "address": "1430 Old w main St",
+    "city": "red wing",
+    "state": "mn",
+    "zip": 55066
+  },
+  "West Side Liquor & Smoke Shop": {
+    "address": "15807 Audubon Way",
+    "city": "baxter",
+    "state": "mn",
+    "zip": 56425
+  },
+  "Westwood Liquors": {
+    "address": "2304 Louisiana Ave S",
+    "city": "saint louis park",
+    "state": "mn",
+    "zip": 55426
+  },
+  "Wine & Roses Liquors": {
+    "address": "1107 Lake St S",
+    "city": "forest lake",
+    "state": "mn",
+    "zip": 55025
+  },
+  "Worthington Liquor Store": {
+    "address": "1190 Ryans Rd",
+    "city": "worthington",
+    "state": "mn",
+    "zip": 56187
+  },
+  "Zipps Liquors": {
+    "address": "2618 Franklin Ave E",
+    "city": "minneapolis",
+    "state": "mn",
+    "zip": 55406
+  },
+  "61 EXPRESS": {
+    "address": "33971 US-61",
+    "city": "Frontenac",
+    "state": "MN",
+    "zip": 55026
+  },
+  "ANDY'S LIQUOR MARKETPLACE": {
+    "address": "2932 41st St. NW",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": 55901
+  },
+  "APOLLO LIQUOR BEST": {
+    "address": "4040 Highway 52",
+    "city": "North Rochester",
+    "state": "MN",
+    "zip": 55901
+  },
+  "BIG DISCOUNT LIQUOR": {
+    "address": "2520 Whitebear Ave N",
+    "city": "North Saint Paul",
+    "state": "MN",
+    "zip": 55109
+  },
+  "CENTRAL AVENUE LIQUOR": {
+    "address": "2538 Central Ave NE",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55418
+  },
+  "CHIANTI GRILL-BURNS": {
+    "address": "14296 Plymouth Ave",
+    "city": "Burnsville",
+    "state": "MN",
+    "zip": 55337
+  },
+  "CLOCKTOWER WINE & SPIRITS": {
+    "address": "15190 Bluebird St NW # 109",
+    "city": "Andover",
+    "state": "MN",
+    "zip": 55304
+  },
+  "DOOLITTLES": {
+    "address": "2140 Cliff Rd",
+    "city": "Eagan",
+    "state": "MN",
+    "zip": 55122
+  },
+  "EAGLE LIQUOR - BEER": {
+    "address": "617 Apollo Dr",
+    "city": "Lino Lakes",
+    "state": "MN",
+    "zip": 55014
+  },
+  "ELEVATED BEER WINE & SPIR": {
+    "address": "4135 Hiawatha Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55406
+  },
+  "FALLS LIQUOR": {
+    "address": "4604 Minnehaha Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55406
+  },
+  "FIRST GRAND AVENUE LIQUOR": {
+    "address": "918 Grand Ave",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55105
+  },
+  "JERRY'S WINE & SPIRITS": {
+    "address": "7754 Hargis Pkwy",
+    "city": "Woodbury",
+    "state": "MN",
+    "zip": 55129
+  },
+  "JIM'S LIQUOR": {
+    "address": "3 6th Ave S",
+    "city": "Hopkins",
+    "state": "MN",
+    "zip": 55343
+  },
+  "KEYBOARD LIQUOR": {
+    "address": "230 W Lake St",
+    "city": "Chisholm",
+    "state": "MN",
+    "zip": 55719
+  },
+  "KOWALSKI'S GRAND MARKET": {
+    "address": "1261 Grand Ave",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55105
+  },
+  "LAKE AIRE BOTTLE SHOP": {
+    "address": "2530 London Rd,",
+    "city": "Duluth",
+    "state": "MN",
+    "zip": 55812
+  },
+  "LAKESIDE WINE & SPIRIT": {
+    "address": "1916 Wayzata Blvd #1",
+    "city": "Long Lake",
+    "state": "MN",
+    "zip": 55356
+  },
+  "LINCOLN SQUARE LIQUOR BAR": {
+    "address": "3124 Century Ave N",
+    "city": "Saint Paul",
+    "state": "MN",
+    "zip": 55110
+  },
+  "LIQUOR TIME": {
+    "address": "5954 N Osgood Ave",
+    "city": "Oak Park Heights",
+    "state": "MN",
+    "zip": 55082
+  },
+  "LOWBROW": {
+    "address": "4244 Nicollet Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55409
+  },
+  "LOWRY HILL LIQUOR": {
+    "address": "1922 Hennepin Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55403
+  },
+  "MAC'S LIQUOR": {
+    "address": "8550 Excelsior Blvd",
+    "city": "Hopkins",
+    "state": "MN",
+    "zip": 55343
+  },
+  "MARSHALL LIQUOR": {
+    "address": "2027 Marshall Ave",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55104
+  },
+  "MERWIN LIQUORS": {
+    "address": "700 W Broadway Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55411
+  },
+  "MIDWAY LIQUOR": {
+    "address": "1955 University Ave W,",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55104
+  },
+  "Municipal Liquor Store ADA": {
+    "address": "404 E Main St",
+    "city": "Ada",
+    "state": "MN",
+    "zip": 56510
+  },
+  "Municipal Liquor Store KASSON": {
+    "address": "30 W Main St",
+    "city": "Kasson",
+    "state": "MN",
+    "zip": 55944
+  },
+  "Municipal Liquor Store MARSHALL": {
+    "address": "1305 E College Dr",
+    "city": "Marshall",
+    "state": "MN",
+    "zip": 56258
+  },
+  "Municipal Liquor Store MORRIS": {
+    "address": "14 E 5th St",
+    "city": "Morris",
+    "state": "MN",
+    "zip": 56267
+  },
+  "Municipal Liquor Store NORTH BRANCH #1": {
+    "address": "5486 Old Main St",
+    "city": "North Branch",
+    "state": "MN",
+    "zip": 55046
+  },
+  "NAMASTE CAFE": {
+    "address": "2512 Hennepin Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55405
+  },
+  "PARK LIQUOR STORE": {
+    "address": "140 Snelling Ave N",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55104
+  },
+  "PARTY TIME LIQUORS": {
+    "address": "1835 Larpenteur Ave E",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55109
+  },
+  "PATRICK'S ON THIRD": {
+    "address": "125 S 3rd St",
+    "city": "St Peter",
+    "state": "MN",
+    "zip": 56082
+  },
+  "PEOPLE'S FOOD COOP WINE B": {
+    "address": "519 1st Ave SW #3304",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": 55902
+  },
+  "PERRIER WINES & LIQUOR": {
+    "address": "7700 W Old Shakopee Rd",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55438
+  },
+  "SEVENTH STREET LIQUOR BAR": {
+    "address": "665 7th St W",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55102
+  },
+  "SHORT STOP WINE & SPIRIT": {
+    "address": "2190 Eagle Creek Ln # F",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55129
+  },
+  "STAGHEAD": {
+    "address": "219 Bush St,",
+    "city": "Red Wing",
+    "state": "MN",
+    "zip": 55066
+  },
+  "STINSON WINE & SPIRITS": {
+    "address": "2315 18th Ave NE",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55418
+  },
+  "TAVERN 4 & 5": {
+    "address": "16396 Wagner Way",
+    "city": "Eden Prairie",
+    "state": "MN",
+    "zip": 55344
+  },
+  "TOP TEN ANDOVER": {
+    "address": "13627 Quinn St NW",
+    "city": "Andover",
+    "state": "MN",
+    "zip": 55304
+  },
+  "TOP TEN BLAINE": {
+    "address": "12513 Central Ave NE",
+    "city": "Blaine",
+    "state": "MN",
+    "zip": 55449
+  },
+  "TOP TEN ROSEMOUNT": {
+    "address": "15047 Crestone Ave",
+    "city": "Rosemount",
+    "state": "MN",
+    "zip": 55068
+  },
+  "TOP TEN ROSEVILLE": {
+    "address": "1611 County Rd C West",
+    "city": "Roseville",
+    "state": "MN",
+    "zip": 55113
+  },
+  "TOP TEN ST LOUIS PARK": {
+    "address": "5111 Excelsior Blvd",
+    "city": "St Louis Park",
+    "state": "MN",
+    "zip": 55416
+  },
+  "VIKING LIQUOR": {
+    "address": "16290 State Hwy 13,",
+    "city": "Prior Lake",
+    "state": "MN",
+    "zip": 55372
+  },
+  "WEST SIDE LIQUORS WP": {
+    "address": "45 Waite Ave N",
+    "city": "Waite Park",
+    "state": "MN",
+    "zip": 56387
+  },
+  "WHOLE FOODS MARKET - OFF": {
+    "address": "222 Hennepin Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55401
+  },
+  "ZIPP'S LIQUORS": {
+    "address": "2618 E Franklin Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55406
+  },
+  "THE TAP HOUSE WEST END": {
+    "address": "2365 Commerce Dr NW",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": 55901
+  },
+  "ELITE LIQUOR 230M": {
+    "address": "8472 Tamarack Bay Ste 200",
+    "city": "Woodbury",
+    "state": "MN",
+    "zip": 55125
+  },
+  "FRONTIER LIQUORS": {
+    "address": "26207 Fremont Dr",
+    "city": "Zimmerman",
+    "state": "MN",
+    "zip": 55398
+  },
+  "HWY 61 LIQUOR": {
+    "address": "1213 Gilmore Ave",
+    "city": "Winona",
+    "state": "MN",
+    "zip": 55987
+  },
+  "LA CRESCENT WINE & SPIRIT": {
+    "address": "100 Twilite St",
+    "city": "La Crescent",
+    "state": "MN",
+    "zip": 55947
+  },
+  "Municipal Liquor Store TWO HARBORS": {
+    "address": "630 7th Ave",
+    "city": "Two Harbors",
+    "state": "MN",
+    "zip": 55616
+  },
+  "P J'S LIQUOR": {
+    "address": "407 Belgrade Ave",
+    "city": "North Mankato",
+    "state": "MN",
+    "zip": 56003
+  },
+  "ANDY'S LIQUOR NORTHEAST": {
+    "address": "82 36th Ave. NW",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": 55901
+  },
+  "LAKE WINE & CHEESE": {
+    "address": "404 W. Lake Street",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55408
+  },
+  "COLD ONE LIQUOR": {
+    "address": "906 MN-33",
+    "city": "Cloquet",
+    "state": "MN",
+    "zip": 55720
+  },
+  "FRANCE 44 WINES & SPIRITS": {
+    "address": "4351 France Ave S",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55410
+  },
+  "KEN & NORM'S LIQUORS": {
+    "address": "4801 Chicago Ave",
+    "city": "Minneapolis",
+    "state": "MN",
+    "zip": 55417
+  },
+  "LIQUOR BOY": {
+    "address": " Cedar Lake Rd",
+    "city": "St Louis Park",
+    "state": "MN",
+    "zip": 55416
+  },
+  "MLS ADA": {
+    "address": "404 E Main St",
+    "city": "Ada",
+    "state": "MN",
+    "zip": 56510
+  },
+  "MLS APPLE VALLEY #3": {
+    "address": "5470 157th St W",
+    "city": "Apple Valley",
+    "state": "MN",
+    "zip": 55124
+  },
+  "MLS BUFFALO #1": {
+    "address": "621 Hwy 55 East",
+    "city": "Buffalo",
+    "state": "MN",
+    "zip": 55313
+  },
+  "MLS EDEN PRAIRIE #2": {
+    "address": "8018 Den Road",
+    "city": "Eden Praire",
+    "state": "MN",
+    "zip": 55344
+  },
+  "MLS KASSON": {
+    "address": "30 W Main St",
+    "city": "Kasson",
+    "state": "MN",
+    "zip": 55944
+  },
+  "MLS LAKEVILLE #1": {
+    "address": "20164 Heritage Dr",
+    "city": "Lakeville",
+    "state": "MN",
+    "zip": 55044
+  },
+  "MLS MARSHALL": {
+    "address": "1410 Boyer Dr",
+    "city": "Marshall",
+    "state": "MN",
+    "zip": 56258
+  },
+  "MLS MORRIS": {
+    "address": "14 E 5th St",
+    "city": "Morris",
+    "state": "MN",
+    "zip": 56267
+  },
+  "MLS NORTH BRANCH #1": {
+    "address": "5846 Old Main St",
+    "city": "North Branch",
+    "state": "MN",
+    "zip": 55056
+  },
+  "MOUNT ROYAL BOTTLE SHOPPE": {
+    "address": "1602 Woodland Ave",
+    "city": "Duluth",
+    "state": "MN",
+    "zip": 55803
+  },
+  "TEAL'S LIQUOR": {
+    "address": "1000 Shamrock Ln",
+    "city": "Albany",
+    "state": "MN",
+    "zip": 56307
+  },
+  "THOMAS LIQUORS": {
+    "address": "1941 Grand Ave",
+    "city": "St Paul",
+    "state": "MN",
+    "zip": 55105
+  },
+  "99 BOTTLES": {
+    "address": "924 Main Ave",
+    "city": "Moorhead",
+    "state": "MN",
+    "zip": 56560
+  },
+  "MLS TWO HARBORS": {
+    "address": "630 7th Ave",
+    "city": "Two Harbors",
+    "state": "MN",
+    "zip": 55616
+  },
+  "VILLAGE LIQUOR": {
+    "address": "16731 State Hwy 13",
+    "city": "Prior Lake",
+    "state": "MN",
+    "zip": 55372
+  },
+  "ANDY'S LIQUOR": {
+    "address": "2932 41st St NW",
+    "city": "Rochester",
+    "state": "MN",
+    "zip": 55901
+  },
+  "MLS COLUMBIA HEIGHT #1": {
+    "address": "5225 University Ave NE",
+    "city": "Columbia Heights",
+    "state": "MN",
+    "zip": 55421
+  },
+  "MLS RICHFIELD #2": {
+    "address": "6600 Cedar Ave",
+    "city": "Richfield",
+    "state": "MN",
+    "zip": 55423
+  },
+  "MLS ROGERS #3": {
+    "address": "21725 S Diamond Lake Rd",
+    "city": "Rogers",
+    "state": "MN",
+    "zip": 55374
+  },
+  "MLS EDINA #2": {
+    "address": "6755 York",
+    "city": "Edina",
+    "state": "MN",
+    "zip": 55435
+  },
+  "MLS EDINA #3": {
+    "address": "5013 Vernon Ave",
+    "city": "Edina",
+    "state": "MN",
+    "zip": 55436
+  },
+  "MACEY'S PROVID 10971": {
+    "address": "50 N HWY 165",
+    "city": "PROVIDENCE",
+    "state": "UT",
+    "zip": "84332"
+  },
+  "FR MKTS-21ST  12371": {
+    "address": "2040 SOUTH 23RD EAST",
+    "city": "SALT LAKE CITY",
+    "state": "UT",
+    "zip": "84108"
+  },
+  "FR MKTS-JEREMY 12307": {
+    "address": "3151 W KILBY RD",
+    "city": "JEREMY RANCH",
+    "state": "UT",
+    "zip": "84098"
+  },
+  "MACEY'S 11058": {
+    "address": "4530 S. HIGHLAND DR.",
+    "city": "HOLLADAY",
+    "state": "UT",
+    "zip": "84117"
+  },
+  "FR MKTS-LAYTON 12377": {
+    "address": "910 NORTH FAIRFIELD RD",
+    "city": "LAYTON",
+    "state": "UT",
+    "zip": "84040"
+  },
+  "FR MKTS-PARKCITY 12365": {
+    "address": "1740 PARK AVENUE",
+    "city": "PARK CITY",
+    "state": "UT",
+    "zip": "84060"
+  },
+  "FR MKTS-GRANGER 12381": {
+    "address": "3555 WEST 3500 SOUTH",
+    "city": "WEST VALLEY CITY",
+    "state": "UT",
+    "zip": "84119"
+  },
+  "MACEY'S 11062": {
+    "address": "5632 S 900 E",
+    "city": "MURRAY",
+    "state": "UT",
+    "zip": "84121"
+  },
+  "MACEY'S SANDY 10964": {
+    "address": "7850 S 1300 E",
+    "city": "SANDY",
+    "state": "UT",
+    "zip": "84094"
+  },
+  "DAN'S #5 70TH. 11474": {
+    "address": "2029 E 7000 S",
+    "city": "SALT LAKE CITY",
+    "state": "UT",
+    "zip": "84121"
+  },
+  "MACEY'S PL GROVE 11034": {
+    "address": "931 W STATE ST",
+    "city": "PLEASANT GROVE",
+    "state": "UT",
+    "zip": "84062"
+  },
+  "MACEY'S TOOELE 11042": {
+    "address": "972 N MAIN",
+    "city": "TOOELE",
+    "state": "UT",
+    "zip": "84074"
+  },
+  "KAMAS FOODTOWN 10866": {
+    "address": "145 W 200 S",
+    "city": "KAMAS",
+    "state": "UT",
+    "zip": "84036"
+  },
+  "RIDLEY'S ELY 11154": {
+    "address": "1689 GREAT BASIN BLVD",
+    "city": "ELY",
+    "state": "NV",
+    "zip": "89301"
+  },
+  "LIN'S MKT PRICE 10838": {
+    "address": "760 WEST PRICE RIVER DRIVE",
+    "city": "PRICE",
+    "state": "UT",
+    "zip": "84501"
+  },
+  "RIDLEY'S LARAMIE 11131": {
+    "address": "3112 GRAND AVE.",
+    "city": "LARAMIE",
+    "state": "WY",
+    "zip": "83301"
+  },
+  "RIDLEY'S MIDDLET 18442": {
+    "address": "206 E MAIN",
+    "city": "MIDDLETON",
+    "state": "ID",
+    "zip": "83644"
+  },
+  "RIDLEY'S RUPERT 18447": {
+    "address": "310 ONIEDA",
+    "city": "RUPERT",
+    "state": "ID",
+    "zip": "83350"
+  },
+  "MISSOULA FRESH MKT #13417": {
+    "address": "800 WEST BROADWAY",
+    "city": "MISSOULA",
+    "state": "MT",
+    "zip": "59801"
+  },
+  "RIDLEY'S KIMBERLY 18464": {
+    "address": "210 MAIN ST S",
+    "city": "KIMBERLY",
+    "state": "ID",
+    "zip": "83341"
+  },
+  "WINEGARS SUPRMKT 11790": {
+    "address": "3440 W 4800 S",
+    "city": "ROY",
+    "state": "UT",
+    "zip": "84067"
+  },
+  "THE MARKET@TELLURIDE 11337": {
+    "address": "157 S FIR STREET",
+    "city": "TELLURIDE",
+    "state": "CO",
+    "zip": "81435"
+  },
+  "L&P GROCERY DELI 13558": {
+    "address": "215 N MAIN STREET",
+    "city": "BOULDER",
+    "state": "MT",
+    "zip": "59632"
+  },
+  "CLAIBORNE HILL WAVELND  #741": {
+    "address": "410 HWY 90",
+    "city": "WAVELAND",
+    "state": "MS",
+    "zip": "39576"
+  },
+  "CASHWISE #3011 DAX": {
+    "address": "1020 HWY 15 SOUTH",
+    "city": "HUTCHINSON",
+    "state": "MN",
+    "zip": "55350"
+  },
+  "COBORNS #2032  SPCLTY DAX": {
+    "address": "1725 PINE CONE ROAD SOUTH",
+    "city": "SARTELL",
+    "state": "MN",
+    "zip": "56377"
+  },
+  "COBORNS #2007 SPCLTY DAX": {
+    "address": "701 1ST AVE NORTH",
+    "city": "SARTELL",
+    "state": "MN",
+    "zip": "56377"
+  },
+  "COBORNS #2037 SPRSTR SPEC DAX": {
+    "address": "225 33RD ST WEST",
+    "city": "HASTINGS",
+    "state": "MN",
+    "zip": "55033"
+  },
+  "COBORNS #2042 SPCLTY DAX": {
+    "address": "1010 EAST ENTERPRISE DR",
+    "city": "BELLE PLAINE",
+    "state": "MN",
+    "zip": "56011"
+  },
+  "COBORNS #2023 SPRSTE SPCLT DAX": {
+    "address": "19425 EVANS ST NW",
+    "city": "ELK RIVER",
+    "state": "MN",
+    "zip": "55330"
+  },
+  "COBORNS #2035 SPRSTE SPEC DAX": {
+    "address": "900 COOPER AVE SOUTH",
+    "city": "ST CLOUD",
+    "state": "MN",
+    "zip": "56301"
+  },
+  "COBORNS #2008  SPCLTY DAX": {
+    "address": "705 COUNTY ROAD 75",
+    "city": "CLEARWATER",
+    "state": "MN",
+    "zip": "55320"
+  },
+  "COBORNS #2038 SPRSTR SPEC DAX": {
+    "address": "200 ALTON AVE SE",
+    "city": "NEW PRAGUE",
+    "state": "MN",
+    "zip": "56071"
+  },
+  "COBORNS #2039 SPCLTY DAX": {
+    "address": "1500 ELM STREET",
+    "city": "ST JOSEPH",
+    "state": "MN",
+    "zip": "56374"
+  },
+  "MARKETPLACE SPCLTY 2581 DAX": {
+    "address": "2191 US HWY 8",
+    "city": "ST CROIX FALLS",
+    "state": "WI",
+    "zip": "54024"
+  },
+  "COBORNS #2031  SPCLTY DAX": {
+    "address": "711 ROSE DRIVE",
+    "city": "BIG LAKE",
+    "state": "MN",
+    "zip": "55309"
+  },
+  "COBORNS #2033 SPCLTY DAX": {
+    "address": "7900 SUNWOOD DRIVE",
+    "city": "RAMSEY",
+    "state": "MN",
+    "zip": "55303"
+  },
+  "COBORNS #2016  SPCLTY DAX": {
+    "address": "645 LAKE STREET SOUTH",
+    "city": "LONG PRAIRIE",
+    "state": "MN",
+    "zip": "56347"
+  },
+  "COBORNS #2028 SPCLTY DAX": {
+    "address": "1400 BABOCK BLVD E",
+    "city": "DELANO",
+    "state": "MN",
+    "zip": "55328"
+  },
+  "SAFEWAY EASTERN #0878": {
+    "address": "7900 FT HUNT",
+    "city": "ALEXANDRIA",
+    "state": "VA",
+    "zip": "22308"
+  },
+  "SAFEWAY EASTERN #1431": {
+    "address": "12200 WEST OX ROAD",
+    "city": "FAIRFAX",
+    "state": "VA",
+    "zip": "22033"
+  },
+  "SAFEWAY ALEXANDRIA # 1019": {
+    "address": "1624 BELLE VIEW",
+    "city": "ALEXANDRIA",
+    "state": "VA",
+    "zip": "22307"
+  },
+  "SAFEWAY EASTERN #1920": {
+    "address": "1688 ANDERSON RAOD",
+    "city": "MCLEAN",
+    "state": "VA",
+    "zip": "22102"
+  },
+  "SAFEWAY WARRENTON # 1801": {
+    "address": "189 LEE HIGHWAY",
+    "city": "WARRENTON",
+    "state": "VA",
+    "zip": "20186"
+  },
+  "SAFEWAY EASTERN #4007": {
+    "address": "3713 LEE HIGHWAY",
+    "city": "ARLINGTON",
+    "state": "VA",
+    "zip": "22207"
+  },
+  "SAFEWAY EASTERN #2616": {
+    "address": "3043 NUTLEY STREET",
+    "city": "FAIRFAX",
+    "state": "VA",
+    "zip": "22031"
+  },
+  "SAFEWAY BRISTOW # 2635": {
+    "address": "12821 BRAEMAR VILLAGE PLAZA",
+    "city": "BRISTOW",
+    "state": "VA",
+    "zip": "20136"
+  },
+  "SAFEWAY EASTERN #2883": {
+    "address": "6118 ARLINGTON BLVD",
+    "city": "FALLS CHURCH",
+    "state": "VA",
+    "zip": "22044"
+  },
+  "SAFEWAY EASTERN #4002": {
+    "address": "5727 BURKE CENTER",
+    "city": "BURKE",
+    "state": "VA",
+    "zip": "22015"
+  },
+  "SAFEWAY EASTERN #1847": {
+    "address": "5980 KINGSTOWNE CENTER",
+    "city": "ALEXANDRIA",
+    "state": "VA",
+    "zip": "22315"
+  },
+  "SAFEWAY EASTERN #3250": {
+    "address": "3526 KING ST",
+    "city": "ALEXANDRIA",
+    "state": "VA",
+    "zip": "22302"
+  },
+  "T&C MARKETS IM  INC. MARQUETTE": {
+    "address": "DBA TADYCH'S FAMILY MARKET",
+    "city": "MARQUETTE",
+    "state": "MI",
+    "zip": "49855"
+  },
+  "HARDING'S MARKET #423": {
+    "address": "6330 S WESTNEDGE AVE",
+    "city": "PORTAGE",
+    "state": "MI",
+    "zip": "49002"
+  },
+  "YAS GROCER CHICAGO INC": {
+    "address": "DBA GO GROCER 11",
+    "city": "CHICAGO",
+    "state": "IL",
+    "zip": "60614"
+  },
+  "EVERETTS'S FOODS        'B'": {
+    "address": "1833 E 38TH ST",
+    "city": "MINNEAPOLIS",
+    "state": "MN",
+    "zip": "55406"
+  },
+  "GENES SAUSAGE SHOP": {
+    "address": "4750 N LINCOLN",
+    "city": "CHICAGO",
+    "state": "IL",
+    "zip": "60625"
+  },
+  "RAMONA FAMILY NATURALS INFRA": {
+    "address": "325 6TH STREET",
+    "city": "RAMONA",
+    "state": "CA",
+    "zip": "92065"
+  },
+  "LEMON STREET MARKET INFRA": {
+    "address": "241 W. LEMON ST.",
+    "city": "LANCASTER",
+    "state": "PA",
+    "zip": "17603"
+  },
+  "NEW MORNING NAT FOODS  *INFRA*": {
+    "address": "3 YORK STREET",
+    "city": "KENNEBUNK",
+    "state": "ME",
+    "zip": "04043"
+  },
+  "NEW MORNING COUNTRY STR *INFRA": {
+    "address": "129 MAIN ST NORTH",
+    "city": "WOODBURY",
+    "state": "CT",
+    "zip": "06798"
+  },
+  "SUNFLOWER NATURAL FOODS *INFRA": {
+    "address": "75 MILL HILL RD",
+    "city": "WOODSTOCK",
+    "state": "NY",
+    "zip": "12498"
+  },
+  "BASIL BANDWAGON CLINTON *INFRA": {
+    "address": "38 OLD HIGHWAY 22",
+    "city": "CLINTON",
+    "state": "NJ",
+    "zip": "08809"
+  },
+  "SUNFLOWER NATURAL FOODS INFRA#": {
+    "address": "24 GARDEN STREET",
+    "city": "RHINEBECK",
+    "state": "NY",
+    "zip": "12572"
+  },
+  "BASIL BANDWAGON NATURAL*INFRA": {
+    "address": "276 HWAY 31",
+    "city": "FLEMINGTON",
+    "state": "NJ",
+    "zip": "08822"
+  },
+  "LIFE SOURCE NATURAL FDS INFRA": {
+    "address": "2649 COMMERCIAL STREET SE",
+    "city": "SALEM",
+    "state": "OR",
+    "zip": "97302"
+  },
+  "DECICCO'S MILLWOOD": {
+    "address": "230 SAW MILL RIVER RD.",
+    "city": "MILLWOOD",
+    "state": "NY",
+    "zip": "10546"
+  },
+  "DECICCO'S & SONS EASTCHESTER": {
+    "address": "777 WHITE PLAINS ROAD",
+    "city": "SCARSDALE",
+    "state": "NY",
+    "zip": "10583"
+  },
+  "DECICCO'S BREWSTER": {
+    "address": "50 INDEPENDENT WAY",
+    "city": "BREWSTER",
+    "state": "NY",
+    "zip": "10509"
+  },
+  "DECICCO'S PELHAM": {
+    "address": "43 FIFTH AVE",
+    "city": "PELHAM",
+    "state": "NY",
+    "zip": "10803"
+  },
+  "DECICCO'S ARDSLEY": {
+    "address": "21 CENTER STREET",
+    "city": "ARDSLEY",
+    "state": "NY",
+    "zip": "10502"
+  },
+  "DECICCO'S ARMONK": {
+    "address": "17 MAPLE AVE",
+    "city": "ARMONK",
+    "state": "NY",
+    "zip": "10504"
+  },
+  "DECICCO'S HARRISON": {
+    "address": "7 HALSTEAD AVE",
+    "city": "HARRISON",
+    "state": "NY",
+    "zip": "10528"
+  },
+  "DECICCO'S SOMERS": {
+    "address": "266 ROUTE 202",
+    "city": "SOMERS",
+    "state": "NY",
+    "zip": "10589"
+  },
+  "DECICCO'S LARCHMONT": {
+    "address": "2141 PALMER AVENUE",
+    "city": "LARCHMONT",
+    "state": "NY",
+    "zip": "10538"
+  },
+  "CANTWELLS MARKET & DELI": {
+    "address": "1533 STATE STREET",
+    "city": "SANTA BARARA",
+    "state": "CA",
+    "zip": "93101"
+  },
+  "BONEY'S BAYSIDE MKT/GROCERY": {
+    "address": "155 ORANGE AVE.",
+    "city": "CORONADO",
+    "state": "CA",
+    "zip": "92118"
+  },
+  "TWO ROCK WINE & DRY GOODS  (S)": {
+    "address": "ATLERIE / TWO ROCK WINE (S)",
+    "city": "HM11",
+    "state": "",
+    "zip": "00000"
+  },
+  "SUPERMART LTD CARE OF TIGER'S": {
+    "address": "110 NEWFIELD AVE",
+    "city": "EDISON",
+    "state": "NJ",
+    "zip": "08837"
+  },
+  "MARVELOUS CAT LLC DBA LIVE OAK": {
+    "address": "4410 MANCHACA ROAD",
+    "city": "DBA LIVE OAK MARKE",
+    "state": "TX",
+    "zip": "78745"
+  },
+  "RIVERWARDS PRODUCE": {
+    "address": "2200 E NORRIS ST",
+    "city": "PHILADELPHIA",
+    "state": "PA",
+    "zip": "19125"
+  },
+  "SWEET CLOVER MARKET": {
+    "address": "21 ESSEX WAY",
+    "city": "ESSEX",
+    "state": "VT",
+    "zip": "05452"
+  },
+  "CASA GUADALUPE SUPERMARKET": {
+    "address": "2909 MISSION STREET",
+    "city": "SAN FRANCISCO",
+    "state": "CA",
+    "zip": "94110"
+  },
+  "HEALTHY FDS-DRY BROKER INA": {
+    "address": "4480 HO'OKUI RD.",
+    "city": "KILAUEA",
+    "state": "HI",
+    "zip": "96754"
+  },
+  "CREAM OF THE CROP": {
+    "address": "2009 SOUTH COAST HWY",
+    "city": "OCEANSIDE",
+    "state": "CA",
+    "zip": "92054"
+  },
+  "JAYDE'S MARKET": {
+    "address": "2964 N BEVERLY GLEN CIRCLE",
+    "city": "LOS ANGELES",
+    "state": "CA",
+    "zip": "90077"
+  },
+  "BETTY MAYRA LLC DBA DESIERTO": {
+    "address": "DBA DESIERTO ALTO",
+    "city": "YUCCA VALLEY",
+    "state": "CA",
+    "zip": "92284"
+  },
+  "SUNAC NATURAL MARKET": {
+    "address": "600 WEST 42ND STREET",
+    "city": "NEW YORK",
+    "state": "NY",
+    "zip": "10036"
+  },
+  "MARKET FRESH MARLTON  LLC": {
+    "address": "710 RT. 73 SOUTH",
+    "city": "MARLTON",
+    "state": "NJ",
+    "zip": "08053"
+  },
+  "BLOSSOM TRADING LLC": {
+    "address": "17446 KUYKENDAHL ROAD",
+    "city": "SPRING",
+    "state": "TX",
+    "zip": "77379"
+  },
+  "HARVEST NATURAL MARKET": {
+    "address": "4603 SIENNA PKWY",
+    "city": "MISSOURI CITY",
+    "state": "TX",
+    "zip": "77459"
+  },
+  "NEW LEAF PACIFIC GROCERY": {
+    "address": "1134 PACIFIC AVENUE",
+    "city": "SANTA CRUZ",
+    "state": "CA",
+    "zip": "95060"
+  },
+  "NSM SEVEN CORNERS #5 GG": {
+    "address": "1954 SE DIVISION ST",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97202"
+  },
+  "NSM SLABTOWN #16 GG": {
+    "address": "2170 NW RALEIGH ST",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97210"
+  },
+  "NSM SELLWOOD #2 GG": {
+    "address": "1214 SE TACOMA ST",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97202"
+  },
+  "NSM WOODSTOCK #17 GG": {
+    "address": "4500 SE WOODSTOCK",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97206"
+  },
+  "NSM HAWTHORNE #10 GG": {
+    "address": "4034 SE HAWTHORNE BLVD",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97214"
+  },
+  "NSM WILLIAMS #13 GG": {
+    "address": "3445 N. WILLIAMS AVE",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97227"
+  },
+  "NSM CONCORDIA #4 GG": {
+    "address": "5320 NE 33RD AVE",
+    "city": "PORTLAND",
+    "state": "OR",
+    "zip": "97211"
+  },
+  "THE LOCAL MARKET & KITCHEN": {
+    "address": "604 CENTRAL AVE",
+    "city": "SHIP BOTTOM",
+    "state": "NJ",
+    "zip": "08008"
+  },
+  "DOMINICK'S MARKET": {
+    "address": "385 CITY ISLAND AVE",
+    "city": "BRONX",
+    "state": "NY",
+    "zip": "10464"
+  },
+  "ASG: LINCOLN MARKET #4": {
+    "address": "1134 FULTON ST",
+    "city": "BROOKLYN",
+    "state": "NY",
+    "zip": "11213"
+  },
+  "DELUCA'S BACK BAY MKT 10409": {
+    "address": "239 NEWBURY ST",
+    "city": "BOSTON",
+    "state": "MA",
+    "zip": "02116"
+  },
+  "DECICCO'S NEW CITY": {
+    "address": "180 SOUTH MAIN STREET",
+    "city": "NEW CITY",
+    "state": "NY",
+    "zip": "10956"
+  },
+  "GOURMET GROCERY OUTLET": {
+    "address": "410 ANDBRO DR, UNIT 3",
+    "city": "PITMAN",
+    "state": "NJ",
+    "zip": "08071"
+  },
+  "DECICCO'S KATONA": {
+    "address": "132 BEDFORD AVENUE",
+    "city": "KATONAH",
+    "state": "NY",
+    "zip": "10536"
+  },
+  "HARVEST MKT GROC(RTB)": {
+    "address": "171 BOATYARD DR.",
+    "city": "FORT BRAGG",
+    "state": "CA",
+    "zip": "95437"
+  },
+  "SHOP AND SHOP": {
+    "address": "3563 MAPLE COURT",
+    "city": "OCEANSIDE",
+    "state": "NY",
+    "zip": "11572"
+  },
+  "SIMONE'S MARKET LLC***COLL***": {
+    "address": "8201 OAK ST #2",
+    "city": "NEW ORLEANS",
+    "state": "LA",
+    "zip": "70118"
+  },
+  "SAVAGE USA LLC    P": {
+    "address": "17815 WAYNE STREET",
+    "city": "ZANESVILLE",
+    "state": "IN",
+    "zip": "48799"
+  },
+  "PIAZZA'S-SM-PROMO": {
+    "address": "1218 W. HILLSDALE BLVD.",
+    "city": "SAN MATEO",
+    "state": "CA",
+    "zip": "94403"
+  },
+  "PIAZZA'S-PA-PROMO (RTB)": {
+    "address": "3922 MIDDLEFIELD ROAD",
+    "city": "PALO ALTO",
+    "state": "CA",
+    "zip": "94303"
+  },
+  "WOODMAN'S #39": {
+    "address": "W124N8145 HWY 145",
+    "city": "MENOMONEE FALLS",
+    "state": "WI",
+    "zip": "53051"
+  },
+  "MACEY'S OGDEN 10990": {
+    "address": "325 E 36TH ST",
+    "city": "OGDEN",
+    "state": "UT",
+    "zip": "84405"
+  },
+  "DICK'S CENTERVL 10565": {
+    "address": "350 E PAGES LN",
+    "city": "CENTERVILLE",
+    "state": "UT",
+    "zip": "84014"
+  },
+  "MACEY'S W JORDAN 11010": {
+    "address": "7859 S 3200 W",
+    "city": "WEST JORDAN",
+    "state": "UT",
+    "zip": "84088"
+  },
+  "RIDLEY'S MCCALL 18463": {
+    "address": "411 DIENHARD LN",
+    "city": "McCALL",
+    "state": "ID",
+    "zip": "83638"
+  },
+  "RIDLEY'S WEISER 18444": {
+    "address": "621 1ST ST",
+    "city": "WEISER",
+    "state": "ID",
+    "zip": "83672"
+  },
+  "RIDLEY'S BLACKFO 17155": {
+    "address": "1295 PARKWAY BLVD",
+    "city": "BLACKFOOT",
+    "state": "ID",
+    "zip": "83321"
+  },
+  "RIDLEY'S WINNEMUCCA 11135": {
+    "address": "1125 WEST WINNEMUCCA BLVD.",
+    "city": "WINNEMUCCA",
+    "state": "NV",
+    "zip": "89445"
+  },
+  "CHAMPAGNE'S MARKET #691": {
+    "address": "454 HEYMANN BLVD.",
+    "city": "LAFAYETTE",
+    "state": "LA",
+    "zip": "70503"
+  },
+  "GREENE VILLE GARDEN": {
+    "address": "373 MYRTLE AVENUE",
+    "city": "BROOKLYN",
+    "state": "NY",
+    "zip": "11205"
+  },
+  "COMMUNITY MARKET LLC": {
+    "address": "778 FORT WORTH AVE",
+    "city": "DALLAS",
+    "state": "TX",
+    "zip": "75208"
+  },
+  "MARKETPLACE SPCLTY 2580 DAX": {
+    "address": "330 SOUTH MAIN STREET",
+    "city": "RICE LAKE",
+    "state": "WI",
+    "zip": "54868"
+  },
+  "MARKETPLACE SPCLTY 2583 DAX": {
+    "address": "10514 SO MAIN STREET",
+    "city": "HAYWARD",
+    "state": "WI",
+    "zip": "54843"
+  },
+  "COBORNS #2019  SPCLTY DAX": {
+    "address": "1100 7TH AVE SOUTH",
+    "city": "PRINCETON",
+    "state": "MN",
+    "zip": "55371"
+  },
+  "COBORNS #2001 SPCLTY DAX": {
+    "address": "110 SOUTH 1ST ST",
+    "city": "SAUK RAPIDS",
+    "state": "MN",
+    "zip": "56379"
+  },
+  "COBORNS #2002 SPCLTY 'A' DAX": {
+    "address": "16 GLEN ST",
+    "city": "FOLEY",
+    "state": "MN",
+    "zip": "56329"
+  },
+  "COBORNS #2029 SPCLTY DAX": {
+    "address": "5698 LA CENTRE AVENUE NE",
+    "city": "ALBERTVILLE",
+    "state": "MN",
+    "zip": "55301"
+  },
+  "MARKETPLACE SPCLTY 2582 DAX": {
+    "address": "207 PINE AVE WEST",
+    "city": "MENOMONIE",
+    "state": "WI",
+    "zip": "54751"
+  },
+  "BOCKWINKEL'S AT HARBOR PT.0057": {
+    "address": "HARBOR MARKET  180057",
+    "city": "CHICAGO",
+    "state": "IL",
+    "zip": "60601"
+  },
+  "CANTORO'S MARKET   \"B\"": {
+    "address": "15550 NORTH HAGGERTY RD",
+    "city": "PLYMOUTH. MI",
+    "state": "MI",
+    "zip": "48170"
+  },
+  "MARINE GENERAL STORE #255101": {
+    "address": "101 JUDD STREET",
+    "city": "ST. CROIX",
+    "state": "MN",
+    "zip": "55047"
+  },
+  "SOUTH LOOP MARKET  \"A\"": {
+    "address": "235 WEST VAN BUREN",
+    "city": "CHICAGO",
+    "state": "IL",
+    "zip": "60607"
+  },
+  "LEG UP FARMERS MARKET *INFRA*": {
+    "address": "3100 N GEORGE ST",
+    "city": "YORK",
+    "state": "PA",
+    "zip": "17406"
+  },
+  "BASIL BANDWAGON LAMBRTVL INFRA": {
+    "address": "239 N UNION ST",
+    "city": "LAMBERTVILLE",
+    "state": "NJ",
+    "zip": "08530"
+  },
+  "NILSSEN'S IGA 'B'": {
+    "address": "265 5TH STREET",
+    "city": "CLEAR LAKE",
+    "state": "WI",
+    "zip": "54005"
+  },
+  "FOOD E. CONCEPTS INC": {
+    "address": "4437 S 134TH ST",
+    "city": "OMAHA",
+    "state": "NE",
+    "zip": "68137"
+  },
+  "TIM & TOM'S SPEEDY MRKT/P": {
+    "address": "2310 COMO AVE",
+    "city": "ST PAUL",
+    "state": "MN",
+    "zip": "55108"
+  },
+  "BURNETT DAIRY CO-OP  \" \"": {
+    "address": "11631 STATE RD 70",
+    "city": "GRANTSBURG",
+    "state": "WI",
+    "zip": "54840"
+  },
+  "BONEY'S BAYSIDE MKT/PERISHABLE": {
+    "address": "155 ORANGE AVE.",
+    "city": "CORONADO",
+    "state": "CA",
+    "zip": "92218"
+  },
+  "WINDMILL FARMS-GROCERY": {
+    "address": "6386 DEL CERRO BLVD",
+    "city": "SAN DIEGO",
+    "state": "CA",
+    "zip": "92120"
+  },
+  "GARDEN OF EDEN (14TH ST)": {
+    "address": "7 EAST 14 STREET",
+    "city": "NEW YORK",
+    "state": "NY",
+    "zip": "10003"
+  },
+  "DELUCCHI'S MARKET": {
+    "address": "3640 FLORENCE STREET",
+    "city": "REDWOOD CITY",
+    "state": "CA",
+    "zip": "94063"
+  },
+  "ELROY'S FINE FOODS": {
+    "address": "15 SOLEDAD DRIVE",
+    "city": "MONTEREY",
+    "state": "CA",
+    "zip": "93940"
+  },
+  "CELESTIAL NATURAL FOODS": {
+    "address": "66443 KAM HWY",
+    "city": "HALEIWA",
+    "state": "HI",
+    "zip": "96712"
+  },
+  "TRI-COUNTY PRODUCE": {
+    "address": "335 S MILPAS STREET",
+    "city": "SANTA BARBARA",
+    "state": "CA",
+    "zip": "93103"
+  },
+  "RODEO GEN-DRY": {
+    "address": "3661 BALDWIN AVENUE",
+    "city": "MAKAWAO",
+    "state": "HI",
+    "zip": "96768"
+  },
+  "COMMON CROW NATRL HLTH INFRA": {
+    "address": "200 EASTERN AVE",
+    "city": "GLOUCESTER",
+    "state": "MA",
+    "zip": "01930"
+  },
+  "ELEVENTH HOUSE LLC DBA ODD PRO": {
+    "address": "DBA ODD PROVISIONS",
+    "city": "WASHINGTON",
+    "state": "DC",
+    "zip": "20010"
+  },
+  "A MATTER OF HEALTH II *INFRA*": {
+    "address": "138 ROCKLAND PLAZA",
+    "city": "NANUET",
+    "state": "NY",
+    "zip": "10954"
+  },
+  "NEW LEAF CAPIT GROCERY": {
+    "address": "1210 41ST AVENUE",
+    "city": "CAPITOLA",
+    "state": "CA",
+    "zip": "95010"
+  },
+  "NEW LEAF WESTSIDE GROC": {
+    "address": "1101 FAIR AVENUE",
+    "city": "SANTA CRUZ",
+    "state": "CA",
+    "zip": "95060"
+  },
+  "SONNY'S MARKET": {
+    "address": "800 TURNPIKE RD",
+    "city": "NEW IPSWICH",
+    "state": "NH",
+    "zip": "03071"
+  },
+  "THE NOUVAUX MARKET CO": {
+    "address": "3539 VAUX ST",
+    "city": "PHILADELPHIA",
+    "state": "PA",
+    "zip": "19129"
+  },
+  "CHRISTINAS EPICURE   \"NAT\"": {
+    "address": "1015 OYSTERBAY ROAD",
+    "city": "EAST NORWICH",
+    "state": "NY",
+    "zip": "11732"
+  },
+  "THE BROAD BRANCH MARKET": {
+    "address": "5608 BROAD BRANCH RD",
+    "city": "WASHINGTON",
+    "state": "DC",
+    "zip": "20015"
+  },
+  "WINZ MARKET": {
+    "address": "16 LAIRD ST",
+    "city": "LONG BRANCH",
+    "state": "NJ",
+    "zip": "07740"
+  },
+  "VINCENT'S COUNTRY STORE 10165": {
+    "address": "109 MAIN ST.",
+    "city": "WESTMINISTER",
+    "state": "MA",
+    "zip": "01473"
+  },
+  "BBQLAND (FUNCTION UNLIMTD INC)": {
+    "address": "6336 EAST SPRING STREET",
+    "city": "LONG BEACH CITY",
+    "state": "CA",
+    "zip": "90815"
+  },
+  "HARVEST URBAN MARKET": {
+    "address": "191 8TH STREET",
+    "city": "SAN FRANCISCO",
+    "state": "CA",
+    "zip": "94103"
+  },
+  "PACIFIC MKT-SEB(RTB)        KD": {
+    "address": "550 N. GRAVENSTEIN HWY",
+    "city": "SEBASTOPOL",
+    "state": "CA",
+    "zip": "95472"
+  },
+  "WOODMAN'S #40 WAUKESHA": {
+    "address": "1600 E MAIN ST",
+    "city": "WAUKESHA",
+    "state": "WI",
+    "zip": "53186"
+  },
+  "618 Restaurant": {
+    "address": "618 Park Ave",
+    "city": "Freehold Borough",
+    "state": "NJ",
+    "zip": "7728.0"
+  },
+  "10 Hope": {
+    "address": "10 Hope St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211.0"
+  },
+  "35 East Household Llc": {
+    "address": "35 E 62nd St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10065.0"
+  },
+  "37 Alpine Road Manager": {
+    "address": "28 LIBERTY STREET",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10005.0"
+  },
+  "Abc Kitchen": {
+    "address": "35 E 18th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10003.0"
+  },
+  "Adp Chelsea": {
+    "address": "135 W 18th St (7th Avenue)",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10011.0"
+  },
+  "Ambassador Of Scarsdale": {
+    "address": "9 Saxon Woods Rd",
+    "city": "White Plains",
+    "state": "NY",
+    "zip": "10605.0"
+  },
+  "Analogue": {
+    "address": "19 W 8th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10011.0"
+  },
+  "Artisan's": {
+    "address": "41 West 40th Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10018.0"
+  },
+  "Barrel & Roost": {
+    "address": "160 NJ-35",
+    "city": "Red Bank",
+    "state": "NJ",
+    "zip": "7701.0"
+  },
+  "Brasserie 292": {
+    "address": "292 Main St",
+    "city": "Poughkeepsie",
+    "state": "NY",
+    "zip": "12601.0"
+  },
+  "Brick Farm Tavern": {
+    "address": "130 Hopewell Rocky Hill Rd",
+    "city": "Hopewell",
+    "state": "NJ",
+    "zip": "8525.0"
+  },
+  "British Airways (jfk) Flik": {
+    "address": "1 Pepsi Way",
+    "city": "Somers",
+    "state": "NY",
+    "zip": "10589.0"
+  },
+  "Cafe St. Barts/inside Park": {
+    "address": "325 Park Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10022.0"
+  },
+  "Calyer": {
+    "address": "519 Myrtle Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11205.0"
+  },
+  "Catskill Provisions (upper Main St)": {
+    "address": "16 Upper Main St",
+    "city": "Callicoon",
+    "state": "NY",
+    "zip": "12723.0"
+  },
+  "Chanson": {
+    "address": "20 W 23rd St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10010.0"
+  },
+  "Citizen Hotel (bowery)": {
+    "address": "189 Bowery",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10002.0"
+  },
+  "Cloister Cafe": {
+    "address": "238 E 9th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10003.0"
+  },
+  "Convene 605 3rd Ave 7th Fl": {
+    "address": "605 3rd Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10158.0"
+  },
+  "Convene At One New York Plaza": {
+    "address": "1 Liberty St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10006.0"
+  },
+  "Copper Beech": {
+    "address": "133 S Country Rd",
+    "city": "Bellport",
+    "state": "NY",
+    "zip": "11713.0"
+  },
+  "Corner Deli/la Esquina *nyc*": {
+    "address": "1402 2nd Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10021.0"
+  },
+  "Crave @ Neshanic Valley Golf Course": {
+    "address": "2301 S Branch Rd",
+    "city": "Neshanic Station",
+    "state": "NJ",
+    "zip": "8853.0"
+  },
+  "Crave Fish Bar": {
+    "address": "945 2nd Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10022.0"
+  },
+  "Dining At The Bedford Post": {
+    "address": "954 Old Post Road",
+    "city": "Bedford",
+    "state": "NY",
+    "zip": "10506.0"
+  },
+  "Faun Restaurant (chef Mod)": {
+    "address": "606 Vanderbilt Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11238.0"
+  },
+  "Forage And Gather": {
+    "address": "81 Main St",
+    "city": "Mountain Dale",
+    "state": "NY",
+    "zip": "12763.0"
+  },
+  "Fortina Commissary": {
+    "address": "1086 N Broadway",
+    "city": "Yonkers",
+    "state": "NY",
+    "zip": "10701.0"
+  },
+  "Fresco Products": {
+    "address": "1160 Randall Ave",
+    "city": "The Bronx",
+    "state": "NY",
+    "zip": "10474.0"
+  },
+  "Harbor Bar Llc": {
+    "address": "1095 6th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10036.0"
+  },
+  "Husk And Vine": {
+    "address": "655 Middle Country Rd",
+    "city": "St James",
+    "state": "NY",
+    "zip": "11780.0"
+  },
+  "Jakes Dilemma": {
+    "address": "430 Amsterdam Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10024.0"
+  },
+  "John's Market ****** Ipex": {
+    "address": "2520 50th Ave",
+    "city": "Long Island City",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "Julia's Beer And Wine Bar": {
+    "address": "818 Woodward Ave",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11385.0"
+  },
+  "Koku": {
+    "address": "454 Main Street",
+    "city": "Armonk",
+    "state": "NY",
+    "zip": "10504.0"
+  },
+  "Laguardia Marriot": {
+    "address": "102-05 Ditmars Blvd",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11369.0"
+  },
+  "Linkedin Cafe Nyc": {
+    "address": "20 West 22nd Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10010.0"
+  },
+  "Little Chef Little Cafe": {
+    "address": "5-43 48th Ave",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "Lodge At Valley Rock Inn": {
+    "address": "27 Mill St",
+    "city": "Sloatsburg",
+    "state": "NY",
+    "zip": "10974.0"
+  },
+  "Michaelangelo's Wine Bar": {
+    "address": "119 Front St",
+    "city": "Massapequa Park",
+    "state": "NY",
+    "zip": "11762.0"
+  },
+  "Mister French Nyc": {
+    "address": "218 Bowery",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10012.0"
+  },
+  "Momentum Events": {
+    "address": "90 Harrow Ln",
+    "city": "Manhasset",
+    "state": "NY",
+    "zip": "11030.0"
+  },
+  "Morso Restaurant": {
+    "address": "420 E 59th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10022.0"
+  },
+  "Murrays Cheese (jackson)": {
+    "address": "28-30 Jackson Ave",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "Neumans Kitchen (philly)": {
+    "address": "35-02 48th Ave",
+    "city": "Long Island City",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "Noho Cultural": {
+    "address": "130 Avenue C, Ninth Precinct",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10002.0"
+  },
+  "Oriental Arrows": {
+    "address": "266 Malcolm X Blvd",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11233.0"
+  },
+  "Park Avenue Tavern": {
+    "address": "99 Park Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10016.0"
+  },
+  "Piccolo Ristoro": {
+    "address": "508 W 28th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001.0"
+  },
+  "Plancha Tapas And Wine Bar": {
+    "address": "931 Franklin Ave",
+    "city": "Garden City",
+    "state": "NY",
+    "zip": "11530.0"
+  },
+  "Point O'woods Store": {
+    "address": "9 Point O'Woods Avenue",
+    "city": "Point O'Woods",
+    "state": "NY",
+    "zip": "11706.0"
+  },
+  "Polaris Ewr Food": {
+    "address": "150 Greenwich Street, 4 World Trade Center",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10007.0"
+  },
+  "Presidential Caterers": {
+    "address": "1400 Prospect Ave.",
+    "city": "East Meadow",
+    "state": "NY",
+    "zip": "11554.0"
+  },
+  "Red Paper Clip": {
+    "address": "120 Christopher St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10014.0"
+  },
+  "Redfarm (broadway)": {
+    "address": "2170 Broadway",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10024.0"
+  },
+  "Rogue Kitchens": {
+    "address": "Main Street",
+    "city": "East Islip",
+    "state": "NY",
+    "zip": "11730.0"
+  },
+  "Rossi Deli": {
+    "address": "45 S Clover St",
+    "city": "Poughkeepsie",
+    "state": "NY",
+    "zip": "12601.0"
+  },
+  "Ruby's Midtown": {
+    "address": "219 Mulberry Street",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10012.0"
+  },
+  "Salumi": {
+    "address": "5600 Merrick Rd",
+    "city": "Massapequa Park",
+    "state": "NY",
+    "zip": "11758.0"
+  },
+  "Savanna Rooftop": {
+    "address": "11-01 43rd Ave 12th Floor",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "Sebonack Golf Club": {
+    "address": "405 Sebonac Rd",
+    "city": "Southampton",
+    "state": "NY",
+    "zip": "11968.0"
+  },
+  "Sweet Chick Vernon Blvd": {
+    "address": "46-42 Vernon Blvd",
+    "city": "Queens",
+    "state": "NY",
+    "zip": "11101.0"
+  },
+  "The Bristal Grand": {
+    "address": "310 Jericho Turnpike",
+    "city": "Jericho",
+    "state": "NY",
+    "zip": "11753.0"
+  },
+  "The High Line Hotel": {
+    "address": "180 10th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10011.0"
+  },
+  "The Hollow": {
+    "address": "79 North Pearl Street",
+    "city": "Albany",
+    "state": "NY",
+    "zip": "12207.0"
+  },
+  "The Hudson Bar Room": {
+    "address": "444 10th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001.0"
+  },
+  "The Leroy House": {
+    "address": "430 Hudson St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10014.0"
+  },
+  "The Marram Hotel": {
+    "address": "21 Oceanview Terrace",
+    "city": "Montauk",
+    "state": "NY",
+    "zip": "11954.0"
+  },
+  "The New York Times Cafe": {
+    "address": "620 Eighth Avenue",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10018.0"
+  },
+  "The Rail House": {
+    "address": "65 1st St",
+    "city": "Village of Pelham",
+    "state": "NY",
+    "zip": "10803.0"
+  },
+  "The Vanguard": {
+    "address": "178 7th Ave S",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10014.0"
+  },
+  "Torches On The Hudson/blu Pointe": {
+    "address": "120 Front St",
+    "city": "Newburgh",
+    "state": "NY",
+    "zip": "12550.0"
+  },
+  "Via Carota": {
+    "address": "51 Grove St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10014.0"
+  },
+  "Vinyl Beer": {
+    "address": "1491 Lexington Ave Store N",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10029.0"
+  },
+  "Wallse": {
+    "address": "344 W 11th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10014.0"
+  },
+  "Westbury Tavern": {
+    "address": "26 HARBOR PARK DRIVE",
+    "city": "PORT WASHINGTON",
+    "state": "NY",
+    "zip": "11050.0"
+  },
+  "Big Vin`s Liquors": {
+    "address": "581 Clinton St",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11231.0"
+  },
+  "Plaza Pkge": {
+    "address": "Fifth Avenue at Central Park South",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10019.0"
+  },
+  "Sal`s Place": {
+    "address": "1495 Hicksville Rd # 1",
+    "city": "North Massapequa",
+    "state": "NY",
+    "zip": "11758.0"
+  },
+  "WF-NE ALBANY ABN 10492": {
+    "address": "1425 Central Ave",
+    "city": "Albany",
+    "state": "NY",
+    "zip": "12205.0"
+  },
+  "WF-NE BUFFALO BUF 10601": {
+    "address": "3139 Sheridan Dr",
+    "city": "Amherst",
+    "state": "NY",
+    "zip": "14226.0"
+  },
+  "WF-NE BRIDGEWATER BRW 10639": {
+    "address": "319 Chimney Rock Rd",
+    "city": "Bound Brook",
+    "state": "NJ",
+    "zip": "8805.0"
+  },
+  "WF-NE BROOKLYN BKN 10220": {
+    "address": "238 Bedford Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11249.0"
+  },
+  "WF-NE FORT GREENE FTG 10709": {
+    "address": "292 Ashland Pl",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11217.0"
+  },
+  "WF-NE WILLIAMSBURG WBG 10487": {
+    "address": "238 Bedford Ave",
+    "city": "Brooklyn",
+    "state": "NY",
+    "zip": "11211.0"
+  },
+  "WF-NE CHAPPAQUA CHQ 10600": {
+    "address": "480 N Bedford Rd",
+    "city": "Chappaqua",
+    "state": "NY",
+    "zip": "10514.0"
+  },
+  "WF-NE CLARK CLA 10576": {
+    "address": "1255 Raritan Rd Unit 150",
+    "city": "Clark",
+    "state": "NJ",
+    "zip": "7066.0"
+  },
+  "WF-NE CLOSTER CLO 10381": {
+    "address": "45 Vervalen St",
+    "city": "Closter",
+    "state": "NJ",
+    "zip": "7624.0"
+  },
+  "WF-NE COMMACK CMK 10683": {
+    "address": "120 Veterans Memorial Hwy #34",
+    "city": "Commack",
+    "state": "NY",
+    "zip": "11725.0"
+  },
+  "RANDOM HARVEST MARKET, LLC": {
+    "address": "1785 NY-23",
+    "city": "Craryville",
+    "state": "NY",
+    "zip": "12521.0"
+  },
+  "WF-NE EDGEWATER EGW 10102": {
+    "address": "905 River Rd",
+    "city": "Edgewater",
+    "state": "NJ",
+    "zip": "7020.0"
+  },
+  "WF-NE WESTBURY WBU 10706": {
+    "address": "867 East Gate Blvd",
+    "city": "Garden City",
+    "state": "NY",
+    "zip": "11530.0"
+  },
+  "WF-NE GREENWICH GRW 10057": {
+    "address": "270 Greenwich St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10007.0"
+  },
+  "WF-NE JERICHO JER 10161": {
+    "address": "429 N Broadway",
+    "city": "Jericho",
+    "state": "NY",
+    "zip": "11753.0"
+  },
+  "WF-NE LAKE GROVE LGV 10240": {
+    "address": "120 New Moriches Rd",
+    "city": "Lake Grove",
+    "state": "NY",
+    "zip": "11755.0"
+  },
+  "WF-NE MADISON RCM 10157": {
+    "address": "222 Main St",
+    "city": "Madison",
+    "state": "NJ",
+    "zip": "7940.0"
+  },
+  "WF-NE MARLBORO MAR 10451": {
+    "address": "113 Route 9 South",
+    "city": "Marlboro",
+    "state": "NJ",
+    "zip": "7726.0"
+  },
+  "WF-NE METUCHEN MTC 10602": {
+    "address": "645 Middlesex Ave",
+    "city": "Metuchen",
+    "state": "NJ",
+    "zip": "8840.0"
+  },
+  "WF-NE MONTCLAIR MNC 10059": {
+    "address": "701 Bloomfield Ave",
+    "city": "Montclair",
+    "state": "NJ",
+    "zip": "7042.0"
+  },
+  "WF-NE MORRISTOWN MOR 10519": {
+    "address": "110 Washington St",
+    "city": "Morristown",
+    "state": "NJ",
+    "zip": "7960.0"
+  },
+  "WF-NE BOWERY HOU-10236": {
+    "address": "95 East Houston St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10002.0"
+  },
+  "WF-NE CHELSEA CHE 10131": {
+    "address": "250 7th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001.0"
+  },
+  "WF-NE COLUMBUS CIRCLE CIR10160": {
+    "address": "10 Columbus Circle Ste Sc101",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10019.0"
+  },
+  "WF-NE E. 57TH STREET MTE 10408": {
+    "address": "226 E 57th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10022.0"
+  },
+  "WF-NE HARLEM HRM 10517": {
+    "address": "100 W 125th St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10027.0"
+  },
+  "WF-NE MANHATTAN WEST MHW 10713": {
+    "address": "450 W 33rd St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001.0"
+  },
+  "WF-NE TRIBECA TRB 10245": {
+    "address": "270 Greenwich St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10007.0"
+  },
+  "WF-NE UNION SQUARE USQ 10162": {
+    "address": "4 Union Square S",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10003.0"
+  },
+  "WF-NE UPPER EAST SIDE UES10518": {
+    "address": "1551 3rd Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10128.0"
+  },
+  "WF-NE UPPER W.SIDE UWS 10328": {
+    "address": "808 Columbus Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10025.0"
+  },
+  "WF-NE NEWARK NWK 10559": {
+    "address": "633 Broad St",
+    "city": "Newark",
+    "state": "NJ",
+    "zip": "7102.0"
+  },
+  "WF-NE PARAMUS PAR 10279": {
+    "address": "300 Bergen Town Center",
+    "city": "Paramus",
+    "state": "NJ",
+    "zip": "7652.0"
+  },
+  "WF-NE PARSIPPANY PSP 10501": {
+    "address": "60 Waterview Blvd",
+    "city": "Parsippany-Troy Hills",
+    "state": "NJ",
+    "zip": "7054.0"
+  },
+  "WF-NE PORT CHESTER POC 10483": {
+    "address": "575 Boston Post Rd",
+    "city": "Port Chester",
+    "state": "NY",
+    "zip": "10573.0"
+  },
+  "WF-NE MIDDLETOWN MID 10213": {
+    "address": "471 St Rt 35 N",
+    "city": "Red Bank",
+    "state": "NJ",
+    "zip": "7701.0"
+  },
+  "WF-NE RIDGEWOOD RDW 10106": {
+    "address": "44 Godwin Ave",
+    "city": "Ridgewood",
+    "state": "NJ",
+    "zip": "7450.0"
+  },
+  "WF-NE MILLBURN MBN 10060": {
+    "address": "2245 Springfield Ave",
+    "city": "Vauxhall",
+    "state": "NJ",
+    "zip": "7088.0"
+  },
+  "WF-NE SPRING LAKE SLW 10587": {
+    "address": "1933 NJ-35",
+    "city": "Wall",
+    "state": "NJ",
+    "zip": "7719.0"
+  },
+  "WF-NE WEEHAWKEN WEE 10711": {
+    "address": "1400 Waterfront Terrace",
+    "city": "Weehawken",
+    "state": "NJ",
+    "zip": "7086.0"
+  },
+  "WF-NE WEST ORANGE WOP 10265": {
+    "address": "235 Prospect Ave",
+    "city": "West Orange",
+    "state": "NJ",
+    "zip": "7052.0"
+  },
+  "WF-NE WHITEPLAINS WHP 10163": {
+    "address": "110 Bloomingdale Rd",
+    "city": "White Plains",
+    "state": "NY",
+    "zip": "10605.0"
+  },
+  "WF-NE YONKERS YON 10343": {
+    "address": "1 Ridge Hill Blvd",
+    "city": "Yonkers",
+    "state": "NY",
+    "zip": "10710.0"
+  },
+  "COOK SHOP%%%": {
+    "address": "156 10th Ave",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10011.0"
+  },
+  "WF-NE WAYNE WNJ 10732": {
+    "address": "560 Valley Rd",
+    "city": "Wayne",
+    "state": "NJ",
+    "zip": "7470.0"
+  },
+  "007600 CHOICE BAR AND GRILLE": {
+    "address": "470 NORTH ALBANY AVE.",
+    "city": "ATLANTIC CITY",
+    "state": "NJ",
+    "zip": "8401.0"
+  },
+  "018960 THE PUB AT BEACHWOOD": {
+    "address": "244 ATLANTIC CITY BLV",
+    "city": "BEACHWOOD",
+    "state": "NJ",
+    "zip": "8722.0"
+  },
+  "021030 PETROCK'S LIQUOR": {
+    "address": "419 AMWELL RD",
+    "city": "HILLSBOROUGH",
+    "state": "NJ",
+    "zip": "8844.0"
+  },
+  "024100 45TH STREET PUB": {
+    "address": "4303 RT 130 SOUTH",
+    "city": "Edgewater Park",
+    "state": "NJ",
+    "zip": "8010.0"
+  },
+  "027240 BOONTON LIQUOR LOCKER": {
+    "address": "119 HAWKINS PLACE",
+    "city": "BOONTON",
+    "state": "NJ",
+    "zip": "7005.0"
+  },
+  "042010 CONGRESS HALL HOTEL": {
+    "address": "251 BEACH AVENUE",
+    "city": "CAPE MAY",
+    "state": "NJ",
+    "zip": "8204.0"
+  },
+  "051380 FIGLARS LIQUOR STORE": {
+    "address": "327 HOPE AVE",
+    "city": "CLIFTON",
+    "state": "NJ",
+    "zip": "7011.0"
+  },
+  "054320 LOCALE RESTAURANT": {
+    "address": "208 PIERMONT ROAD",
+    "city": "CLOSTER",
+    "state": "NJ",
+    "zip": "7624.0"
+  },
+  "058100 ALPINE COUNTRY CLUB CORP": {
+    "address": "80 ANDERSON AVENUE",
+    "city": "DEMAREST",
+    "state": "NJ",
+    "zip": "7627.0"
+  },
+  "085360 PARK 33 BAR": {
+    "address": "618 PARK AVE",
+    "city": "FREEHOLD",
+    "state": "NJ",
+    "zip": "7728.0"
+  },
+  "107810 GARDEN WINE & LIQUOR": {
+    "address": "700 PARK AVE",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "109120 BLUE RIBBON WINE & LIQ": {
+    "address": "450 FIRST STREET",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "109860 WINE DAD'S": {
+    "address": "341 14TH STREET",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "110300 CORK WINE & SPIRITS": {
+    "address": "1450 WASHINGTON STREE",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "123450 BUY & SAVE # 2": {
+    "address": "32 COLE STREET",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "132080 SUN LIQUORS & GROCERY": {
+    "address": "12 KEARNY",
+    "city": "KEARNY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "139240 SHOPRITE (LINCOLN PK)": {
+    "address": "60 BEAVERBROOK RD",
+    "city": "LINCOLN PARK",
+    "state": "NJ",
+    "zip": "7035.0"
+  },
+  "142120 SHOPRITE LIQUORS(LITTLE FALLS)": {
+    "address": "171 BROWERTOWN ROAD",
+    "city": "LITTLE FALLS",
+    "state": "NJ",
+    "zip": "7424.0"
+  },
+  "154880 BOULEVARD SUPER LIQ (MARMORA)": {
+    "address": "501 & 503 ROOSEVELT B",
+    "city": "MARMORA",
+    "state": "NJ",
+    "zip": "8223.0"
+  },
+  "157990 TAUNTON FORGE LIQUORS": {
+    "address": "200 TUCKERTON ROAD",
+    "city": "MEDFORD",
+    "state": "NJ",
+    "zip": "8055.0"
+  },
+  "165960 WINE CELLAR OF MORRISTOWN": {
+    "address": "163 SOUTH STREET",
+    "city": "MORRISTOWN",
+    "state": "NJ",
+    "zip": "7960.0"
+  },
+  "166920 VINE REPUBLIC (MOUNTAINSIDE)": {
+    "address": "1267 ROUTE 22",
+    "city": "MOUNTAINSIDE",
+    "state": "NJ",
+    "zip": "7092.0"
+  },
+  "169741 BILOW (NEPTUNE)": {
+    "address": "310 W. SYLVANIA AVE",
+    "city": "NEPTUNE",
+    "state": "NJ",
+    "zip": "7753.0"
+  },
+  "203560 GRAND OPENING LIQS 'NO HALEDON": {
+    "address": "1068 HIGH MT RD",
+    "city": "HALEDON",
+    "state": "NJ",
+    "zip": "7508.0"
+  },
+  "236630 WINE & WHISKEY COUNTRY": {
+    "address": "36 RT 46 WEST",
+    "city": "PINE BROOK",
+    "state": "NJ",
+    "zip": "7058.0"
+  },
+  "244030 WEGMANS FOOD MARKET(W WINDSOR)": {
+    "address": "240 NASSAU PARK BLVD",
+    "city": "PRINCETON",
+    "state": "NJ",
+    "zip": "8540.0"
+  },
+  "245810 WINE ANTHOLOGY": {
+    "address": "1075 RARITAN ROAD",
+    "city": "CLARK",
+    "state": "NJ",
+    "zip": "7066.0"
+  },
+  "256140 MASON'S CELLAR": {
+    "address": "32 AMES AVE",
+    "city": "RUTHERFORD",
+    "state": "NJ",
+    "zip": "7070.0"
+  },
+  "258150 ASH BROOK GOLF COURSE": {
+    "address": "1210 RARITAN ROAD",
+    "city": "SCOTCH PLAINS",
+    "state": "NJ",
+    "zip": "7076.0"
+  },
+  "298800 BUBBAS LIQUOR WAREHOUSE": {
+    "address": "1849 N DELSEA DR",
+    "city": "VINELAND",
+    "state": "NJ",
+    "zip": "8360.0"
+  },
+  "300160 MATTHEW'S DINER": {
+    "address": "4 FRANKLIN TKE.",
+    "city": "WALDWICK",
+    "state": "NJ",
+    "zip": "7463.0"
+  },
+  "301560 WANAMASSA LIQUOR": {
+    "address": "2201 SUNSET AVE",
+    "city": "ASBURY PARK",
+    "state": "NJ",
+    "zip": "7712.0"
+  },
+  "016460 BUON APPETITO": {
+    "address": "906-8 BROADWAY",
+    "city": "BAYONNE",
+    "state": "NJ",
+    "zip": "7002.0"
+  },
+  "023600 THE CLAREMONT TAVERN": {
+    "address": "121 CLAREMONT RD",
+    "city": "BERNARDSVILLE",
+    "state": "NJ",
+    "zip": "7924.0"
+  },
+  "023680 BERNARDS INN": {
+    "address": "27 MINEBROOK ROAD",
+    "city": "BERNARDSVILLE",
+    "state": "NJ",
+    "zip": "7924.0"
+  },
+  "025750 BLUE STEEL": {
+    "address": "285 GLENWOOD AVENUE",
+    "city": "BLOOMFIELD",
+    "state": "NJ",
+    "zip": "7003.0"
+  },
+  "026320 RIVER OF BEER SALON": {
+    "address": "133 MAIN STREET",
+    "city": "BLOOMINGDALE",
+    "state": "NJ",
+    "zip": "7403.0"
+  },
+  "027450 BOONTON STATION 1904": {
+    "address": "202 MYRTLE AVE",
+    "city": "BOONTON",
+    "state": "NJ",
+    "zip": "7005.0"
+  },
+  "029580 GEORGE'S W&S GALLERY": {
+    "address": "12 MORRIS AVE",
+    "city": "BRANCHVILLE",
+    "state": "NJ",
+    "zip": "7826.0"
+  },
+  "031340 CANAL'S (BRIDGETON)": {
+    "address": "717 N PEARL ST",
+    "city": "BRIDGETON",
+    "state": "NJ",
+    "zip": "8302.0"
+  },
+  "066680 TIO TACO & TEQUILA BAR": {
+    "address": "1003 ROUTE 1",
+    "city": "EDISON",
+    "state": "NJ",
+    "zip": "8817.0"
+  },
+  "077520 OCEANOS RESTAURANT": {
+    "address": "2-27 Saddle River Rd",
+    "city": "FAIR LAWN",
+    "state": "NJ",
+    "zip": "7410.0"
+  },
+  "084640 LIQUOR MART(FRANKLINVILLE)": {
+    "address": "2205 DELSEA DRIVE",
+    "city": "FRANKLINVILLE",
+    "state": "NJ",
+    "zip": "8322.0"
+  },
+  "085160 METROPOLITAN CAFE": {
+    "address": "8 E.MAIN STREET",
+    "city": "FREEHOLD",
+    "state": "NJ",
+    "zip": "7728.0"
+  },
+  "088060 CHOPHOUSE (GIBBSBORO)": {
+    "address": "4 S LAKEVIEW DRIVE",
+    "city": "GIBBSBORO",
+    "state": "NJ",
+    "zip": "8026.0"
+  },
+  "088750 PLAZMA LIQUOR": {
+    "address": "401 BUCK ROAD",
+    "city": "GLASSBORO",
+    "state": "NJ",
+    "zip": "8028.0"
+  },
+  "096440 HARLEY DAWN DINER": {
+    "address": "1402 BLACK HORSE PIKE",
+    "city": "HAMMONTON",
+    "state": "NJ",
+    "zip": "8037.0"
+  },
+  "102120 UNION PLAZA LIQUORS": {
+    "address": "1616 UNION AVE.",
+    "city": "HAZLET",
+    "state": "NJ",
+    "zip": "7730.0"
+  },
+  "106350 HOUSE OF QUE": {
+    "address": "340 SINATRA DRIVE",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "108680 COOLVINES HOBOKEN": {
+    "address": "211 WASHINGTON ST",
+    "city": "HOBOKEN",
+    "state": "NJ",
+    "zip": "7030.0"
+  },
+  "117260 CENTRAL AVENUE LIQUOR": {
+    "address": "210 CENTRAL AVE",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7307.0"
+  },
+  "121110 BATTELLO'S": {
+    "address": "502 WASHINGTON BLVD",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7310.0"
+  },
+  "121280 COOLVINES POWERHOUSE": {
+    "address": "350 WARREN STREET",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "122080 LUNA": {
+    "address": "279 GROVE STREET",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "122260 BOULEVARD MART & LIQUORS": {
+    "address": "2708 KENNEDY BLVD",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7306.0"
+  },
+  "123000 PET SHOP": {
+    "address": "193 NEWARK AVE",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "124760 HUDSON & CO BAR AND GRILL": {
+    "address": "3 SECOND STREET SUITE",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "125900 COOL VINES": {
+    "address": "276 GROVE STREET",
+    "city": "JERSEY CITY",
+    "state": "NJ",
+    "zip": "7302.0"
+  },
+  "141820 BENOS LIQUORS": {
+    "address": "102 NORTH WOOD AVE",
+    "city": "LINDEN",
+    "state": "NJ",
+    "zip": "7036.0"
+  },
+  "146560 COURT LIQUORS": {
+    "address": "146 WEST END COURT",
+    "city": "LONG BRANCH",
+    "state": "NJ",
+    "zip": "7740.0"
+  },
+  "147600 THE WAVE RESORT": {
+    "address": "100 OCEAN AVE",
+    "city": "LONG BRANCH",
+    "state": "NJ",
+    "zip": "7740.0"
+  },
+  "151700 MERRYMAN'S PUB": {
+    "address": "106 SOUTH BROADWAY AV",
+    "city": "PITMAN",
+    "state": "NJ",
+    "zip": "8071.0"
+  },
+  "153440 PICKETT'S VILLAGE BAR": {
+    "address": "2208 MILLBURN AVE",
+    "city": "MAPLEWOOD",
+    "state": "NJ",
+    "zip": "7040.0"
+  },
+  "154630 RASTELLI MARKET FRESH": {
+    "address": "710 ROUTE 73 SOUTH",
+    "city": "MARLTON",
+    "state": "NJ",
+    "zip": "8053.0"
+  },
+  "158180 ROXITICUS GOLF CLUB": {
+    "address": "BLISS ROAD P.O.BOX 2",
+    "city": "MENDHAM",
+    "state": "NJ",
+    "zip": "7945.0"
+  },
+  "158840 WINE CHATEAU": {
+    "address": "85 CENTRAL AVE",
+    "city": "METUCHEN",
+    "state": "NJ",
+    "zip": "8840.0"
+  },
+  "166390 TOWN BAR & KITCHEN": {
+    "address": "80 ELM STREET",
+    "city": "MORRISTOWN",
+    "state": "NJ",
+    "zip": "7960.0"
+  },
+  "166580 MOUNTAIN LAKES WINE & LIQUOR": {
+    "address": "5 ROMAINE ROAD",
+    "city": "MOUNTAIN LAKES",
+    "state": "NJ",
+    "zip": "7046.0"
+  },
+  "198320 BROOKCHESTER BAR AND LIQUORS": {
+    "address": "872 RIVER RD",
+    "city": "NEW MILFORD",
+    "state": "NJ",
+    "zip": "7646.0"
+  },
+  "238120 STONE HOUSE (WARREN)": {
+    "address": "50 STIRLING RD",
+    "city": "WARREN",
+    "state": "NJ",
+    "zip": "7059.0"
+  },
+  "241020 B2 BISTRO": {
+    "address": "709 ARNOLD AVE",
+    "city": "POINT PLEASANT BEACH",
+    "state": "NJ",
+    "zip": "8742.0"
+  },
+  "243440 METRO NORTH": {
+    "address": "378 ALEXANDER STREET",
+    "city": "PRINCETON",
+    "state": "NJ",
+    "zip": "8540.0"
+  },
+  "246840 CHAR STEAKHOUSE": {
+    "address": "777 ROUTE 202 NORTH",
+    "city": "RARITAN",
+    "state": "NJ",
+    "zip": "8869.0"
+  },
+  "253360 ROCKY HILL INN": {
+    "address": "137 WASHINGTON STR.P.",
+    "city": "ROCKY HILL",
+    "state": "NJ",
+    "zip": "8553.0"
+  },
+  "253400 SKILLMAN WINE & LIQUOR": {
+    "address": "1325 RT 206, SUITE 5",
+    "city": "SKILLMAN",
+    "state": "NJ",
+    "zip": "8558.0"
+  },
+  "259840 TOMMY'S TAVERN & TAP(SEABRIGHT": {
+    "address": "1030 OCEAN AVE",
+    "city": "Sea Bright",
+    "state": "NJ",
+    "zip": "7760.0"
+  },
+  "273200 SHOPRITE (BYRAM/STANHOPE)": {
+    "address": "90 ROUTE 206 NORTH/SU",
+    "city": "STANHOPE",
+    "state": "NJ",
+    "zip": "7874.0"
+  },
+  "274460 FREDS (STONE HARBOR)": {
+    "address": "314 96TH STREET",
+    "city": "STONE HARBOR",
+    "state": "NJ",
+    "zip": "8247.0"
+  },
+  "274980 THE MARKET PLACE": {
+    "address": "182 ROUTE 206",
+    "city": "FLANDERS",
+    "state": "NJ",
+    "zip": "7836.0"
+  },
+  "276520 BOTTO'S ITALIAN LINE REST": {
+    "address": "1411 KINGS HWY",
+    "city": "SWEDESBORO",
+    "state": "NJ",
+    "zip": "8085.0"
+  },
+  "279080 B2 BISTRO & BAR": {
+    "address": "1250 HOOPER AVE",
+    "city": "TOMS RIVER",
+    "state": "NJ",
+    "zip": "8753.0"
+  },
+  "279260 WINE & BEVERAGE DEPOT": {
+    "address": "823 RIVERVIEW AVE",
+    "city": "TOTOWA",
+    "state": "NJ",
+    "zip": "7512.0"
+  },
+  "287120 ERINI RESTAURANT": {
+    "address": "1140 RIVER ROAD",
+    "city": "TRENTON",
+    "state": "NJ",
+    "zip": "8628.0"
+  },
+  "288720 BLEND BAR & BISTRO": {
+    "address": "911 ROUTE 33",
+    "city": "TRENTON",
+    "state": "NJ",
+    "zip": "8690.0"
+  },
+  "298080 J & B LIQUORS": {
+    "address": "2371 RTE 206 SO.",
+    "city": "VINCENTOWN",
+    "state": "NJ",
+    "zip": "8088.0"
+  },
+  "299980 VILLAGE GRILL": {
+    "address": "71 CRESCENT AVENUE",
+    "city": "WALDWICK",
+    "state": "NJ",
+    "zip": "7463.0"
+  },
+  "302000 SOMERSET HILL HOTEL": {
+    "address": "200 LIBERTY CORNER RD",
+    "city": "WARREN",
+    "state": "NJ",
+    "zip": "7059.0"
+  },
+  "303540 MAGGIES TOWN TAVERN": {
+    "address": "1082 HAMBURG TPKE",
+    "city": "WAYNE",
+    "state": "NJ",
+    "zip": "7470.0"
+  },
+  "306220 NOSVINO": {
+    "address": "127 CENTRAL AVE",
+    "city": "WESTFIELD",
+    "state": "NJ",
+    "zip": "7090.0"
+  },
+  "307200 COOKS LIQUOR STORE": {
+    "address": "26 HADDON AVE",
+    "city": "COLLINGSWOOD",
+    "state": "NJ",
+    "zip": "8108.0"
+  },
+  "307220 POUR HOUSE": {
+    "address": "124 HADDON AVE",
+    "city": "COLLINGSWOOD",
+    "state": "NJ",
+    "zip": "8108.0"
+  }
 }
