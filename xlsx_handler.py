@@ -1,9 +1,13 @@
 import pandas as pd
 import json
 import os
+import re
 from collections import Counter
 
 import pdb
+
+with open("hella_codes.json", "r") as f:
+    hella_codes = json.load(f)
 
 
 class Handler:
@@ -58,7 +62,9 @@ class Handler:
         identifiers = {
             "skip":"No arguments required: press enter to continue",
             "column":"start row, customer column, product column",
-            "int":"products_row, cust_column, start_row, start_column, end_column"
+            "int":"products_row, cust_column, start_row, start_column, end_column",
+            "sep":"product_column, cust_column, start_row",
+            "indent":"product_column, cust_column, start_row"
         }
         keys = list(identifiers.keys())
         for index in range(len(keys)):
@@ -70,12 +76,6 @@ class Handler:
         filetypes[name_id] = new_type
         with open("filetypes.json", "w") as f:
             json.dump(filetypes, f, indent=2)
-
-        with open("address_book.json", "r") as f:
-            address_book = json.load(f)
-        address_book[name_id] = {}
-        with open("address_book.json", "w") as f:
-            json.dump(address_book, f, indent=2)
 
         return new_type
 
@@ -193,13 +193,21 @@ class Handler:
             self.identify_by_column(args[0], args[1], args[2])
         elif self.type["identifier"] == "int":
             self.identify_by_int(args[0], args[1], args[2], args[3], args[4])
+        elif self.type["identifier"] == "sep":
+            self.identify_by_sep(args[0], args[1], args[2])
+        elif self.type["identifier"] == "indent":
+            self.identify_by_indent(args[0], args[1], args[2])
         else:
             raise f"No Identifier for {self.filename}"
 
     def add_purchase(self, customer, product):
-
         if customer != customer:
             return
+
+        customer = str(customer).strip()
+        if product in list(hella_codes.keys()):
+            product = hella_codes[product]
+        product = str(product).strip()
 
         if customer in self.payload["customers"]:
             self.payload["customers"][customer].append(product)
@@ -230,6 +238,39 @@ class Handler:
                     customer = item
                 elif type(item) == int and column >= start_column:
                     self.add_purchase(customer, products[column])
+        return
+
+    # New product starts where space found
+    def identify_by_sep(self, product_column, cust_column, start_row):
+        # CUSTOMER
+        # PRODUCT
+        #
+        # CUSTOMER
+        # this may not be accurate ^
+        rows = self.sheet.values[start_row:]
+
+        for row in rows:
+            if row[cust_column] is None or row[cust_column] != row[cust_column]:
+                # This row is empty
+                # Set a new product
+                product = row[product_column]
+            else:
+                customer = row[cust_column] + " " + row[cust_column+1]
+                self.add_purchase(customer, product)
+        return
+
+    def identify_by_indent(self, product_column, cust_column, start_row):
+        # CUSTOMER
+            # PRODUCT
+        # CUSTOMER
+        rows = self.sheet.values[start_row:]
+        for row in rows:
+            if not (row[cust_column] is None or row[cust_column] != row[cust_column]):
+                # There is a customer
+                customer = row[cust_column]
+            elif not (row[product_column] is None or row[product_column] != row[product_column]):
+                product = row[product_column]
+                self.add_purchase(customer, product)
         return
 
 
