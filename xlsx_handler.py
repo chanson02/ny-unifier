@@ -64,6 +64,7 @@ class Handler:
             "column":"start row, customer column, product column",
             "int":"products_row, cust_column, start_row, start_column, end_column",
             "sep":"product_column, cust_column, start_row",
+            "sep2":"start_row, product_column, cust_column",
             "indent":"product_column, cust_column, start_row"
         }
         keys = list(identifiers.keys())
@@ -195,6 +196,8 @@ class Handler:
             self.identify_by_int(args[0], args[1], args[2], args[3], args[4])
         elif self.type["identifier"] == "sep":
             self.identify_by_sep(args[0], args[1], args[2])
+        elif self.type["identifier"] == "sep2":
+            self.identify_by_sep_2(args[0], args[1], args[2])
         elif self.type["identifier"] == "indent":
             self.identify_by_indent(args[0], args[1], args[2])
         else:
@@ -203,7 +206,6 @@ class Handler:
     def add_purchase(self, customer, product):
         if customer != customer:
             return
-
         customer = str(customer).strip()
         if product in list(hella_codes.keys()):
             product = hella_codes[product]
@@ -219,7 +221,21 @@ class Handler:
         rows = self.sheet.values[start_index:]
         for row in rows:
             customer = row[cust_col]
-            products = row[prod_col]
+
+            ## Temporary fix
+            try:
+                v = str(int(row[cust_col+1]))
+                if self.payload["source_file_name"] == "WICONSIN Jan-Mar+2021.xlsx" and len(v) == 5 and v.isdigit():
+                    customer = customer.strip()
+                    customer += f", {str(int(row[cust_col+1]))}"
+            except:
+                pass
+            ## End temp fix
+
+            try:
+                products = row[prod_col]
+            except IndexError:
+                products = ""
             if products is not None and products == products:
                 for product in products.split(", "):
                     self.add_purchase(customer, product)
@@ -248,7 +264,6 @@ class Handler:
         # CUSTOMER
         # this may not be accurate ^
         rows = self.sheet.values[start_row:]
-
         for row in rows:
             if row[cust_column] is None or row[cust_column] != row[cust_column]:
                 # This row is empty
@@ -257,6 +272,18 @@ class Handler:
             else:
                 customer = row[cust_column] + " " + row[cust_column+1]
                 self.add_purchase(customer, product)
+        return
+
+    def identify_by_sep_2(self, start_row, product_column, cust_column):
+        rows = self.sheet.values[start_row:]
+        for row in rows:
+            if row[product_column] == row[product_column]:
+                #there is a new product
+                product = row[product_column]
+            if row[cust_column] == row[cust_column]:
+                customer = row[cust_column]
+                self.add_purchase(customer, product)
+
         return
 
     def identify_by_indent(self, product_column, cust_column, start_row):

@@ -3,7 +3,7 @@ drive_downloaded/
 credentials.json
 token.pickle
 token_gen.py
-venv/
 known.csv
 unknown.csv
 temp/
+.python-version

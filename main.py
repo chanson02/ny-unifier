@@ -59,13 +59,19 @@ def strip_name(name):
         .strip())
 
 def is_chain(name):
+
+    if "FRED MEYER" in str(name):
+        return name[15:].lower()
+    elif "TOTAL WINE" in str(name):
+        return re.sub("[^0-9]", "", name)
+    elif "Nutty Gourmet" in str(name):
+        # Run it as a walmart
+        cur.execute("SELECT id FROM chains WHERE name='Walmart'")
+        return cur.fetchall()[0][0]
+
     for chain in chains:
         if chain["name"].lower() in str(name).lower():
             return chain["id"]
-        if "FRED MEYER" in str(name):
-            return name[15:].lower()
-        elif "TOTAL WINE" in str(name):
-            return re.sub("[^0-9]", "", name)
     return False
 
 # False or address_object
@@ -82,17 +88,19 @@ def is_known(customer):
 def is_address(string):
     string = str(string)
     sep_comma = string.split(", ")
-    sep_space = string.split(" ")
+    sep_space = [sep for sep in string.split(" ") if sep != '']
     try:
-        if (sep_space[0].replace("-", "").isdigit() or sep_comma[1][0:2].isdigit()) and (sep_space[-1].isdigit() or sep_space[-1].lower() == "usa") and len(sep_comma) > 1:
-            return True
+        return (sep_space[0].replace("-", "").isdigit() or sep_comma[1][0:2].isdigit()) and (sep_space[-1].isdigit() or sep_space[-1].lower() == "usa") and len(sep_comma) > 1
     except IndexError:
         pass
+    if "-" in sep_space[-1]:
+        # phone number
+        return is_address(" ".join(sep_space[:-1]))
     return False
 
 def addressor(address):
     # Call the addressor from the command line
-    command = f"ruby ../ny-addressor/lib/from_cmd.rb '{address}'"
+    command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
     os.system(command)
 
     try:
@@ -132,7 +140,14 @@ def write_addressor(source, store, address, products):
 def write_address(source, customer, products):
     if is_address(customer):
         # The customer already is an address
-        store = " ".join([word for word in source.split(" ") if not word[0].isdigit()])
+        # Check to see if the chain is in the address
+        sep_comma = customer.split(",")
+        potential_address = ",".join(sep_comma[1:])
+        if is_chain(sep_comma[0]) and is_address(potential_address):
+            store = sep_comma[0]
+            customer = potential_address
+        else:
+            store = " ".join([word for word in source.split(" ") if not word[0].isdigit()])
         write_addressor(source, strip_name(store), customer, products)
     else:
         if not customer.isdigit():
@@ -163,6 +178,7 @@ chains = load_chains()
 downloads = ["drive_downloaded/UNFI Q4 2020 .xlsx"]
 downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 # downloads = download_files()
+
 for download in downloads:
     file = Handler(download)
     if file.payload["source_file_type"]["identifier"] == "skip":
