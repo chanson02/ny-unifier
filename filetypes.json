@@ -309,5 +309,14 @@
       8,
       2
     ]
+  },
+  "eCommerce": {
+    "name_id": "eCommerce",
+    "identifier": "column",
+    "args": [
+      0,
+      0,
+      1
+    ]
   }
 }

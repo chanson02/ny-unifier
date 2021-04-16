@@ -222,23 +222,20 @@ class Handler:
         for row in rows:
             customer = row[cust_col]
 
-            ## Temporary fix
-            try:
-                v = str(int(row[cust_col+1]))
-                if self.payload["source_file_name"] == "WICONSIN Jan-Mar+2021.xlsx" and len(v) == 5 and v.isdigit():
-                    customer = customer.strip()
-                    customer += f", {str(int(row[cust_col+1]))}"
-            except:
-                pass
-            ## End temp fix
-
             try:
                 products = row[prod_col]
             except IndexError:
                 products = ""
-            if products is not None and products == products:
+
+            if products is not None and products == products and products != "":
+                try:
+                    products.split()
+                except:
+                    pdb.set_trace()
                 for product in products.split(", "):
                     self.add_purchase(customer, product)
+            else:
+                self.add_purchase(customer, "")
         return
 
     # Find values associated with an integer (ex: quantity)
