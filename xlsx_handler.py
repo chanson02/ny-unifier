@@ -224,7 +224,9 @@ class Handler:
                     self.payload["source_file"]["options"]["chain+address"] = True
                 self.payload["source_file"]["options"]["address_data"] = int(input("Address column: "))
 
-        if not self.payload["source_file"]["options"]["chain+address"]:
+        if self.payload["source_file"]["options"]["chain+address"]:
+            self.payload["source_file"]["options"]["customer_column"] = self.payload["source_file"]["options"]["address_data"]
+        else:
             self.payload["source_file"]["options"]["customer_column"] = int(input("Customer column: "))
 
         return
@@ -273,6 +275,7 @@ class Handler:
             if parts is None:
                 # addressor error?
                 # bad input?
+                address["street"] = full_address
                 return address
             address["street"] = parts["street"]
             address["city"] = parts["city"]
@@ -349,7 +352,22 @@ class Handler:
         options = self.payload["source_file"]["options"]
         rows = self.sheet.values[options["start_row"]:]
         for row in rows:
-            customer = row[options["customer_column"]]
+            row = [str(v) for v in row]
+            for i in range(len(row)):
+                if row[i] == "nan":
+                    row[i] = ""
+
+            # Remove chain from address if exists
+            if options["chain+address"]:
+                target_col = row[options["customer_column"]]
+                if target_col == "":
+                    continue
+                data = target_col.split(",")
+                customer = data[0]
+                row[options["customer_column"]] = (",".join(data[1:])).strip()
+            else:
+                customer = row[options["customer_column"]]
+            # Remove phone from address is exists
             phone = self.phone_from_row(row, options["phone"])
             address = self.address_from_row(row, options["address_data"], phone)
             products = self.products_from_row(row, options["product"])
@@ -410,7 +428,8 @@ class Handler:
 if __name__ == "__main__":
     path = "/home/chanson/Documents/Projects/NearestYou/ny-unifier/XLSX examples/"
     file = "column_full_address.xlsx"
-    # file = "column_phone_sep.xlsx"
+    file = "column_phone_sep.xlsx"
+    file = "column_dzip_dphone_chainaddress.xlsx"
     handler = Handler(path+file)
     customer_data = handler.payload["customers"]
     customers = list(handler.payload["customers"].keys())
