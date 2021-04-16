@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import uuid
 import os
 import re
 from collections import Counter
@@ -267,9 +268,16 @@ class Handler:
     def address_from_row(self, row, address_data, phone=""):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
         if type(address_data) == int:
-            # pass to addressor?
-            print("link this to addressor")
-            address["street"] = row[address_data]
+            full_address = row[address_data]
+            parts = self.addressor(full_address)
+            if parts is None:
+                # addressor error?
+                # bad input?
+                return address
+            address["street"] = parts["street"]
+            address["city"] = parts["city"]
+            address["state"] = parts["state"]
+            address["zip"] = parts["postal_code"]
 
         # If the address is seperated for us
         elif type(address_data) == dict:
@@ -286,7 +294,35 @@ class Handler:
 
         return address
 
+    # Call the addressor from the command line
+    def addressor(self, address):
+        command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
+        os.system(command)
 
+        try:
+            with open("addressor.json", "r") as f:
+                parts = json.load(f)
+            os.remove("addressor.json")
+        except Exception:
+            return None
+        if parts is None:
+            return None
+
+        # Make sure it has all required parts
+        required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
+        keys = list(parts.keys())
+        for rk in required_keys:
+            if rk not in keys:
+                parts[rk] = ""
+
+        # Combine street parts together
+        parts["street"] = f"{parts['street_number']} {parts['street_name']}"
+        if "street_label" in keys:
+            parts["street"] += f" {parts['street_label']}"
+        if "street_direction" in keys:
+            parts["street"] += f" {parts['street_label']}"
+
+        return parts
 
 
     # Function to map purchases to customers
@@ -299,7 +335,10 @@ class Handler:
         product = str(product).strip()
 
         if customer in self.payload["customers"]:
-            self.payload["customers"][customer]["products"].append(product)
+            if address == self.payload["customers"][customer]["address"]:
+                self.payload["customers"][customer]["products"].append(product)
+            else:
+                self.payload["customers"][customer + str(uuid.uuid4())] = {"address": address, "products": [product]}
         else:
             self.payload["customers"][customer] = {"address": address, "products": [product]}
 
@@ -370,8 +409,8 @@ class Handler:
 
 if __name__ == "__main__":
     path = "/home/chanson/Documents/Projects/NearestYou/ny-unifier/XLSX examples/"
-    # file = "column_full_address.xlsx"
-    file = "column_phone_sep.xlsx"
+    file = "column_full_address.xlsx"
+    # file = "column_phone_sep.xlsx"
     handler = Handler(path+file)
     customer_data = handler.payload["customers"]
     customers = list(handler.payload["customers"].keys())
