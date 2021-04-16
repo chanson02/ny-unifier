@@ -6,8 +6,6 @@ from string import digits
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-counter = 0 #for debugging
-
 #Open connection to database
 conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
 cur = conn.cursor()
@@ -19,18 +17,43 @@ header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Prod
 known_file.writerow(header)
 unknown_file.writerow(header)
 
-chains = load_chains()
-downloads = ["drive_downloaded/UNFI Q4 2020 .xlsx"]
-downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
-# downloads = download_files()
+# Function to check if all information has been found
+def known(customer):
+    if type(customer) == str:
+        # look in the address book
+        pass
+    elif type(customer) == dict:
+        required_keys = ["street", "city", "state", "zip"]
+        result = [False for rk in required_keys if customer["address"][rk] == ""]
+        if False not in result:
+            return True
+    else:
+        return False
+
+
+# downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
+downloads = ["XLSX examples/column_full_address.xlsx", "XLSX examples/column_phone_sep.xlsx"]
 
 for download in downloads:
+
     file = Handler(download)
-    if file.payload["source_file_type"]["identifier"] == "skip":
+    source_info = file.payload["source_file"]
+    customers_info = file.payload["customers"]
+    if source_info["identifier"] == "skip":
+        print(source_info["name"], "was skipped")
         continue
 
-    source = file.payload["source_file_name"]
-    customers = list(file.payload["customers"].keys())
+    source = source_info['name']
+    customers = list(customers_info.keys())
+
+    for name in customers:
+        customer = customers_info[name]
+        parts = customer["address"]
+        row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], ", ".join(customer["products"])]
+        if known(customer):
+            known_file.writerow(row)
+        else:
+            unknown_file.writerow(row)
 
 conn.close()
-print("Done", counter)
+print("Done")
