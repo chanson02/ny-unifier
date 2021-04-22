@@ -332,7 +332,7 @@ class Handler:
     def add_purchase(self, customer, product, address=None):
         if not self.valid_cell(customer):
             return
-        customer = str(customer).strip()
+        customer = re.sub(' +', ' ', str(customer).strip())
         if product in list(hella_codes.keys()):
             product = hella_codes[product]
         product = str(product).strip()
@@ -341,11 +341,66 @@ class Handler:
             if address == self.payload["customers"][customer]["address"]:
                 self.payload["customers"][customer]["products"].append(product)
             else:
-                self.payload["customers"][customer + str(uuid.uuid4())] = {"address": address, "products": [product]}
+                repeat = [k for k in list(self.payload["customers"].keys()) if customer in k]
+                for i in range(len(repeat)):
+                    repeat_address = self.payload["customers"][repeat[i]]['address']
+                    updated_address = self.same_address(address, repeat_address, merge=True)
+                    if updated_address:
+                        self.payload["customers"][customer]['address'] = updated_address
+                        self.payload["customers"][customer]['products'].append(product)
+                        break
+                    elif i < len(repeat)-1:
+                        continue
+                    else:
+                        # make a new key
+                        uniq = f" ({len(repeat)})"
+                        self.payload['customers'][customer + uniq] = {'address': address, 'products': [product]}
         else:
             self.payload["customers"][customer] = {"address": address, "products": [product]}
 
         return
+
+    # Function to check if an address is the same
+    # Returns either False or the better match
+    def same_address(self, a1, a2, merge=False):
+        phone = self.same_key('phone', a1, a2)
+
+        # Check if full address in street
+        if a1['city'] == '' and a2['city'] == '' \
+        and a1['state'] == '' and a2['state'] == '' \
+        and a1['zip'] == '' and a2['zip'] == '' \
+        and (a1['street'] in a2['street'] or a2['street'] in a1['street']):
+            if merge:
+                # return longer address
+                if len(a1['street']) > len(a2['street']):
+                    return {'street': a1['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
+                else:
+                    return {'street': a2['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
+            else:
+                return True
+
+        street = self.same_key('street', a1, a2)
+        city = self.same_key('city', a1, a2)
+        state = self.same_key('state', a1, a2)
+        zip = self.same_key('zip', a1, a2)
+
+        if False in [street, city, state, zip, phone]:
+            return False
+        if merge is False:
+            return True
+
+        return {'street': street, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
+
+
+    def same_key(self, key, a1, a2):
+        if a1[key] != '' and a2[key] == '':
+            return a1[key]
+        elif a1[key] == '' and a2[key] != '':
+            return a2[key]
+        elif a1[key] != '' and a2[key] != '' and a1[key] != a2[key]:
+            return False
+        else:
+            return a1[key]
 
     # Customer and Product in each row
     def identify_by_column(self):

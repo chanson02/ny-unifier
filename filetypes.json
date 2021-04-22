@@ -32,5 +32,20 @@
       "chain+address": false,
       "customer_column": 2
     }
+  },
+  "column_dzip_dphone_chainaddress": {
+    "name": "column_dzip_dphone_chainaddress.xlsx",
+    "identifier": "column",
+    "options": {
+      "start_row": 0,
+      "chain": false,
+      "phone": 4,
+      "product": 0,
+      "products": false,
+      "address_data": 2,
+      "chain+address": true,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
   }
 }
