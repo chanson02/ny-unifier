@@ -24,6 +24,7 @@ class Handler:
 
         self.sheet = self.strip_null(self.sheet)
         self.load_filetype()
+        self.load_rows()
         self.parse()
 
     def __repr__(self):
@@ -87,6 +88,16 @@ class Handler:
             if file in self.filename:
                 return file
         return False
+
+    # Function to stringify all NULL values and repalce 'nan' with ''
+    def load_rows(self):
+        options = self.payload["source_file"]["options"]
+        self.rows = self.sheet.values[options["start_row"]:]
+        for i_row in range(len(self.rows)):
+            self.rows[i_row] = [str(v) for v in self.rows[i_row]]
+            for i_val in range(len(self.rows[i_row])):
+                if self.rows[i_row][i_val] == 'nan':
+                    self.rows[i_row][i_val] = ''
 
     # save this file in history
     def register_filetype(self, filetypes):
@@ -261,12 +272,14 @@ class Handler:
             [result.append(p.strip()) for p in row[product_column].split(",")]
             return result
 
+    # Function to return phone number from row
     def phone_from_row(self, row, phone_column):
         if phone_column is not False:
             if self.valid_cell(row[phone_column]):
                 return row[phone_column]
         return ""
 
+    # Function to return address from row
     def address_from_row(self, row, address_data, phone=""):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
         if type(address_data) == int:
@@ -350,9 +363,10 @@ class Handler:
                         self.payload["customers"][customer]['products'].append(product)
                         break
                     elif i < len(repeat)-1:
+                        # Go onto the next potential repeat address
                         continue
                     else:
-                        # make a new key
+                        # make a new customer key for this address
                         uniq = f" ({len(repeat)})"
                         self.payload['customers'][customer + uniq] = {'address': address, 'products': [product]}
         else:
@@ -391,26 +405,33 @@ class Handler:
 
         return {'street': street, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
 
-
+    # Function to check if keys from address dictionary have the same values
+    # Returns 'more accurate' data
     def same_key(self, key, a1, a2):
-        if a1[key] != '' and a2[key] == '':
+        if a1[key] == '' and a2[key] == '':
+            # Both empty
+            return a1[key]
+        elif a1[key] != '' and a2[key] == '':
+            # a2 empty
             return a1[key]
         elif a1[key] == '' and a2[key] != '':
+            # a1 empty
             return a2[key]
-        elif a1[key] != '' and a2[key] != '' and a1[key] != a2[key]:
-            return False
-        else:
+        elif a1[key] in a2[key]:
+            # a2 longer
+            return a2[key]
+        elif a2[key] in a1[key]:
+            #a1 longer
             return a1[key]
+        else:
+            # they do not match
+            return False
+        return False #this is here for autotab
 
     # Customer and Product in each row
     def identify_by_column(self):
         options = self.payload["source_file"]["options"]
-        rows = self.sheet.values[options["start_row"]:]
-        for row in rows:
-            row = [str(v) for v in row]
-            for i in range(len(row)):
-                if row[i] == "nan":
-                    row[i] = ""
+        for row in self.rows:
 
             # Remove chain from address if exists
             if options["chain+address"]:
