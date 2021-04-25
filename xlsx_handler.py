@@ -270,7 +270,7 @@ class Handler:
     def address_from_row(self, row, address_data, phone=""):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
         if type(address_data) == int:
-            full_address = row[address_data]
+            full_address = re.sub(' +', ' ', row[address_data].strip())
             parts = self.addressor(full_address)
             if parts is None:
                 # addressor error?

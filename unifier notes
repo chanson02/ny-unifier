@@ -8,14 +8,6 @@ identifier, customer, FULL address
 # Handler to seperate chains and addresses (if in the same column)
 
 
-self.payload["customers"] {
-	"street": "4933 Yukon Ave",
-	"city": "New Hope",
-	"state": "MN",
-	"zip": "",
-	"phone": 7632429365
-}
-
 Where I left off:
 find a way to remove phone from address (if in there)
 find a way to remove chain from address (if in there)
