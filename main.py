@@ -37,10 +37,10 @@ downloads = ["XLSX examples/column_full_address.xlsx",
             "XLSX examples/column_phone_sep.xlsx",
             "XLSX examples/column_dzip_dphone_chainaddress.xlsx",
             "XLSX examples/phone_address.xlsx",
-            "XLSX examples/int.xlsx"]
+            "XLSX examples/int_iden.xlsx",
+            "XLSX examples/multipage_file.xlsx"]
 
 for download in downloads:
-
     file = Handler(download)
     source_info = file.payload["source_file"]
     customers_info = file.payload["customers"]

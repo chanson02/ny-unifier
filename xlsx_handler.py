@@ -14,21 +14,26 @@ with open("hella_codes.json", "r") as f:
 class Handler:
     def __init__(self, path):
         self.filename = os.path.split(path)[1]
+        self.excel_file = pd.ExcelFile(path)
         self.payload = self.empty_payload()
+        self.load_filetype()
 
         try:
-            self.sheet = pd.ExcelFile(path).parse()
+            self.set_sheet()
         except Exception as e:
             print("There was an error", e)
             return
 
         self.sheet = self.strip_null(self.sheet)
-        self.load_filetype()
         self.load_rows()
         self.parse()
 
     def __repr__(self):
         return f"{self.filename} file handler"
+
+    def set_sheet(self):
+        self.sheet = self.excel_file.parse(self.excel_file.sheet_names[self.payload['source_file']['options']['sheet']])
+        return
 
     # Function to prepare an empty payload to be populated
     def empty_payload(self):
@@ -37,6 +42,7 @@ class Handler:
                 "name": self.filename,
                 "identifier": "skip",
                 "options": {
+                    "sheet": 0,
                     "start_row": 0,
                     "merge": {},
                     "chain": False,
@@ -139,6 +145,8 @@ class Handler:
             print(f"Name Identifier: {name_id}")
         new_type["name_id"] = name_id
 
+        self.payload['source_file']['options']['sheet'] = self.select_sheet()
+        self.set_sheet()
         self.print_head()
         self.set_options()
 
@@ -208,6 +216,17 @@ class Handler:
             base = base[:-1]
 
         return base
+
+    def select_sheet(self):
+        sheet_count = len(self.excel_file.sheet_names)
+        if sheet_count == 1:
+            return 0
+
+        print("Which sheet would you like to use?")
+        for sheet_i in range(sheet_count):
+            print(f"{sheet_i}: {self.excel_file.sheet_names[sheet_i]}")
+
+        return eval(input('Sheet number: '))
 
     # function to display just the first few rows
     def print_head(self, row_count=5):
