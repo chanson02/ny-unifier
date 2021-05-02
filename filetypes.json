@@ -81,5 +81,36 @@
       "customer_column": 2,
       "unique_instruction": false
     }
+  },
+  "int": {
+    "name": "int.xlsx",
+    "identifier": "int",
+    "options": {
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "address_data": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 4,
+        "zip": 5
+      },
+      "chain+address": false,
+      "premise": 6,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
   }
 }

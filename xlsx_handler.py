@@ -255,7 +255,7 @@ class Handler:
             self.payload["source_file"]["options"]["website"] = int(input("  Webbsite Column: "))
 
         if input("Does this file contain products? ") == "1":
-            if input("  Do the products span multiple columns? ") == 1:
+            if input("  Do the products span multiple columns? ") == "1":
                 self.payload["source_file"]["options"]["products"] = eval(input("  Product rows- enter like this '[5,6,7]' "))
             else:
                 self.payload["source_file"]["options"]["product"] = int(input("  Product column: "))
@@ -524,18 +524,21 @@ class Handler:
         return
 
     # Find values associated with an integer (ex: quantity)
-    def identify_by_int(self, products_row, cust_column, start_row, start_column, end_column):
-        rows = self.sheet.values[start_row:]
-        products = self.sheet.values[products_row]
+    # def identify_by_int(self, products_row, cust_column, start_row, start_column, end_column):
+    def identify_by_int(self):
+        options = self.payload["source_file"]["options"]
+        products = self.sheet.columns
 
-        for row in rows:
-            customer = None
-            for column in range(end_column+1):
-                item = row[column]
-                if column == cust_column:
-                    customer = item
-                elif type(item) == int and column >= start_column:
-                    self.add_purchase(customer, products[column])
+        for row in self.rows:
+            customer = row[options["customer_column"]]
+            phone = self.phone_from_row(row, options["phone"])
+            address = self.address_from_row(row, options["address_data"], phone)
+            premise = self.premise_from_row(row, options["premise"])
+            website = self.website_from_row(row, options["website"])
+
+            for product_column in options["products"]:
+                if row[product_column].isdigit():
+                    self.add_purchase(customer, products[product_column], address, premise, website)
         return
 
     # New product starts where space found

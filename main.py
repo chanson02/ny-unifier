@@ -36,7 +36,8 @@ def known(customer):
 downloads = ["XLSX examples/column_full_address.xlsx",
             "XLSX examples/column_phone_sep.xlsx",
             "XLSX examples/column_dzip_dphone_chainaddress.xlsx",
-            "XLSX examples/phone_address.xlsx"]
+            "XLSX examples/phone_address.xlsx",
+            "XLSX examples/int.xlsx"]
 
 for download in downloads:
 
