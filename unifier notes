@@ -14,7 +14,6 @@ make sep
 
 
 # TO DO:
-Include Website
 Function to identify chain + remote_id
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
 
@@ -23,3 +22,5 @@ pass full address to addressor
 phone in different column
 chain in same column
 Chain, Address, City, State | Zip -> merger
+Include Website
+Include Premise

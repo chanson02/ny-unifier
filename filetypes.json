@@ -7,6 +7,7 @@
       "merge": {},
       "chain": false,
       "phone": false,
+      "website": false,
       "product": 4,
       "products": false,
       "address_data": 9,
@@ -24,6 +25,7 @@
       "merge": {},
       "chain": false,
       "phone": 10,
+      "website": false,
       "product": 3,
       "products": false,
       "address_data": {
@@ -47,6 +49,7 @@
       "merge": {", ": [2,3]},
       "chain": false,
       "phone": 4,
+      "website": false,
       "product": 0,
       "products": false,
       "address_data": 2,

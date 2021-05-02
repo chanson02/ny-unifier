@@ -41,6 +41,7 @@ class Handler:
                     "merge": {},
                     "chain": False,
                     "phone": False,
+                    "website": False,
                     "product": False,
                     "products": False,
                     "address_data": False,
@@ -248,7 +249,10 @@ class Handler:
             self.payload["source_file"]["options"]["chain"] = True
 
         if input("Does this file contain phone numbers? ") == "1":
-            self.payload["source_file"]["options"]["phone"] = int(input("Phone Column: "))
+            self.payload["source_file"]["options"]["phone"] = int(input("  Phone Column: "))
+
+        if input("Does this file contain websites? ") == "1":
+            self.payload["source_file"]["options"]["website"] = int(input("  Webbsite Column: "))
 
         if input("Does this file contain products? ") == "1":
             if input("  Do the products span multiple columns? ") == 1:
@@ -317,6 +321,13 @@ class Handler:
                 return row[phone_column]
         return ""
 
+    # Function to return website from row
+    def website_from_row(self, row, website_column):
+        if website_column is not False:
+            if self.valid_cell(row[website_column]):
+                return row[website_column]
+        return ""
+
     # Function to return address from row
     def address_from_row(self, row, address_data, phone=""):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
@@ -350,7 +361,7 @@ class Handler:
 
     def premise_from_row(self, row, col):
         if col is False:
-            return None
+            return ""
         else:
             return row[col]
 
@@ -386,7 +397,7 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer, product, address=None, premise=None):
+    def add_purchase(self, customer, product, address=None, premise=None, website=None):
         if not self.valid_cell(customer):
             return
         customer = re.sub(' +', ' ', str(customer).strip())
@@ -412,9 +423,9 @@ class Handler:
                     else:
                         # make a new customer key for this address
                         uniq = f" ({len(repeat)})"
-                        self.payload['customers'][customer + uniq] = {'address': address, 'products': [product]}
+                        self.payload['customers'][customer + uniq] = {'address': address, 'products': [product], 'premise': premise, 'website': website}
         else:
-            self.payload["customers"][customer] = {"address": address, "products": [product], "premise": premise}
+            self.payload["customers"][customer] = {"address": address, "products": [product], "premise": premise, "website": website}
 
         return
 
@@ -498,9 +509,10 @@ class Handler:
             address = self.address_from_row(row, options["address_data"], phone)
             products = self.products_from_row(row, options["product"])
             premise = self.premise_from_row(row, options["premise"])
+            website = self.website_from_row(row, options["website"])
 
             for product in products:
-                self.add_purchase(customer, product, address, premise)
+                self.add_purchase(customer, product, address, premise, website)
         return
 
     # Find values associated with an integer (ex: quantity)

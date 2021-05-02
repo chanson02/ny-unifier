@@ -13,7 +13,8 @@ cur = conn.cursor()
 # Open known and unknown files
 known_file = csv.writer(open("known_v2.csv", "w"))
 unknown_file = csv.writer(open("unknown_v2.csv", "w"))
-header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Products", "Premise", "Comments"]
+header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Products", "Premise", "Website", "Comments"]
+#           0           1           2       3       4       5       6           7           8           9
 known_file.writerow(header)
 unknown_file.writerow(header)
 
@@ -51,7 +52,7 @@ for download in downloads:
     for name in customers:
         customer = customers_info[name]
         parts = customer["address"]
-        row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], ", ".join(customer["products"])]
+        row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], ", ".join(customer["products"]), customer["premise"], customer["website"]]
         if known(customer):
             known_file.writerow(row)
         else:
