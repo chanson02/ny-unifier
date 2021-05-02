@@ -3,14 +3,13 @@ Read XLSX file
 requirements:
 identifier, customer, FULL address
 
-
 Where I left off:
-find a way to remove phone from address (if in there) (run phone_address.xlsx)
-make sep
+Moved some stuff to DONE
 
 
 # TO DO:
 Function to identify chain + remote_id
+How to incorporate all identifiers?
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
 
 # DONE:
@@ -21,3 +20,4 @@ Chain, Address, City, State | Zip -> merger
 Include Website
 Include Premise
 Seperate Products into different rows
+Phone in same column

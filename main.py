@@ -35,7 +35,8 @@ def known(customer):
 # downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 downloads = ["XLSX examples/column_full_address.xlsx",
             "XLSX examples/column_phone_sep.xlsx",
-            "XLSX examples/column_dzip_dphone_chainaddress.xlsx"]
+            "XLSX examples/column_dzip_dphone_chainaddress.xlsx",
+            "XLSX examples/phone_address.xlsx"]
 
 for download in downloads:
 

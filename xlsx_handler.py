@@ -505,7 +505,15 @@ class Handler:
             else:
                 customer = row[options["customer_column"]]
             # Remove phone from address is exists
-            phone = self.phone_from_row(row, options["phone"])
+            if options["phone"] == options["address_data"]:
+                target_col = row[options["phone"]].strip()
+                if target_col == "":
+                    continue
+                data = target_col.split(' ')
+                phone = data[-1]
+                row[options["address_data"]] = ' '.join(data[:-1]).strip()
+            else:
+                phone = self.phone_from_row(row, options["phone"])
             address = self.address_from_row(row, options["address_data"], phone)
             products = self.products_from_row(row, options["product"])
             premise = self.premise_from_row(row, options["premise"])

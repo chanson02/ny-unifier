@@ -46,11 +46,34 @@
     "identifier": "column",
     "options": {
       "start_row": 0,
-      "merge": {", ": [2,3]},
+      "merge": {
+        ", ": [
+          2,
+          3
+        ]
+      },
       "chain": false,
       "phone": 4,
       "website": false,
       "product": 0,
+      "products": false,
+      "address_data": 2,
+      "chain+address": true,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
+  },
+  "phone_address": {
+    "name": "phone_address.xlsx",
+    "identifier": "column",
+    "options": {
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": 2,
+      "website": false,
+      "product": 1,
       "products": false,
       "address_data": 2,
       "chain+address": true,
