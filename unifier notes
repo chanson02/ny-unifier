@@ -9,9 +9,17 @@ identifier, customer, FULL address
 
 
 Where I left off:
-find a way to remove phone from address (if in there)
-find a way to remove chain from address (if in there)
+find a way to remove phone from address (if in there) (run phone_address.xlsx)
+make sep
+
 
 # TO DO:
+Include Website
 Function to identify chain + remote_id
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
+
+# DONE:
+pass full address to addressor
+phone in different column
+chain in same column
+Chain, Address, City, State | Zip -> merger

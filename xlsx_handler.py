@@ -38,12 +38,14 @@ class Handler:
                 "identifier": "skip",
                 "options": {
                     "start_row": 0,
+                    "merge": {},
                     "chain": False,
                     "phone": False,
                     "product": False,
                     "products": False,
                     "address_data": False,
                     "chain+address": False,
+                    "premise": False,
                     "customer_column": 0,
                     "unique_instruction": False
                 }
@@ -94,10 +96,33 @@ class Handler:
         options = self.payload["source_file"]["options"]
         self.rows = self.sheet.values[options["start_row"]:]
         for i_row in range(len(self.rows)):
-            self.rows[i_row] = [str(v) for v in self.rows[i_row]]
+            self.rows[i_row] = [str(v).strip() for v in self.rows[i_row]]
             for i_val in range(len(self.rows[i_row])):
                 if self.rows[i_row][i_val] == 'nan':
                     self.rows[i_row][i_val] = ''
+                if self.rows[i_row][i_val][-2:] == ".0":
+                    self.rows[i_row][i_val] = self.rows[i_row][i_val][:-2]
+
+        self.merge_columns()
+        return
+
+    # Function to merge columns
+    # ex: | Address, City, State | Zip
+    def merge_columns(self):
+        merges = self.payload["source_file"]["options"]["merge"]
+        joiners = list(merges.keys())
+        if len(joiners) == 0:
+            return
+
+        for i_row in range(len(self.rows)):
+            for j in joiners:
+                result = []
+                for merge in merges[j]:
+                    if self.rows[i_row][merge] != '':
+                        result.append(self.rows[i_row][merge])
+                self.rows[i_row][merges[j][0]] = j.join(result)
+
+        return
 
     # save this file in history
     def register_filetype(self, filetypes):
@@ -210,6 +235,15 @@ class Handler:
 
         self.payload["source_file"]["options"]["start_row"] = int(input("What row does the data start? "))
 
+        if input("Do any columns need to be merged? ") == "1":
+            for i in range(eval(input("  How many merges? "))):
+                joiner = input('  Character to combine columns: ')
+                merge = eval(input('  Array of columns: '))
+                if joiner in list(self.payload["source_file"]["options"]["merge"].keys()):
+                    self.payload["source_file"]["options"]["merge"][joiner].append(merge)
+                else:
+                    self.payload["source_file"]["options"]["merge"][joiner] = [merge]
+
         if input("Does this file represent a chain? ") == "1":
             self.payload["source_file"]["options"]["chain"] = True
 
@@ -222,8 +256,12 @@ class Handler:
             else:
                 self.payload["source_file"]["options"]["product"] = int(input("  Product column: "))
 
+        if input("Does this contain premise data? ") == "1":
+            self.payload["source_file"]["options"]["premise"] = int(input("  Premise column: "))
+
         if input("Does this file contain addresses? ") == "1":
             if input("Does this file seperate addresses? ") == "1":
+                print("(Input -1 for empty address column)")
                 self.payload["source_file"]["options"]["address_data"] = {}
                 self.payload["source_file"]["options"]["address_data"]["address1"] = int(input("  Address 1 column: "))
                 self.payload["source_file"]["options"]["address_data"]["address2"] = int(input("  Address 2 column: "))
@@ -233,7 +271,7 @@ class Handler:
             else:
                 if input("Does this file combine chain and addresses? ") == "1":
                     self.payload["source_file"]["options"]["chain+address"] = True
-                self.payload["source_file"]["options"]["address_data"] = int(input("Address column: "))
+                self.payload["source_file"]["options"]["address_data"] = int(input("  Address column: "))
 
         if self.payload["source_file"]["options"]["chain+address"]:
             self.payload["source_file"]["options"]["customer_column"] = self.payload["source_file"]["options"]["address_data"]
@@ -310,6 +348,12 @@ class Handler:
 
         return address
 
+    def premise_from_row(self, row, col):
+        if col is False:
+            return None
+        else:
+            return row[col]
+
     # Call the addressor from the command line
     def addressor(self, address):
         command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
@@ -342,7 +386,7 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer, product, address=None):
+    def add_purchase(self, customer, product, address=None, premise=None):
         if not self.valid_cell(customer):
             return
         customer = re.sub(' +', ' ', str(customer).strip())
@@ -370,7 +414,7 @@ class Handler:
                         uniq = f" ({len(repeat)})"
                         self.payload['customers'][customer + uniq] = {'address': address, 'products': [product]}
         else:
-            self.payload["customers"][customer] = {"address": address, "products": [product]}
+            self.payload["customers"][customer] = {"address": address, "products": [product], "premise": premise}
 
         return
 
@@ -408,7 +452,13 @@ class Handler:
     # Function to check if keys from address dictionary have the same values
     # Returns 'more accurate' data
     def same_key(self, key, a1, a2):
-        if a1[key] == '' and a2[key] == '':
+        if a1[key] is False and a2[key] is False:
+            return a1[key]
+        elif a1[key] is False and a2[key] is not False:
+            return a2[key]
+        elif a1[key] is not False and a2[key] is False:
+            return a1[key]
+        elif a1[key] == '' and a2[key] == '':
             # Both empty
             return a1[key]
         elif a1[key] != '' and a2[key] == '':
@@ -447,8 +497,10 @@ class Handler:
             phone = self.phone_from_row(row, options["phone"])
             address = self.address_from_row(row, options["address_data"], phone)
             products = self.products_from_row(row, options["product"])
+            premise = self.premise_from_row(row, options["premise"])
+
             for product in products:
-                self.add_purchase(customer, product, address)
+                self.add_purchase(customer, product, address, premise)
         return
 
     # Find values associated with an integer (ex: quantity)

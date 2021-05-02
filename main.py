@@ -11,9 +11,9 @@ conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', databas
 cur = conn.cursor()
 
 # Open known and unknown files
-known_file = csv.writer(open("known.csv", "w"))
-unknown_file = csv.writer(open("unknown.csv", "w"))
-header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Products", "Comments"]
+known_file = csv.writer(open("known_v2.csv", "w"))
+unknown_file = csv.writer(open("unknown_v2.csv", "w"))
+header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Products", "Premise", "Comments"]
 known_file.writerow(header)
 unknown_file.writerow(header)
 
@@ -32,7 +32,9 @@ def known(customer):
 
 
 # downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
-downloads = ["XLSX examples/column_full_address.xlsx", "XLSX examples/column_phone_sep.xlsx", "XLSX examples/column_dzip_dphone_chainaddress.xlsx"]
+downloads = ["XLSX examples/column_full_address.xlsx",
+            "XLSX examples/column_phone_sep.xlsx",
+            "XLSX examples/column_dzip_dphone_chainaddress.xlsx"]
 
 for download in downloads:
 

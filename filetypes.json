@@ -4,13 +4,16 @@
     "identifier": "column",
     "options": {
       "start_row": 0,
+      "merge": {},
       "chain": false,
       "phone": false,
       "product": 4,
       "products": false,
       "address_data": 9,
       "chain+address": false,
-      "customer_column": 8
+      "premise": 10,
+      "customer_column": 8,
+      "unique_instruction": false
     }
   },
   "column_phone_sep": {
@@ -18,6 +21,7 @@
     "identifier": "column",
     "options": {
       "start_row": 0,
+      "merge": {},
       "chain": false,
       "phone": 10,
       "product": 3,
@@ -30,7 +34,9 @@
         "zip": 9
       },
       "chain+address": false,
-      "customer_column": 2
+      "premise": 1,
+      "customer_column": 2,
+      "unique_instruction": false
     }
   },
   "column_dzip_dphone_chainaddress": {
@@ -38,12 +44,14 @@
     "identifier": "column",
     "options": {
       "start_row": 0,
+      "merge": {", ": [2,3]},
       "chain": false,
       "phone": 4,
       "product": 0,
       "products": false,
       "address_data": 2,
       "chain+address": true,
+      "premise": false,
       "customer_column": 2,
       "unique_instruction": false
     }
