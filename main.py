@@ -52,11 +52,15 @@ for download in downloads:
     for name in customers:
         customer = customers_info[name]
         parts = customer["address"]
-        row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], ", ".join(customer["products"]), customer["premise"], customer["website"]]
-        if known(customer):
-            known_file.writerow(row)
-        else:
-            unknown_file.writerow(row)
+        if len(customer["products"]) == 0:
+            customer["products"] = [""]
+
+        for product in customer["products"]:
+            row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], product, customer["premise"], customer["website"]]
+            if known(customer):
+                known_file.writerow(row)
+            else:
+                unknown_file.writerow(row)
 
 conn.close()
 print("Done")

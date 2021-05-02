@@ -3,10 +3,6 @@ Read XLSX file
 requirements:
 identifier, customer, FULL address
 
-# customer can have multiple addresses?
-# does the XLSX file represent a chain? if so customer == chain
-# Handler to seperate chains and addresses (if in the same column)
-
 
 Where I left off:
 find a way to remove phone from address (if in there) (run phone_address.xlsx)
@@ -24,3 +20,4 @@ chain in same column
 Chain, Address, City, State | Zip -> merger
 Include Website
 Include Premise
+Seperate Products into different rows
