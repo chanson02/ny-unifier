@@ -544,7 +544,7 @@ class Handler:
             else:
                 customer = row[options["customer_column"]]
             # Remove phone from address is exists
-            if options["phone"] == options["address_data"]:
+            if options["phone"] == options["address_data"] and options['phone']:
                 target_col = row[options["phone"]].strip()
                 if target_col == "":
                     continue

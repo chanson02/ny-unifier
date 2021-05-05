@@ -4,7 +4,12 @@ requirements:
 identifier, customer, FULL address
 
 Where I left off:
-Busybody Integration
+Integrating Busybody
+Getter can recognize if entire file is a chain
+Next- busybody find that store, fill in missing information
+
+
+Busybody Integration:
   1) Parse file (xlsx_handler)
   2) Download all chain names
   3) Check source for chain

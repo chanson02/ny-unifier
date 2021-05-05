@@ -1,14 +1,11 @@
 import os, json, csv, psycopg2, re, pdb
 from drive_downloader import DriveDownloader
+from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
 from string import digits
 
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
-
-#Open connection to database
-# conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
-# cur = conn.cursor()
 
 # Open known and unknown files
 known_file = csv.writer(open("known_v2.csv", "w"))
@@ -53,7 +50,8 @@ for download in downloads:
         continue
 
     # Check with Busybody
-    
+    BusybodyGetter(file)
+
     # Check Address Book
 
     # Write to known/unknown file

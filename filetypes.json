@@ -292,5 +292,24 @@
       "customer_column": 3,
       "unique_instruction": false
     }
+  },
+  "whole_foods": {
+    "name": "whole_foods.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": true,
+      "phone": false,
+      "website": false,
+      "product": 2,
+      "products": false,
+      "address_data": false,
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
   }
 }
