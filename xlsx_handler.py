@@ -161,6 +161,15 @@ class Handler:
 
         return
 
+    # Function to check if a string can be an integer
+    def is_int(self, s):
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
+
+
     # Function to try automatically remove dates from filenames
     def strip_filename(self):
         base, ext = os.path.splitext(self.filename)
@@ -323,6 +332,17 @@ class Handler:
     def valid_cell(self, cell):
         return cell == cell and cell != "" and cell != None
 
+    # Function to standardize phone number 999-999-9999
+    def standardize_phone(self, data):
+        data = re.sub('[^0-9]', '', data)
+        if len(data) < 10:
+            return ""
+        if data[0] == "1":
+            data = data[1:]
+        data = data[:10]
+        return f"{data[:3]}-{data[3:6]}-{data[6:]}"
+
+
     # Function to return array of products
     # Cell example: Juice, Tea -> ['Juice', 'Tea']
     def products_from_row(self, row, product_column):
@@ -337,7 +357,7 @@ class Handler:
     def phone_from_row(self, row, phone_column):
         if phone_column is not False:
             if self.valid_cell(row[phone_column]):
-                return row[phone_column]
+                return self.standardize_phone(row[phone_column])
         return ""
 
     # Function to return website from row
@@ -348,7 +368,7 @@ class Handler:
         return ""
 
     # Function to return address from row
-    def address_from_row(self, row, address_data, phone=""):
+    def address_from_row(self, row, address_data, phone=''):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
         if type(address_data) == int:
             full_address = re.sub(' +', ' ', row[address_data].strip())
@@ -416,7 +436,7 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer, product, address=None, premise=None, website=None):
+    def add_purchase(self, customer, product='', address='', premise='', website=''):
         if not self.valid_cell(customer):
             return
         customer = re.sub(' +', ' ', str(customer).strip())
@@ -539,7 +559,7 @@ class Handler:
             website = self.website_from_row(row, options["website"])
 
             for product in products:
-                self.add_purchase(customer, product, address, premise, website)
+                self.add_purchase(customer, product=product, address=address, premise=premise, website=website)
         return
 
     # Find values associated with an integer (ex: quantity)
@@ -557,14 +577,31 @@ class Handler:
 
             for product_column in options["products"]:
                 if row[product_column].isdigit():
-                    self.add_purchase(customer, products[product_column], address, premise, website)
+                    self.add_purchase(customer, product=products[product_column], address=address, premise=premise, website=website)
         return
 
     # New product starts where space found
     def identify_by_sep(self):
         # if product_col is not a number: set new product
+        options = self.payload['source_file']['options']
+        product = ""
+
+        for row in self.rows:
+            # Set new product
+            product_cell = self.products_from_row(row, options['product'])
+            if not product_cell[0].isdigit() and product_cell[0] != "":
+                product = product_cell[0]
+
+            # Add purchase to current product (if there is a customer in this row)
+            customer = row[options["customer_column"]]
+            if customer == '':
+                continue
+            address = self.address_from_row(row, options['address_data'])
+            self.add_purchase(customer, product=product, address=address)
+
         return
 
+    # DOES NOT FUNCTION !!!
     def identify_by_indent(self, product_column, cust_column, start_row):
         # CUSTOMER
             # PRODUCT
@@ -576,7 +613,7 @@ class Handler:
                 customer = row[cust_column]
             elif not (row[product_column] is None or row[product_column] != row[product_column]):
                 product = row[product_column]
-                self.add_purchase(customer, product)
+                self.add_purchase(customer, product=product)
         return
 
 

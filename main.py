@@ -7,13 +7,13 @@ import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
 #Open connection to database
-conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
-cur = conn.cursor()
+# conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
+# cur = conn.cursor()
 
 # Open known and unknown files
 known_file = csv.writer(open("known_v2.csv", "w"))
 unknown_file = csv.writer(open("unknown_v2.csv", "w"))
-header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Products", "Premise", "Website", "Comments"]
+header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
 #           0           1           2       3       4       5       6           7           8           9
 known_file.writerow(header)
 unknown_file.writerow(header)
@@ -32,15 +32,19 @@ def known(customer):
         return False
 
 
-# downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 downloads = ["XLSX examples/column_full_address.xlsx",
             "XLSX examples/column_phone_sep.xlsx",
             "XLSX examples/column_dzip_dphone_chainaddress.xlsx",
             "XLSX examples/phone_address.xlsx",
             "XLSX examples/int_iden.xlsx",
-            "XLSX examples/multipage_file.xlsx"]
+            "XLSX examples/multipage_file.xlsx",
+            "XLSX examples/sep1.xlsx",
+            "XLSX examples/sep2_no_state.xlsx"]
 
+# downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 for download in downloads:
+
+    # Parse XLSX file with Handler
     file = Handler(download)
     source_info = file.payload["source_file"]
     customers_info = file.payload["customers"]
@@ -48,6 +52,11 @@ for download in downloads:
         print(source_info["name"], "was skipped")
         continue
 
+    # Check with Busybody
+    
+    # Check Address Book
+
+    # Write to known/unknown file
     source = source_info['name']
     customers = list(customers_info.keys())
 
@@ -64,5 +73,4 @@ for download in downloads:
             else:
                 unknown_file.writerow(row)
 
-conn.close()
 print("Done")

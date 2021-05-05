@@ -142,5 +142,155 @@
       "customer_column": 6,
       "unique_instruction": false
     }
+  },
+  "Trader Joe_s": {
+    "name": "Trader Joe_s 2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": true,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 3,
+        "zip": 4
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "Rock Island": {
+    "name": "Rock Island March 2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": 6,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 4,
+        "zip": 5
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "Kehe": {
+    "name": "Kehe April 2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": 3,
+        "address2": -1,
+        "city": 4,
+        "state": 5,
+        "zip": 6
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
+  },
+  "UNFI": {
+    "name": "UNFI March 2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": 4,
+        "address2": -1,
+        "city": 5,
+        "state": 6,
+        "zip": 7
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 3,
+      "unique_instruction": false
+    }
+  },
+  "sep1": {
+    "name": "sep1.xlsx",
+    "identifier": "sep",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 1,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 3,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
+  },
+  "sep2_no_state": {
+    "name": "sep2_no_state.xlsx",
+    "identifier": "sep",
+    "options": {
+      "sheet": 0,
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 0,
+      "products": false,
+      "address_data": {
+        "address1": 5,
+        "address2": -1,
+        "city": 6,
+        "state": -1,
+        "zip": 7
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 3,
+      "unique_instruction": false
+    }
   }
 }

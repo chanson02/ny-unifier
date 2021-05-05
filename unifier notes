@@ -4,12 +4,20 @@ requirements:
 identifier, customer, FULL address
 
 Where I left off:
-Moved some stuff to DONE
+Busybody Integration
+  1) Parse file (xlsx_handler)
+  2) Download all chain names
+  3) Check source for chain
+  4) Check customer for chain
+  5) If chain, fill in missing Busybody data
+  6) If chain and info, compare to busybody db?
+  7) Update the payload with new data
 
 
 # TO DO:
+Busybody Integration
 Function to identify chain + remote_id
-How to incorporate all identifiers?
+Skip confidential addresses
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
 
 # DONE:
@@ -23,3 +31,5 @@ Seperate Products into different rows
 Phone in same column
 Incorporate integer method
 Can choose different sheet in excel file
+Phone verification
+Sep Identifier
