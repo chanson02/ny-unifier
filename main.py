@@ -8,8 +8,8 @@ import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
 # Open known and unknown files
-known_file = csv.writer(open("known_v2.csv", "w"))
-unknown_file = csv.writer(open("unknown_v2.csv", "w"))
+known_file = csv.writer(open("known.csv", "w"))
+unknown_file = csv.writer(open("unknown.csv", "w"))
 header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
 #           0           1           2       3       4       5       6           7           8           9
 known_file.writerow(header)
@@ -36,13 +36,15 @@ downloads = ["XLSX examples/column_full_address.xlsx",
             "XLSX examples/int_iden.xlsx",
             "XLSX examples/multipage_file.xlsx",
             "XLSX examples/sep1.xlsx",
-            "XLSX examples/sep2_no_state.xlsx"]
+            "XLSX examples/sep2_no_state.xlsx",
+            "XLSX examples/whole_foods.xlsx"]
 
 # downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 for download in downloads:
 
     # Parse XLSX file with Handler
     file = Handler(download)
+    print('parsed', file)
     source_info = file.payload["source_file"]
     customers_info = file.payload["customers"]
     if source_info["identifier"] == "skip":
@@ -51,6 +53,7 @@ for download in downloads:
 
     # Check with Busybody
     BusybodyGetter(file)
+    print('bodied', file)
 
     # Check Address Book
 
