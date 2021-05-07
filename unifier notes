@@ -18,7 +18,7 @@ Busybody Integration:
     a) check if address / phone is not filled in
     b) if address no phone, lookup address in busybody
     c) if partial address, attempt to find full
-    d) if no address, attempt to find based on customer
+    d) if no address, attempt to find based on customer (or remote_id if chain file)
   6) If chain and info, compare to busybody db?
   7) Update the payload with new data
 

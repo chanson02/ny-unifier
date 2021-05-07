@@ -116,11 +116,12 @@ class BusybodyGetter:
 
     def update_file(self, chain_id):
         customers = self.handler.payload['customers']
+
         for customer in list(customers.keys()):
             blank = self.missing_data(customer)
 
             # Skip if all information already exists
-            if len(blank) == 0:
+            if len(blank) == 0 or customer is None:
                 continue
 
             if blank == ['phone']:
@@ -134,10 +135,46 @@ class BusybodyGetter:
                 pass
             else:
                 # Find by customer
-                self.cur.execute(f"SELECT * FROM stores WHERE chain_id=42 AND address ILIKE '%{customer}%'")
-                result = self.cur.fetchall()
-                if len(result) == 1:
-                    self.update_customer(customer, result[0])
+                # MAKE A FUNCTION TO DETECT REMOTE ID
+                remote_id = re.sub('[^0-9]', '', customer)
+                if len(remote_id) == 0:
+                    # Customer is a city
+                    self.cur.execute(f"SELECT * FROM stores WHERE chain_id=42 AND address ILIKE '%{customer}%'")
+                    results = self.cur.fetchall()
+                    if len(results) == 0:
+                        continue
+
+                    entry = self.best_fit(customer, results)
+                    if entry is None:
+                        continue
+
+                    self.update_customer(customer, entry)
+
+                else:
+                    #Customer is a remote_id
+                    print('this does nothing right now x3', remote_id)
+                    pass
+
+    # Function to find the best matching location returned by busybody
+    def best_fit(self, customer, results, by='city'):
+        parsed_addresses = []
+        for r in results:
+            nyaddr = self.addressor(r[2])
+            if nyaddr is not None:
+                parsed_addresses.append(nyaddr)
+
+        possible = []
+        for pa in parsed_addresses:
+            if pa[by] == customer.lower():
+                possible.append(pa)
+
+        if len(possible) > 0:
+            for r in results:
+                if possible[0]['orig'] == r[2]:
+                    return r
+        return None
+
+
 
 if __name__ == '__main__':
     from xlsx_handler import Handler
