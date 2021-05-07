@@ -33,6 +33,21 @@ class BusybodyGetter:
             string = string.replace(e, '')
         return string.lower()
 
+    # Function to identify if an integer is in a string
+    def contain_int(self, string):
+        for char in string:
+            if char.isdigit():
+                return True
+        return False
+
+    # Function to identify if a word might be an ID
+    def is_id_format(self, string):
+        #, #12 returns TRUE
+        # 17th returns FALSE
+        if string[-2:] == 'st' or string[-2:] == 'nd' or string[-2:] == 'rd' or string[-2:] == 'th':
+            return False
+        return True
+
     # Function to return all chain names known to busybody
     def get_chains(self):
         self.cur.execute('SELECT name, id FROM chains')
@@ -135,9 +150,8 @@ class BusybodyGetter:
                 pass
             else:
                 # Find by customer
-                # MAKE A FUNCTION TO DETECT REMOTE ID
-                remote_id = re.sub('[^0-9]', '', customer)
-                if len(remote_id) == 0:
+                remote_id = self.find_remote_id(customer)
+                if remote_id is None:
                     # Customer is a city
                     self.cur.execute(f"SELECT * FROM stores WHERE chain_id=42 AND address ILIKE '%{customer}%'")
                     results = self.cur.fetchall()
@@ -154,6 +168,38 @@ class BusybodyGetter:
                     #Customer is a remote_id
                     print('this does nothing right now x3', remote_id)
                     pass
+
+    # Function to extract remote id out of customer name
+    # Whole Foods #12 - return 12
+    # 17th Street - return None
+    def find_remote_id(self, customer):
+        # Find chain id and name
+        chain_id = self.file_is_chain()
+        chain_name = ""
+        for k in list(self.chains.keys()):
+            if self.chains[k] == chain_id:
+                chain_name = self.clean(k)
+                break
+
+        # Remove chain from name
+        no_chain_name = self.clean(customer).replace(chain_name, "")
+
+        # Find potential matches for ID's
+        potential_ids = []
+        for word in customer.split()[::-1]:
+            if word in no_chain_name and self.contain_int(word) and self.is_id_format(word):
+                potential_ids.append(word)
+
+        # Find which potential id to return
+        if len(potential_ids) == 0:
+            return None
+        elif len(potential_ids) == 1:
+            return re.sub('[^0-9]', '', potential_ids[0])
+        else:
+            for p_id in potential_ids:
+                if '#' in p_id:
+                    return re.sub('[^0-9]', '', p_id)
+            return re.sub('[^0-9]', '', potential_ids[0])
 
     # Function to find the best matching location returned by busybody
     def best_fit(self, customer, results, by='city'):
