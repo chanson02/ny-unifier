@@ -1,26 +1,5 @@
-Read XLSX file
-
-requirements:
-identifier, customer, FULL address
-
 Where I left off:
-Integrating Busybody
-If whole file is chain, overwrite previous address/phone data with busybody data
-Next- busybody find specific store, fill in missing information
 
-
-Busybody Integration:
-  1) Parse file (xlsx_handler)
-  2) Download all chain names
-  3) Check source for chain
-  4) Check customer for chain
-  5) If chain, fill in missing Busybody data
-    a) check if address / phone is not filled in
-    b) if address no phone, lookup address in busybody
-    c) if partial address, attempt to find full
-    d) if no address, attempt to find based on customer (or remote_id if chain file)
-  6) If chain and info, compare to busybody db?
-  7) Update the payload with new data
 
 
 # TO DO:
@@ -28,6 +7,7 @@ Busybody Integration
 Function to identify chain + remote_id
 Skip confidential addresses
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
+Google address?
 
 # DONE:
 pass full address to addressor
@@ -42,3 +22,4 @@ Incorporate integer method
 Can choose different sheet in excel file
 Phone verification
 Sep Identifier
+Unknowns don't separate products

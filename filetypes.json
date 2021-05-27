@@ -311,5 +311,105 @@
       "customer_column": 1,
       "unique_instruction": false
     }
+  },
+  "New Map Report2 Dashfire": {
+    "name": "New Map Report2 Dashfire May 2021.xls",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 3,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 6,
+      "products": false,
+      "address_data": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 4,
+        "zip": 5
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "New Map Report Dashfire": {
+    "name": "New Map Report Dashfire May 2021.xls",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 4,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 6,
+      "products": false,
+      "address_data": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 4,
+        "zip": 5
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "Burning Bros": {
+    "name": "Burning Bros - March 2021.xlsx",
+    "identifier": "sep",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 1,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 3,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
+  },
+  "Wild State Inventory": {
+    "name": "Wild State Inventory-Cust 5.3.21.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 1,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 1,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
   }
 }

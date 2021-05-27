@@ -392,7 +392,7 @@ class Handler:
             if self.valid_cell(row[address_data["city"]]) and address_data["city"] != -1:
                 address["city"] = row[address_data["city"]]
             if self.valid_cell(row[address_data["state"]]) and address_data["state"] != -1:
-                address["state"] = row[address_data["state"]]
+                address["state"] = row[address_data["state"]].split(', ')[-1] #sometimes 'city' | 'city, state'
             if self.valid_cell(row[address_data["zip"]]) and address_data["zip"] != -1:
                 address["zip"] = row[address_data["zip"]]
 
@@ -430,14 +430,14 @@ class Handler:
         if "street_label" in keys:
             parts["street"] += f" {parts['street_label']}"
         if "street_direction" in keys:
-            parts["street"] += f" {parts['street_label']}"
+            parts["street"] += f" {parts['street_direction']}"
 
         return parts
 
 
     # Function to map purchases to customers
     def add_purchase(self, customer, product='', address='', premise='', website=''):
-        if not self.valid_cell(customer):
+        if not self.valid_cell(customer) or product.lower() == 'total':
             return
         customer = re.sub(' +', ' ', str(customer).strip())
         if product in list(hella_codes.keys()):

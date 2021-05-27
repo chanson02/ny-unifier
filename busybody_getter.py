@@ -14,10 +14,10 @@ class BusybodyGetter:
 
         self.chains = self.get_chains()
 
-        chain_id = self.file_is_chain()
-        if chain_id is not False:
+        chain_name = self.is_chain(self.handler.payload['source_file']['name'])
+        if chain_name is not False:
             # file is a chain
-            self.update_file(chain_id)
+            self.update_file(chain_name)
         else:
             self.update_rows()
 
@@ -31,7 +31,7 @@ class BusybodyGetter:
         extraneous = ['"', "'", ',', '-', '_', '.', ' ']
         for e in extraneous:
             string = string.replace(e, '')
-        return string.lower()
+        return string.lower().replace(' and ', '&')
 
     # Function to identify if an integer is in a string
     def contain_int(self, string):
@@ -45,6 +45,8 @@ class BusybodyGetter:
         #, #12 returns TRUE
         # 17th returns FALSE
         if string[-2:] == 'st' or string[-2:] == 'nd' or string[-2:] == 'rd' or string[-2:] == 'th':
+            return False
+        if string[0] == '(' and string[-1] == ')':
             return False
         return True
 
@@ -118,68 +120,103 @@ class BusybodyGetter:
 
         return parts
 
-    def file_is_chain(self):
-        filename = self.clean(self.handler.payload['source_file']['name'])
+    def is_chain(self, string):
+        str_name = self.clean(string)
         for name in list(self.chains.keys()):
-            if self.clean(name) in filename:
-                return self.chains[name]
+            if self.clean(name) in str_name:
+                return name
+                # return self.chains[name]
 
         return False
 
+    # Function to look for a chain in each row
     def update_rows(self):
-        pass
+        customers = self.handler.payload['customers']
 
-    def update_file(self, chain_id):
+        for customer in customers:
+            chain = self.is_chain(customer)
+            if chain is False:
+                continue
+
+            # Scrape busybody for chain data
+            self.update_row(customer, chain)
+
+        return
+
+    # Function to look up each entry against a chain
+    def update_file(self, chain):
         customers = self.handler.payload['customers']
 
         for customer in list(customers.keys()):
-            blank = self.missing_data(customer)
+            self.update_row(customer, chain, chain_file=True)
 
-            # Skip if all information already exists
-            if len(blank) == 0 or customer is None:
-                continue
+    def update_row(self, customer, chain_name, chain_file=False):
+        # remove chain from customer (if in there)
+        blank = self.missing_data(customer)
+        remote_id = self.find_remote_id(customer, chain_name)
+        chain_id = self.chains[chain_name]
 
-            if blank == ['phone']:
-                # If phone is the only missing key
-                print('this does nothing right now')
-                continue
+        # Skip if all information already exists
+        if len(blank) == 0 or customer is None:
+            return
 
-            if self.partial_address(blank):
-                # Use partial address to find the rest of the address
-                print('this also does nothing right now')
-                pass
-            else:
-                # Find by customer
-                remote_id = self.find_remote_id(customer)
-                if remote_id is None:
-                    # Customer is a city
-                    self.cur.execute(f"SELECT * FROM stores WHERE chain_id=42 AND address ILIKE '%{customer}%'")
-                    results = self.cur.fetchall()
-                    if len(results) == 0:
-                        continue
+        # Check if only missing phone
+        elif blank == ['phone']:
+            self.update_phone(customer, chain_name)
+            return
 
-                    entry = self.best_fit(customer, results)
-                    if entry is None:
-                        continue
+        # Use partial address to find the rest of the information
+        elif self.partial_address(blank):
+            print('partial address does nothing right now')
+            return
 
-                    self.update_customer(customer, entry)
+        # Search by remote_id
+        elif remote_id is not None:
+            print('remote_id search does nothing right now')
 
-                else:
-                    #Customer is a remote_id
-                    print('this does nothing right now x3', remote_id)
-                    pass
+        # Search by city
+        else:
+            self.cur.execute(f"SELECT * FROM stores WHERE chain_id={chain_id} AND address ILIKE '%{customer}%'")
+            results = self.cur.fetchall()
+            if len(results) == 0:
+                return
+
+            entry = self.best_fit(customer, results)
+            if entry is None:
+                return
+
+            self.update_customer(customer, entry)
+
+        return
+
+    # Function to only find phone number of customer
+    # (address already known)
+    def update_phone(self, customer, chain):
+        address = self.handler.payload['customers'][customer]['address']
+
+        sql_command = 'SELECT phone FROM stores WHERE '
+        sql_command += f"chain_id={self.chains[chain]} "
+        sql_command += f"AND address ILIKE '%{address['street'].split()[0]}%' " # Just search for the same street number
+        sql_command += f"AND address ILIKE '%{address['city']}%' "
+        sql_command += f"AND address ILIKE '%{address['state']}%' " # TO-DO: Standardize the state?
+        sql_command += f"AND address ILIKE '%{address['zip']}%'"
+        self.cur.execute(sql_command)
+        results = self.cur.fetchall()
+        if len(results) == 0:
+            #TO-DO: print('flag and check!')
+            return
+
+        address['phone'] = results[0][0]
+
+        return
 
     # Function to extract remote id out of customer name
     # Whole Foods #12 - return 12
     # 17th Street - return None
-    def find_remote_id(self, customer):
+    def find_remote_id(self, customer, chain_name):
         # Find chain id and name
-        chain_id = self.file_is_chain()
-        chain_name = ""
-        for k in list(self.chains.keys()):
-            if self.chains[k] == chain_id:
-                chain_name = self.clean(k)
-                break
+        # chain_name = self.is_chain(self.handler.payload['source_file']['name'])
+        chain_id = self.chains[chain_name]
 
         # Remove chain from name
         no_chain_name = self.clean(customer).replace(chain_name, "")
