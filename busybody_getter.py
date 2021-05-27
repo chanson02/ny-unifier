@@ -1,4 +1,5 @@
 import psycopg2, re, os, json, pdb
+from collections import Counter
 
 
 # Class to check the Busybody database for information
@@ -167,11 +168,11 @@ class BusybodyGetter:
 
         # Use partial address to find the rest of the information
         elif self.partial_address(blank):
-            print('partial address does nothing right now')
-            return
+            if self.partial_search(customer, chain_id):
+                return
 
         # Search by remote_id
-        elif remote_id is not None:
+        if remote_id is not None:
             print('remote_id search does nothing right now')
 
         # Search by city
@@ -257,6 +258,33 @@ class BusybodyGetter:
                     return r
         return None
 
+    # Function to find best matching location based off partial address
+    def partial_search(self, customer, chain_id):
+        # find known keys
+        # search each key
+        # append results to array/
+        # find most repeated entry
+        data = self.handler.payload['customers'][customer]['address']
+        known_keys = []
+        for k in list(data.keys()):
+            if data[k] != '':
+                known_keys.append(k)
+
+        entries = []
+        for k in known_keys:
+            if k == 'phone':
+                self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND phone ILIKE '%{data[k]}%'")
+            else:
+                self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND address ILIKE '%{data[k]}%'")
+
+            for r in self.cur.fetchall():
+                entries.append(r)
+
+        if len(entries) == 0:
+            print('partial search failed')
+            return False
+        self.update_customer(customer, Counter(entries).most_common()[0][0])
+        return True
 
 
 if __name__ == '__main__':
