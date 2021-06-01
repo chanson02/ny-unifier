@@ -1,10 +1,7 @@
 Where I left off:
-
-
+Finished Busybody Integration
 
 # TO DO:
-Busybody Integration
-Function to identify chain + remote_id
 Skip confidential addresses
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
 Google address?
@@ -24,3 +21,5 @@ Phone verification
 Sep Identifier
 Unknowns don't separate products
 Partial address search
+Busybody Integration
+Function to identify chain + remote_id

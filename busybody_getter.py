@@ -162,31 +162,23 @@ class BusybodyGetter:
             return
 
         # Check if only missing phone
-        elif blank == ['phone']:
+        if blank == ['phone']:
             self.update_phone(customer, chain_name)
             return
 
         # Use partial address to find the rest of the information
-        elif self.partial_address(blank):
+        if self.partial_address(blank):
             if self.partial_search(customer, chain_id):
                 return
 
         # Search by remote_id
         if remote_id is not None:
-            print('remote_id search does nothing right now')
+            if self.remote_id_search(customer, chain_id, remote_id):
+                return
 
         # Search by city
-        else:
-            self.cur.execute(f"SELECT * FROM stores WHERE chain_id={chain_id} AND address ILIKE '%{customer}%'")
-            results = self.cur.fetchall()
-            if len(results) == 0:
-                return
-
-            entry = self.best_fit(customer, results)
-            if entry is None:
-                return
-
-            self.update_customer(customer, entry)
+        if chain_file:
+            self.name_search(customer, chain_id)
 
         return
 
@@ -258,6 +250,19 @@ class BusybodyGetter:
                     return r
         return None
 
+    def name_search(self, customer, chain_id):
+        self.cur.execute(f"SELECT * FROM stores WHERE chain_id={chain_id} AND address ILIKE '%{customer}%'")
+        results = self.cur.fetchall()
+        if len(results) == 0:
+            return
+
+        entry = self.best_fit(customer, results)
+        if entry is None:
+            return
+
+        self.update_customer(customer, entry)
+        return
+
     # Function to find best matching location based off partial address
     def partial_search(self, customer, chain_id):
         # find known keys
@@ -281,10 +286,18 @@ class BusybodyGetter:
                 entries.append(r)
 
         if len(entries) == 0:
-            print('partial search failed')
             return False
         self.update_customer(customer, Counter(entries).most_common()[0][0])
         return True
+
+    # Function to search by remote id
+    def remote_id_search(self, customer, chain_id, remote_id):
+        self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND remote_id='{remote_id}'")
+        results = self.cur.fetchall()
+        if len(results) == 0:
+            return False
+        self.update_customer(customer, results[0])
+
 
 
 if __name__ == '__main__':

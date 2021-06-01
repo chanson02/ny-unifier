@@ -31,15 +31,15 @@ def known(customer):
 
 
 downloads = [
-            # "XLSX examples/column_full_address.xlsx", # Fully working
-            # "XLSX examples/column_phone_sep.xlsx",
-            # "XLSX examples/column_dzip_dphone_chainaddress.xlsx",
-            # "XLSX examples/phone_address.xlsx",
-            # "XLSX examples/int_iden.xlsx",
-            # "XLSX examples/multipage_file.xlsx",
-            "XLSX examples/sep1.xlsx", #Partial address search?
-            # "XLSX examples/sep2_no_state.xlsx",
-            # "XLSX examples/whole_foods.xlsx"
+            "XLSX examples/column_full_address.xlsx", # Fully working
+            "XLSX examples/column_phone_sep.xlsx",
+            "XLSX examples/column_dzip_dphone_chainaddress.xlsx", #Remote ID Search
+            "XLSX examples/phone_address.xlsx",
+            "XLSX examples/int_iden.xlsx",
+            "XLSX examples/multipage_file.xlsx",
+            "XLSX examples/sep1.xlsx", #Partial address search
+            "XLSX examples/sep2_no_state.xlsx",
+            "XLSX examples/whole_foods.xlsx"
             ]
 
 # downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
