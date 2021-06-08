@@ -5,6 +5,14 @@ Finished Busybody Integration
 Skip confidential addresses
 Addressor can address addresses without state: 8700 W SURA LN, GREENFIELD                                                   53228
 Google address?
+Integrate data@nearestyou
+Rebuild DriveDownloader - (to work with data@nearestyou)
+Load known locations (from LocationsDownload file)
+Load previous quarter
+Rebuild Gap Report to work with v2
+Load / Update address book
+Create Trello Poster
+
 
 # DONE:
 pass full address to addressor
