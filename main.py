@@ -42,7 +42,7 @@ downloads = [
             "XLSX examples/whole_foods.xlsx"
             ]
 
-# downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
+downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
 for download in downloads:
 
     # Parse XLSX file with Handler

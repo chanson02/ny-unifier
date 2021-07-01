@@ -411,5 +411,30 @@
       "customer_column": 0,
       "unique_instruction": false
     }
+  },
+  "Burning_Bros_-_May_2021": {
+    "name": "Burning_Bros_-_May_2021.xlsx",
+    "identifier": "sep",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 1,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 3,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
   }
 }
