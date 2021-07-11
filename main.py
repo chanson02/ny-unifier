@@ -2,6 +2,7 @@ import os, json, csv, psycopg2, re, pdb, time, requests
 from drive_downloader import DriveDownloader
 from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
+from secret import slack_webhook
 from string import digits
 import pandas as pd
 
@@ -13,7 +14,7 @@ warnings.simplefilter("ignore") # Slider List Extension is not supported and wil
 header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
 #           0           1           2       3       4       5       6           7           8           9
 
-SLACK = False #Boolean for if slack should be notified
+SLACK = True #Boolean for if slack should be notified
 
 with open('last_run.txt', 'r') as f:
     # last_run = float(f.read())
@@ -21,7 +22,6 @@ with open('last_run.txt', 'r') as f:
 
 # Function to send message to slack
 def slack(msg):
-    slack_webhook = 'https://hooks.slack.com/services/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'
     headers = {'Content-Type': 'application/json'}
     data = json.dumps({'text': msg})
     response = requests.post(slack_webhook, data=data, headers=headers)
