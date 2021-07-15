@@ -85,6 +85,7 @@ for brand in brands:
     except IndexError:
         # No children means new brand
         dl.initialize_brand(brand)
+        slack(f'Initializing {brand.folder_data["name"]}') if SLACK else False
         continue
 
     # Check to see if there is new files
@@ -114,8 +115,8 @@ for container in files_present_queue:
     # Process downloaded files
     for download in downloads:
         # Parse XLSX file with Handler
+        print('parsing', download)
         file = Handler(download)
-        print('parsed', file)
         source_info = file.payload['source_file']
         customer_info = file.payload['customers']
         if source_info['identifier'] == 'skip':
@@ -123,8 +124,8 @@ for container in files_present_queue:
             continue
 
         # Check with Busybody
+        print('bodying', file)
         BusybodyGetter(file) # Updates Haldner object
-        print('bodied', file)
 
         # Check Address Book
         pass
@@ -175,9 +176,11 @@ for drive_file in unknowns_learned_queue:
 
     # Delete local file
     os.remove(complete_file_path)
+    slack(f'uploaded {brand.path}/unifier_io/{complete_file_path.split("/")[-1]}') if SLACK else False
 
 
-
+print('Continue to record time')
+pdb.set_trace()
 print('done')
 with open('last_run.txt', 'w') as f:
     # f.write(datetime.now(pytz.timezone('Etc/GMT+0')).isoformat())

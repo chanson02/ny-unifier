@@ -186,6 +186,8 @@ class BusybodyGetter:
     # (address already known)
     def update_phone(self, customer, chain):
         address = self.handler.payload['customers'][customer]['address']
+        for k in list(address.keys()):
+            address[k] = address[k].replace("'", "''")
 
         sql_command = 'SELECT phone FROM stores WHERE '
         sql_command += f"chain_id={self.chains[chain]} "
@@ -193,6 +195,7 @@ class BusybodyGetter:
         sql_command += f"AND address ILIKE '%{address['city']}%' "
         sql_command += f"AND address ILIKE '%{address['state']}%' " # TO-DO: Standardize the state?
         sql_command += f"AND address ILIKE '%{address['zip']}%'"
+
         self.cur.execute(sql_command)
         results = self.cur.fetchall()
         if len(results) == 0:

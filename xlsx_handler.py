@@ -7,14 +7,23 @@ from collections import Counter
 
 import pdb
 
-with open("hella_codes.json", "r") as f:
+with open("extra data/hella_codes.json", "r") as f:
     hella_codes = json.load(f)
 
 
 class Handler:
     def __init__(self, path):
         self.filename = os.path.split(path)[1]
-        self.excel_file = pd.ExcelFile(path)
+
+        file_ext = self.filename.split('.')[-1]
+        if  file_ext in ['xlsx', 'xls']:
+            self.excel_file = pd.ExcelFile(path)
+        elif file_ext == 'csv':
+            self.excel_file = pd.read_csv(path)
+        else:
+            print(file_ext, 'not supported')
+            return
+
         self.payload = self.empty_payload()
         self.load_filetype()
 
@@ -24,15 +33,19 @@ class Handler:
             print("There was an error", e)
             return
 
-        self.sheet = self.strip_null(self.sheet)
+        # self.sheet = self.strip_null(self.sheet) #this is making things MORE complicated
         self.load_rows()
         self.parse()
 
     def __repr__(self):
         return f"{self.filename} file handler"
 
+    # Sheet is a dataframe object
     def set_sheet(self):
-        self.sheet = self.excel_file.parse(self.excel_file.sheet_names[self.payload['source_file']['options']['sheet']])
+        if type(self.excel_file) == pd.core.frame.DataFrame:
+            self.sheet = self.excel_file
+        else:
+            self.sheet = self.excel_file.parse(self.excel_file.sheet_names[self.payload['source_file']['options']['sheet']])
         return
 
     # Function to prepare an empty payload to be populated
@@ -227,6 +240,8 @@ class Handler:
         return base
 
     def select_sheet(self):
+        if type(self.excel_file) == pd.core.frame.DataFrame:
+            return None
         sheet_count = len(self.excel_file.sheet_names)
         if sheet_count == 1:
             return 0

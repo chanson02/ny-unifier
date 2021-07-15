@@ -218,7 +218,7 @@
       "unique_instruction": false
     }
   },
-  "UNFI": {
+  "UNFI June": {
     "name": "UNFI March 2021.xlsx",
     "identifier": "column",
     "options": {
@@ -228,18 +228,43 @@
       "chain": false,
       "phone": false,
       "website": false,
-      "product": false,
+      "product": 18,
       "products": false,
       "address_data": {
-        "address1": 4,
-        "address2": -1,
-        "city": 5,
-        "state": 6,
-        "zip": 7
+        "address1": 7,
+        "address2": 8,
+        "city": 9,
+        "state": 10,
+        "zip": 11
       },
       "chain+address": false,
       "premise": false,
-      "customer_column": 3,
+      "customer_column": 6,
+      "unique_instruction": false
+    }
+  },
+  "UNFI Nationwide Individual": {
+    "name": "UNFI March 2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 13,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 19,
+      "products": false,
+      "address_data": {
+        "address1": 8,
+        "address2": 9,
+        "city": 10,
+        "state": 11,
+        "zip": 12
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 7,
       "unique_instruction": false
     }
   },
@@ -431,6 +456,361 @@
         "state": -1,
         "zip": -1
       },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 2,
+      "unique_instruction": false
+    }
+  },
+  "wild-state-cider": {
+    "name": "wild-state-cider_Wild_State_Inventory-Cust_7.6.21.csv",
+    "identifier": "column",
+    "options": {
+      "sheet": null,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 1,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "Eagle Rock": {
+    "name": "Eagle Rock April Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 2,
+      "products": false,
+      "address_data": 1,
+      "chain+address": true,
+      "premise": 3,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "Momentum": {
+    "name": "Momentum April Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 2,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 3,
+      "products": false,
+      "address_data": 1,
+      "chain+address": false,
+      "premise": 2,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "Associated Buyers": {
+    "name": "Associated June Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 12,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 7,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 2,
+        "state": 3,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "Slocum": {
+    "name": "Slocum June Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 3,
+      "products": false,
+      "address_data": false,
+      "chain+address": false,
+      "premise": 1,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "SGWS Nationwide Individual by Store Sales Report": {
+    "name": "SGWS Nationwide Individual by Store Sales Report Week Ended April 30-2021.xlsx",
+    "identifier": "sep",
+    "options": {
+      "sheet": 2,
+      "start_row": 22,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 2,
+      "products": false,
+      "address_data": false,
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "KeHE": {
+    "name": "KeHE Full POD Vendor (3).xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 11,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 13,
+      "products": false,
+      "address_data": {
+        "address1": 5,
+        "address2": 6,
+        "city": 7,
+        "state": 8,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 3,
+      "unique_instruction": false
+    }
+  },
+  "Walmart": {
+    "name": "Walmart Locations.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 1,
+      "start_row": 3,
+      "merge": {},
+      "chain": true,
+      "phone": 11,
+      "website": false,
+      "product": 1,
+      "products": false,
+      "address_data": {
+        "address1": 7,
+        "address2": -1,
+        "city": 8,
+        "state": 9,
+        "zip": 10
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 5,
+      "unique_instruction": false
+    }
+  },
+  "Craft Collective": {
+    "name": "Craft Collective April Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 4,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 2,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 1,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "FEDWAY ASSOCIATES": {
+    "name": "FEDWAY ASSOCIATES INC-1.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": 6,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": -1,
+        "zip": 4
+      },
+      "chain+address": false,
+      "premise": 7,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "Ruby Wines": {
+    "name": "Ruby Wines May Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 15,
+      "products": false,
+      "address_data": {
+        "address1": 4,
+        "address2": 5,
+        "city": 6,
+        "state": 7,
+        "zip": 8
+      },
+      "chain+address": false,
+      "premise": 3,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "eCommerce": {
+    "name": "eCommerce April Report.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": 2,
+      "website": false,
+      "product": false,
+      "products": false,
+      "address_data": 1,
+      "chain+address": false,
+      "premise": 4,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "Baldor April": {
+    "name": "Baldor April Report.xlsx",
+    "identifier": "int",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "address_data": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 4,
+        "zip": 5
+      },
+      "chain+address": false,
+      "premise": 6,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "Baldor June": {
+    "name": "Baldor June Report.xlsx",
+    "identifier": "int",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": false,
+      "products": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "address_data": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 3,
+        "zip": 4
+      },
+      "chain+address": false,
+      "premise": 5,
+      "customer_column": 0,
+      "unique_instruction": false
+    }
+  },
+  "WFM Locations": {
+    "name": "WFM Locations by SKU Carried.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 11,
+      "products": false,
+      "address_data": false,
       "chain+address": false,
       "premise": false,
       "customer_column": 2,
