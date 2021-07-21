@@ -3,6 +3,7 @@ from drive_downloader import DriveDownloader
 from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
 from secret import slack_webhook
+from customer import Customer
 from string import digits
 import pandas as pd
 
@@ -112,6 +113,19 @@ for container in files_present_queue:
     known_file.writerow(header)
     unknown_file.writerow(header)
 
+    # Get customer data by parsing XLSX
+    customers = []
+    for download in downloads:
+        print('parsing', download)
+        Handler(download, customers)
+
+    # Merge addresses to find best data
+    [c.execute() for c in customers]
+    print('merged customers')
+    pdb.set_trace()
+
+"""
+# OLD METHOD FOR HANDLING FILES
     # Process downloaded files
     for download in downloads:
         # Parse XLSX file with Handler
@@ -130,6 +144,8 @@ for container in files_present_queue:
         # Check Address Book
         pass
 
+        # Check for duplicates
+
         # Writer to known/unknown file
         source = source_info['name']
         customers = list(customer_info.keys())
@@ -145,13 +161,16 @@ for container in files_present_queue:
                     row[7] = product
                     known_file.writerow(row)
             else:
+                # check for duplicate unknowns
                 unknown_file.writerow(row)
+"""
 
+    # TEMP UNCOMMENT
     # Upload and delete unknown file
-    unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
-    upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
-    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
-    os.remove(unknown_path)
+    # unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
+    # upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
+    # slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+    # os.remove(unknown_path)
 
 # Unknowns Completed
 for drive_file in unknowns_learned_queue:

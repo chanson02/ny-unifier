@@ -3,6 +3,7 @@ import json
 import uuid
 import os
 import re
+from customer import Customer
 from collections import Counter
 
 import pdb
@@ -12,8 +13,9 @@ with open("extra data/hella_codes.json", "r") as f:
 
 
 class Handler:
-    def __init__(self, path):
+    def __init__(self, path, customers=[]):
         self.filename = os.path.split(path)[1]
+        self.customers = customers
 
         file_ext = self.filename.split('.')[-1]
         if  file_ext in ['xlsx', 'xls']:
@@ -451,97 +453,39 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer, product='', address='', premise='', website=''):
-        if not self.valid_cell(customer) or product.lower() == 'total':
+    def add_purchase(self, customer_name, product='', address='', premise='', website=''):
+        # Return early if null
+        if not self.valid_cell(customer_name) or product.lower() == 'total':
             return
-        customer = re.sub(' +', ' ', str(customer).strip())
+
+        # Check for hella
         if product in list(hella_codes.keys()):
             product = hella_codes[product]
-        product = str(product).strip()
 
-        if customer in self.payload["customers"]:
-            if address == self.payload["customers"][customer]["address"]:
-                self.payload["customers"][customer]["products"].append(product)
-            else:
-                repeat = [k for k in list(self.payload["customers"].keys()) if customer in k]
-                for i in range(len(repeat)):
-                    repeat_address = self.payload["customers"][repeat[i]]['address']
-                    updated_address = self.same_address(address, repeat_address, merge=True)
-                    if updated_address:
-                        self.payload["customers"][customer]['address'] = updated_address
-                        self.payload["customers"][customer]['products'].append(product)
-                        break
-                    elif i < len(repeat)-1:
-                        # Go onto the next potential repeat address
-                        continue
-                    else:
-                        # make a new customer key for this address
-                        uniq = f" ({len(repeat)})"
-                        self.payload['customers'][customer + uniq] = {'address': address, 'products': [product], 'premise': premise, 'website': website}
-        else:
-            self.payload["customers"][customer] = {"address": address, "products": [product], "premise": premise, "website": website}
+        # Standardize
+        product = str(product).strip()
+        customer_name = re.sub(' +', ' ', str(customer_name).strip())
+        customer = self.search_customers(customer_name)
+
+        # Update customer information
+        entry_data = {
+            'source': self.payload['source_file']['name'],
+            'address': address,
+            'product': product,
+        }
+        customer.add_entry(entry_data)
+        customer.website = website if customer.website == '' else False
+        customer.premise = premise if customer.premise == '' else False
 
         return
 
-    # Function to check if an address is the same
-    # Returns either False or the better match
-    def same_address(self, a1, a2, merge=False):
-        phone = self.same_key('phone', a1, a2)
-
-        # Check if full address in street
-        if a1['city'] == '' and a2['city'] == '' \
-        and a1['state'] == '' and a2['state'] == '' \
-        and a1['zip'] == '' and a2['zip'] == '' \
-        and (a1['street'] in a2['street'] or a2['street'] in a1['street']):
-            if merge:
-                # return longer address
-                if len(a1['street']) > len(a2['street']):
-                    return {'street': a1['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
-                else:
-                    return {'street': a2['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
-            else:
-                return True
-
-        street = self.same_key('street', a1, a2)
-        city = self.same_key('city', a1, a2)
-        state = self.same_key('state', a1, a2)
-        zip = self.same_key('zip', a1, a2)
-
-        if False in [street, city, state, zip, phone]:
-            return False
-        if merge is False:
-            return True
-
-        return {'street': street, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
-
-    # Function to check if keys from address dictionary have the same values
-    # Returns 'more accurate' data
-    def same_key(self, key, a1, a2):
-        if a1[key] is False and a2[key] is False:
-            return a1[key]
-        elif a1[key] is False and a2[key] is not False:
-            return a2[key]
-        elif a1[key] is not False and a2[key] is False:
-            return a1[key]
-        elif a1[key] == '' and a2[key] == '':
-            # Both empty
-            return a1[key]
-        elif a1[key] != '' and a2[key] == '':
-            # a2 empty
-            return a1[key]
-        elif a1[key] == '' and a2[key] != '':
-            # a1 empty
-            return a2[key]
-        elif a1[key] in a2[key]:
-            # a2 longer
-            return a2[key]
-        elif a2[key] in a1[key]:
-            #a1 longer
-            return a1[key]
-        else:
-            # they do not match
-            return False
-        return False #this is here for autotab
+    def search_customers(self, name):
+        for cust in self.customers:
+            if name == cust.name:
+                return cust
+        new_cust = Customer(name)
+        self.customers.append(new_cust)
+        return new_cust
 
     # Customer and Product in each row
     def identify_by_column(self):
@@ -558,7 +502,7 @@ class Handler:
                 row[options["customer_column"]] = (",".join(data[1:])).strip()
             else:
                 customer = row[options["customer_column"]]
-            # Remove phone from address is exists
+            # Remove phone from address if exists
             if options["phone"] == options["address_data"] and options['phone']:
                 target_col = row[options["phone"]].strip()
                 if target_col == "":
