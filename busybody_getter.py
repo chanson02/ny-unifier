@@ -38,9 +38,7 @@ class BusybodyGetter:
             return address
         elif blank == ['phone']:
             # update only phone
-            # return self.update_phone(address) !!!
-            print('unfinished phone only')
-            return address
+            return self.partial_address_search(address, self.chains[chain_name])
 
         results = []
 
@@ -199,7 +197,6 @@ class BusybodyGetter:
     def partial_address_search(self, address, chain_id):
         # Find knowns keys
         known_keys = [k for k in list(address.keys()) if address[k] != '']
-
         #Search each key
         sql_command = f"SELECT * FROM stores WHERE chain_id='{chain_id}'"
         for k in known_keys:
@@ -207,7 +204,7 @@ class BusybodyGetter:
                 sql_command += f" AND phone ILIKE '%{address[k]}%'"
             else:
                 sql_command += f" AND address ILIKE '%{address[k]}%'"
-
+        self.cur.execute(sql_command)
         results = self.cur.fetchall()
         return [self.result_to_dict(r) for r in results]
 
@@ -215,7 +212,7 @@ class BusybodyGetter:
 
 if __name__ == '__main__':
     customer = 'Whole Foods'
-    address = {'street': '', 'city': 'Minneapolis', 'state': '', 'zip': '', 'phone': ''}
+    address = {'street': '3060 excelsior blvd', 'city': 'Minneapolis', 'state': 'mn', 'zip': '55416', 'phone': ''}
     filename = ''
     bbg = BusybodyGetter()
     print(bbg.get(customer, address, filename))
