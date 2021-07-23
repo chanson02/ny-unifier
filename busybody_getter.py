@@ -39,6 +39,7 @@ class BusybodyGetter:
         elif blank == ['phone']:
             # update only phone
             # return self.update_phone(address) !!!
+            print('unfinished phone only')
             return address
 
         results = []
@@ -53,6 +54,7 @@ class BusybodyGetter:
             results += self.remote_search(remote, self.chains[chain_name])
 
         if address is not None:
+            print('partial address search')
             results += self.partial_address_search(address, self.chains[chain_name])
 
         return self.find_best_fit(results)
@@ -212,13 +214,11 @@ class BusybodyGetter:
 
 
 if __name__ == '__main__':
-    # customer = 'Academy'
-    customers = ['Huntsville', 'Birmingham', 'Montgomery', 'Mobile', 'Flagstaff']
-    address = None
-    filename = 'whole_foods.xlsx'
+    customer = 'Whole Foods'
+    address = {'street': '', 'city': 'Minneapolis', 'state': '', 'zip': '', 'phone': ''}
+    filename = ''
     bbg = BusybodyGetter()
-    print([bbg.get(c, address, filename) for c in customers])
-    # print(bbg.get(customer, address, filename))
+    print(bbg.get(customer, address, filename))
     bbg.conn.close()
 
 """
