@@ -119,9 +119,11 @@ for container in files_present_queue:
         print('parsing', download)
         Handler(download, customers)
 
+    bbg = BusybodyGetter()
     # Merge addresses to find best data
-    [c.execute() for c in customers]
+    [c.execute(bbg) for c in customers]
     print('merged customers')
+    bbg.conn.close()
     pdb.set_trace()
 
 """

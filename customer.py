@@ -12,6 +12,8 @@ class Customer:
         self.website = ''
         self.premise = ''
 
+        self.bbg = None #BusyBodyGetter
+
         return
 
     def __repr__(self):
@@ -30,12 +32,16 @@ class Customer:
             self.address_book = book[k]
         return
 
-    def execute(self):
+    def execute(self, bbg):
+        self.bbg = bbg # Set the busybody getter
+
         # check to see if there are different address entries
         variations = self.find_variations()
         if self.all_mergable(variations):
             merged = self.merge_all(variations)
             #send to busybody
+            filename = self.entries[0]['source']
+            self.final = self.bbg.get(customer=self.name, address=merged, filename=filename)
         else:
             # THIS IS NOT FINISHED
             self.final = None
@@ -90,7 +96,7 @@ class Customer:
         return True
 
     def merge_all(self, variations):
-        final_address = {'street': '', 'city': '', 'state': '', 'zip': 'phone': ''}
+        final_address = {'street': '', 'city': '', 'state': '', 'zip': '', 'phone': ''}
         for variation in variations:
             for key in list(variation.keys()):
                 if len(variation[key]) > len(final_address[key]):
