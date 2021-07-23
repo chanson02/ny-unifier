@@ -6,33 +6,119 @@ from collections import Counter
 
 class BusybodyGetter:
 
-    def __init__(self, handler):
-        self.handler = handler
-
+    def __init__(self):
         # Open connection to database
         self.conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
         self.cur = self.conn.cursor()
 
         self.chains = self.get_chains()
 
-        chain_name = self.is_chain(self.handler.payload['source_file']['name'])
-        if chain_name is not False:
-            # file is a chain
-            self.update_file(chain_name)
-        else:
-            self.update_rows()
-
-        self.conn.close()
+        # chain_name = self.is_chain(self.handler.payload['source_file']['name'])
+        return
 
     def __repr__(self):
-        return f"Busybody Getter for {self.handler}"
+        return f"Busybody Getter"
 
-    # Function to remove characters from string
+    # Function to return all chain names known to busybody
+    def get_chains(self):
+        self.cur.execute('SELECT name, id FROM chains')
+        result = self.cur.fetchall()
+        chains = {}
+        for r in result:
+            chains[r[0]] = r[1]
+        return chains
+
+    # Function to search busybody for data
+    def get(self, customer, address=None, filename=None):
+        chain_file = self.is_chain(filename)
+        chain_cust = self.is_chain(customer)
+        chain_name = None
+        blank = self.missing_data(address)
+
+        if not chain_file and not chain_cust:
+            # Can't find anything
+            return address
+        if len(blank) == 0:
+            # Skip if all information is available
+            return address
+        elif blank == ['phone']:
+            # update only phone
+            # return self.update_phone(address) !!!
+            return address
+
+        results = []
+
+        if chain_file:
+            # file is a chain, customer is either a city or a remote_id
+            chain_name = chain_file
+            results += self.remote_search(customer.replace('#', ''), self.chains[chain_name])
+
+        if chain_cust:
+            # chain is in customer or is customer-- split chain and remote/city
+            chain_name = chain_cust
+            remote = self.parse_identifier(customer, chain_name, address)
+            results += self.remote_search(remote, self.chains[chain_name])
+
+        if address is not None:
+            print('unfinished')
+            results += self.partial_address_search(address, self.chains[chain_name])
+
+        return self.find_best_fit(results)
+
+    # Function to remove misc characters from string
     def clean(self, string):
         extraneous = ['"', "'", ',', '-', '_', '.', ' ']
         for e in extraneous:
             string = string.replace(e, '')
         return string.lower().replace(' and ', '&')
+
+    # Function to find data to look up in Busybody
+    def missing_data(self, address):
+        bb_keys = ['street', 'city', 'state', 'zip', 'phone']
+        return [k for k in bb_keys if address[k] == '']
+
+    # Function to check if string is chain
+    def is_chain(self, string):
+        if string is None:
+            return False
+        str_name = self.clean(string)
+        for name in list(self.chains.keys()):
+            if self.clean(name) in str_name:
+                return name
+        return False
+
+    ###############################
+    ### Remote Search Functions ###
+    # Function to search by remote id
+    def remote_search(self, customer, chain_id, identifier):
+        sql_command = f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND "
+        if identifier.isdigit():
+            sql_command += f"remote_id='{identifier}'"
+        else:
+            sql_command += f'address ILIKE %{identifier}%'
+        results = self.cur.fetchall()
+        return [self.result_to_dict(r) for r in results]
+
+    # Function to find identifier
+    def parse_identifier(self, customer, chain_name, address):
+        customer = customer.lower().replace(chain_name.lower(), '').strip()
+        if self.contain_int(customer):
+            # remote_id
+            for word in customer.split():
+                if self.is_id_format(word):
+                    return word.replace('#', '')
+        elif len(customer) > 0:
+            # customer is a city?
+            return customer
+        else:
+            # identifier in address?
+            if address['city'] != '':
+                return address['city']
+            elif address['street'] != '':
+                return address['street']
+        # Parse failed
+        print('PARSE FAILED')
+        return None
 
     # Function to identify if an integer is in a string
     def contain_int(self, string):
@@ -50,161 +136,7 @@ class BusybodyGetter:
         if string[0] == '(' and string[-1] == ')':
             return False
         return True
-
-    # Function to return all chain names known to busybody
-    def get_chains(self):
-        self.cur.execute('SELECT name, id FROM chains')
-        result = self.cur.fetchall()
-        chains = {}
-        for r in result:
-            chains[r[0]] = r[1]
-        return chains
-
-    # Function to find data to look up in Busybody
-    def missing_data(self, customer):
-        bb_keys = ['street', 'city', 'state', 'zip', 'phone']
-        address = self.handler.payload['customers'][customer]['address']
-        return [k for k in bb_keys if address[k] == '']
-
-    # Check if address can be partially searched
-    def partial_address(self, missing_keys):
-        if 'street' not in missing_keys or 'city' not in missing_keys or 'state' not in missing_keys or 'zip' not in missing_keys:
-            return True
-        return False
-
-    # Function to update self.handler.payload with Busybody data
-    def update_customer(self, customer, entry):
-        parts = self.addressor(entry[2])
-        if parts is None:
-            return
-
-        address = self.handler.payload['customers'][customer]['address']
-        address['street'] = parts['street']
-        address['city'] = parts['city']
-        address['state'] = parts['state']
-        address['zip'] = parts['postal_code']
-        address['phone'] = entry[3]
-
-    # Call the addressor from the command line
-    def addressor(self, address):
-        command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
-        os.system(command)
-
-        try:
-            with open("addressor.json", "r") as f:
-                parts = json.load(f)
-            os.remove("addressor.json")
-        except Exception:
-            return None
-        if parts is None:
-            return None
-
-        # Make sure it has all required parts
-        required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
-        keys = list(parts.keys())
-        for rk in required_keys:
-            if rk not in keys:
-                parts[rk] = ""
-
-        # Combine street parts together
-        parts["street"] = f"{parts['street_number']} {parts['street_name']}"
-        try:
-            if "street_label" in keys:
-                parts["street"] += f" {parts['street_label']}"
-        except:
-            pass
-        try:
-            if "street_direction" in keys:
-                parts["street"] += f" {parts['street_label']}"
-        except:
-            pass
-
-        return parts
-
-    def is_chain(self, string):
-        str_name = self.clean(string)
-        for name in list(self.chains.keys()):
-            if self.clean(name) in str_name:
-                return name
-                # return self.chains[name]
-
-        return False
-
-    # Function to look for a chain in each row
-    def update_rows(self):
-        customers = self.handler.payload['customers']
-
-        for customer in customers:
-            chain = self.is_chain(customer)
-            if chain is False:
-                continue
-
-            # Scrape busybody for chain data
-            self.update_row(customer, chain)
-
-        return
-
-    # Function to look up each entry against a chain
-    def update_file(self, chain):
-        customers = self.handler.payload['customers']
-
-        for customer in list(customers.keys()):
-            self.update_row(customer, chain, chain_file=True)
-
-    def update_row(self, customer, chain_name, chain_file=False):
-        # remove chain from customer (if in there)
-        blank = self.missing_data(customer)
-        remote_id = self.find_remote_id(customer, chain_name)
-        chain_id = self.chains[chain_name]
-
-        # Skip if all information already exists
-        if len(blank) == 0 or customer is None:
-            return
-
-        # Check if only missing phone
-        if blank == ['phone']:
-            self.update_phone(customer, chain_name)
-            return
-
-        # Use partial address to find the rest of the information
-        if self.partial_address(blank):
-            if self.partial_search(customer, chain_id):
-                return
-
-        # Search by remote_id
-        if remote_id is not None:
-            if self.remote_id_search(customer, chain_id, remote_id):
-                return
-
-        # Search by city
-        if chain_file:
-            self.name_search(customer, chain_id)
-
-        return
-
-    # Function to only find phone number of customer
-    # (address already known)
-    def update_phone(self, customer, chain):
-        address = self.handler.payload['customers'][customer]['address']
-        for k in list(address.keys()):
-            address[k] = address[k].replace("'", "''")
-
-        sql_command = 'SELECT phone FROM stores WHERE '
-        sql_command += f"chain_id={self.chains[chain]} "
-        sql_command += f"AND address ILIKE '%{address['street'].split()[0]}%' " # Just search for the same street number
-        sql_command += f"AND address ILIKE '%{address['city']}%' "
-        sql_command += f"AND address ILIKE '%{address['state']}%' " # TO-DO: Standardize the state?
-        sql_command += f"AND address ILIKE '%{address['zip']}%'"
-
-        self.cur.execute(sql_command)
-        results = self.cur.fetchall()
-        if len(results) == 0:
-            #TO-DO: print('flag and check!')
-            return
-
-        address['phone'] = results[0][0]
-
-        return
+"""
 
     # Function to extract remote id out of customer name
     # Whole Foods #12 - return 12
@@ -293,17 +225,80 @@ class BusybodyGetter:
         self.update_customer(customer, Counter(entries).most_common()[0][0])
         return True
 
-    # Function to search by remote id
-    def remote_id_search(self, customer, chain_id, remote_id):
-        self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND remote_id='{remote_id}'")
-        results = self.cur.fetchall()
-        if len(results) == 0:
-            return False
-        self.update_customer(customer, results[0])
-
-
-
 if __name__ == '__main__':
     from xlsx_handler import Handler
     file = Handler('XLSX examples/whole_foods.xlsx')
     t = BusybodyGetter(file)
+
+
+
+
+
+
+
+
+
+
+
+    # Call the addressor from the command line
+    def addressor(self, address):
+        command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
+        os.system(command)
+
+        try:
+            with open("addressor.json", "r") as f:
+                parts = json.load(f)
+            os.remove("addressor.json")
+        except Exception:
+            return None
+        if parts is None:
+            return None
+
+        # Make sure it has all required parts
+        required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
+        keys = list(parts.keys())
+        for rk in required_keys:
+            if rk not in keys:
+                parts[rk] = ""
+
+        # Combine street parts together
+        parts["street"] = f"{parts['street_number']} {parts['street_name']}"
+        try:
+            if "street_label" in keys:
+                parts["street"] += f" {parts['street_label']}"
+        except:
+            pass
+        try:
+            if "street_direction" in keys:
+                parts["street"] += f" {parts['street_label']}"
+        except:
+            pass
+
+        return parts
+
+
+
+    # Function to only find phone number of customer
+    # (address already known)
+    def update_phone(self, customer, chain):
+        address = self.handler.payload['customers'][customer]['address']
+        for k in list(address.keys()):
+            address[k] = address[k].replace("'", "''")
+
+        sql_command = 'SELECT phone FROM stores WHERE '
+        sql_command += f"chain_id={self.chains[chain]} "
+        sql_command += f"AND address ILIKE '%{address['street'].split()[0]}%' " # Just search for the same street number
+        sql_command += f"AND address ILIKE '%{address['city']}%' "
+        sql_command += f"AND address ILIKE '%{address['state']}%' " # TO-DO: Standardize the state?
+        sql_command += f"AND address ILIKE '%{address['zip']}%'"
+
+        self.cur.execute(sql_command)
+        results = self.cur.fetchall()
+        if len(results) == 0:
+            #TO-DO: print('flag and check!')
+            return
+
+        address['phone'] = results[0][0]
+
+        return
+"""
