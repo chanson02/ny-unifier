@@ -12,8 +12,6 @@ class BusybodyGetter:
         self.cur = self.conn.cursor()
 
         self.chains = self.get_chains()
-
-        # chain_name = self.is_chain(self.handler.payload['source_file']['name'])
         return
 
     def __repr__(self):
@@ -32,14 +30,11 @@ class BusybodyGetter:
     def get(self, customer, address=None, filename=None):
         chain_file = self.is_chain(filename)
         chain_cust = self.is_chain(customer)
-        chain_name = None
+        chain_name = chain_file or chain_cust
         blank = self.missing_data(address)
 
-        if not chain_file and not chain_cust:
-            # Can't find anything
-            return address
-        if len(blank) == 0:
-            # Skip if all information is available
+        if not chain_name or len(blank) == 0:
+            # Can't find anything // all info available
             return address
         elif blank == ['phone']:
             # update only phone
@@ -50,17 +45,14 @@ class BusybodyGetter:
 
         if chain_file:
             # file is a chain, customer is either a city or a remote_id
-            chain_name = chain_file
-            results += self.remote_search(customer.replace('#', ''), self.chains[chain_name])
+            results += self.remote_search(customer, self.chains[chain_name])
 
         if chain_cust:
             # chain is in customer or is customer-- split chain and remote/city
-            chain_name = chain_cust
             remote = self.parse_identifier(customer, chain_name, address)
             results += self.remote_search(remote, self.chains[chain_name])
 
         if address is not None:
-            print('unfinished')
             results += self.partial_address_search(address, self.chains[chain_name])
 
         return self.find_best_fit(results)
@@ -75,7 +67,7 @@ class BusybodyGetter:
     # Function to find data to look up in Busybody
     def missing_data(self, address):
         bb_keys = ['street', 'city', 'state', 'zip', 'phone']
-        return [k for k in bb_keys if address[k] == '']
+        return bb_keys if address is None else [k for k in bb_keys if address[k] == '']
 
     # Function to check if string is chain
     def is_chain(self, string):
@@ -87,15 +79,78 @@ class BusybodyGetter:
                 return name
         return False
 
+    # Function to choose one final address from multiple results
+    def find_best_fit(self, results):
+        results = [r for r in results if r is not None]
+        if len(results) == 0:
+            return None
+        elif len(results) == 1:
+            return results[0]
+        else:
+            print('UNFINISHED: find_best_fit', results)
+            return results[0]
+
+    # Function to convert Busybody entry to Unifier entry
+    def result_to_dict(self, result):
+        addressor = self.addressor(result[2])
+        if addressor is None:
+            return None
+        return {
+            'street': addressor['street'],
+            'city': addressor['city'],
+            'state': addressor['state'],
+            'zip': addressor['postal_code'],
+            'phone': result[3]
+        }
+
+    # Call the addressor from the command line
+    def addressor(self, address):
+        command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
+        os.system(command)
+
+        try:
+            with open("addressor.json", "r") as f:
+                parts = json.load(f)
+            os.remove("addressor.json")
+        except Exception:
+            return None
+        if parts is None:
+            return None
+
+        # Make sure it has all required parts
+        required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
+        keys = list(parts.keys())
+        for rk in required_keys:
+            if rk not in keys:
+                parts[rk] = ""
+
+        # Combine street parts together
+        parts["street"] = f"{parts['street_number']} {parts['street_name']}"
+        try:
+            if "street_label" in keys:
+                parts["street"] += f" {parts['street_label']}"
+        except:
+            pass
+        try:
+            if "street_direction" in keys:
+                parts["street"] += f" {parts['street_label']}"
+        except:
+            pass
+
+        return parts
+
     ###############################
     ### Remote Search Functions ###
     # Function to search by remote id
-    def remote_search(self, customer, chain_id, identifier):
+    def remote_search(self, identifier, chain_id):
         sql_command = f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND "
-        if identifier.isdigit():
+        if self.contain_int(identifier) and len(identifier.split()) == 1:
+            identifier = re.sub('[^0-9]', '', identifier)
             sql_command += f"remote_id='{identifier}'"
         else:
-            sql_command += f'address ILIKE %{identifier}%'
+            sql_command += f"address ILIKE '%{identifier}%'"
+
+        self.cur.execute(sql_command)
         results = self.cur.fetchall()
         return [self.result_to_dict(r) for r in results]
 
@@ -136,35 +191,39 @@ class BusybodyGetter:
         if string[0] == '(' and string[-1] == ')':
             return False
         return True
+
+    ##############################
+    ### Partial Address Search ###
+    def partial_address_search(self, address, chain_id):
+        # Find knowns keys
+        known_keys = [k for k in list(address.keys()) if address[k] != '']
+
+        #Search each key
+        sql_command = f"SELECT * FROM stores WHERE chain_id='{chain_id}'"
+        for k in known_keys:
+            if k == 'phone':
+                sql_command += f" AND phone ILIKE '%{address[k]}%'"
+            else:
+                sql_command += f" AND address ILIKE '%{address[k]}%'"
+
+        results = self.cur.fetchall()
+        return [self.result_to_dict(r) for r in results]
+
+
+
+if __name__ == '__main__':
+    # customer = 'Academy'
+    customers = ['Huntsville', 'Birmingham', 'Montgomery', 'Mobile', 'Flagstaff']
+    address = None
+    filename = 'whole_foods.xlsx'
+    bbg = BusybodyGetter()
+    print([bbg.get(c, address, filename) for c in customers])
+    # print(bbg.get(customer, address, filename))
+    bbg.conn.close()
+
 """
 
-    # Function to extract remote id out of customer name
-    # Whole Foods #12 - return 12
-    # 17th Street - return None
-    def find_remote_id(self, customer, chain_name):
-        # Find chain id and name
-        # chain_name = self.is_chain(self.handler.payload['source_file']['name'])
-        chain_id = self.chains[chain_name]
 
-        # Remove chain from name
-        no_chain_name = self.clean(customer).replace(chain_name, "")
-
-        # Find potential matches for ID's
-        potential_ids = []
-        for word in customer.split()[::-1]:
-            if word in no_chain_name and self.contain_int(word) and self.is_id_format(word):
-                potential_ids.append(word)
-
-        # Find which potential id to return
-        if len(potential_ids) == 0:
-            return None
-        elif len(potential_ids) == 1:
-            return re.sub('[^0-9]', '', potential_ids[0])
-        else:
-            for p_id in potential_ids:
-                if '#' in p_id:
-                    return re.sub('[^0-9]', '', p_id)
-            return re.sub('[^0-9]', '', potential_ids[0])
 
     # Function to find the best matching location returned by busybody
     def best_fit(self, customer, results, by='city'):
@@ -185,96 +244,8 @@ class BusybodyGetter:
                     return r
         return None
 
-    def name_search(self, customer, chain_id):
-        self.cur.execute(f"SELECT * FROM stores WHERE chain_id={chain_id} AND address ILIKE '%{customer}%'")
-        results = self.cur.fetchall()
-        if len(results) == 0:
-            return
-
-        entry = self.best_fit(customer, results)
-        if entry is None:
-            return
-
-        self.update_customer(customer, entry)
-        return
-
-    # Function to find best matching location based off partial address
-    def partial_search(self, customer, chain_id):
-        # find known keys
-        # search each key
-        # append results to array/
-        # find most repeated entry
-        data = self.handler.payload['customers'][customer]['address']
-        known_keys = []
-        for k in list(data.keys()):
-            if data[k] != '':
-                known_keys.append(k)
-
-        entries = []
-        for k in known_keys:
-            if k == 'phone':
-                self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND phone ILIKE '%{data[k]}%'")
-            else:
-                self.cur.execute(f"SELECT * FROM stores WHERE chain_id='{chain_id}' AND address ILIKE '%{data[k]}%'")
-
-            for r in self.cur.fetchall():
-                entries.append(r)
-
-        if len(entries) == 0:
-            return False
-        self.update_customer(customer, Counter(entries).most_common()[0][0])
-        return True
-
-if __name__ == '__main__':
-    from xlsx_handler import Handler
-    file = Handler('XLSX examples/whole_foods.xlsx')
-    t = BusybodyGetter(file)
 
 
-
-
-
-
-
-
-
-
-
-    # Call the addressor from the command line
-    def addressor(self, address):
-        command = f"ruby ../ny-addressor/lib/from_cmd.rb -o -a '{address}'"
-        os.system(command)
-
-        try:
-            with open("addressor.json", "r") as f:
-                parts = json.load(f)
-            os.remove("addressor.json")
-        except Exception:
-            return None
-        if parts is None:
-            return None
-
-        # Make sure it has all required parts
-        required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
-        keys = list(parts.keys())
-        for rk in required_keys:
-            if rk not in keys:
-                parts[rk] = ""
-
-        # Combine street parts together
-        parts["street"] = f"{parts['street_number']} {parts['street_name']}"
-        try:
-            if "street_label" in keys:
-                parts["street"] += f" {parts['street_label']}"
-        except:
-            pass
-        try:
-            if "street_direction" in keys:
-                parts["street"] += f" {parts['street_label']}"
-        except:
-            pass
-
-        return parts
 
 
 
