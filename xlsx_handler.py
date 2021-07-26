@@ -474,8 +474,8 @@ class Handler:
             'product': product,
         }
         customer.add_entry(entry_data)
-        customer.website = website if customer.website == '' else False
-        customer.premise = premise if customer.premise == '' else False
+        customer.website = website if customer.website == '' and website != '' else False
+        customer.premise = premise if customer.premise == '' and premise != '' else False
 
         return
 

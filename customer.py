@@ -5,7 +5,7 @@ class Customer:
 
     def __init__(self, name):
         self.name = name
-        self.final_address = None
+        self.final = None # Final address
         self.search_address_book()
 
         self.entries = []
@@ -29,11 +29,17 @@ class Customer:
             book = json.load(f)
         k = self.name.lower()
         if k in list(book.keys()):
-            self.address_book = book[k]
+            self.final = book[k]
         return
 
     def execute(self, bbg):
+        if self.name == 'Confidential':
+            self.name = f'Confidential x{len(self.entries)}'
+            self.entries = [self.entries[0]]
+
         self.bbg = bbg # Set the busybody getter
+        if self.final is not None:
+            return
 
         # check to see if there are different address entries
         variations = self.find_variations()
@@ -42,6 +48,7 @@ class Customer:
             #send to busybody
             filename = self.entries[0]['source']
             self.final = self.bbg.get(customer=self.name, address=merged, filename=filename)
+            print('.', end='', flush=True)
         else:
             # THIS IS NOT FINISHED
             self.final = None
@@ -95,6 +102,7 @@ class Customer:
 
         return True
 
+    # Function to attempt to merge all entry addresses
     def merge_all(self, variations):
         final_address = {'street': '', 'city': '', 'state': '', 'zip': '', 'phone': ''}
         for variation in variations:

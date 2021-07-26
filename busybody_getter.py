@@ -28,17 +28,22 @@ class BusybodyGetter:
 
     # Function to search busybody for data
     def get(self, customer, address=None, filename=None):
+        blank = self.missing_data(address)
+        if len(blank) == 0:
+            return address
+
         chain_file = self.is_chain(filename)
         chain_cust = self.is_chain(customer)
         chain_name = chain_file or chain_cust
-        blank = self.missing_data(address)
 
-        if not chain_name or len(blank) == 0:
+        if chain_name is False:
             # Can't find anything // all info available
             return address
+        # make this better !!!
         elif blank == ['phone']:
             # update only phone
-            return self.partial_address_search(address, self.chains[chain_name])
+            addy_search = self.partial_address_search(address, self.chains[chain_name])
+            return addy_search[0] if len(addy_search) > 0 else address
 
         results = []
 
@@ -52,7 +57,6 @@ class BusybodyGetter:
             results += self.remote_search(remote, self.chains[chain_name])
 
         if address is not None:
-            print('partial address search')
             results += self.partial_address_search(address, self.chains[chain_name])
 
         return self.find_best_fit(results)
@@ -87,7 +91,7 @@ class BusybodyGetter:
         elif len(results) == 1:
             return results[0]
         else:
-            print('UNFINISHED: find_best_fit', results)
+            # print('UNFINISHED: find_best_fit', results)
             return results[0]
 
     # Function to convert Busybody entry to Unifier entry
@@ -148,6 +152,7 @@ class BusybodyGetter:
             identifier = re.sub('[^0-9]', '', identifier)
             sql_command += f"remote_id='{identifier}'"
         else:
+            identifier = identifier.replace("'", "''")
             sql_command += f"address ILIKE '%{identifier}%'"
 
         self.cur.execute(sql_command)
@@ -197,6 +202,8 @@ class BusybodyGetter:
     def partial_address_search(self, address, chain_id):
         # Find knowns keys
         known_keys = [k for k in list(address.keys()) if address[k] != '']
+        for k in known_keys:
+            address[k] = address[k].replace("'", "''")
         #Search each key
         sql_command = f"SELECT * FROM stores WHERE chain_id='{chain_id}'"
         for k in known_keys:
@@ -217,56 +224,3 @@ if __name__ == '__main__':
     bbg = BusybodyGetter()
     print(bbg.get(customer, address, filename))
     bbg.conn.close()
-
-"""
-
-
-
-    # Function to find the best matching location returned by busybody
-    def best_fit(self, customer, results, by='city'):
-        parsed_addresses = []
-        for r in results:
-            nyaddr = self.addressor(r[2])
-            if nyaddr is not None:
-                parsed_addresses.append(nyaddr)
-
-        possible = []
-        for pa in parsed_addresses:
-            if pa[by] == customer.lower():
-                possible.append(pa)
-
-        if len(possible) > 0:
-            for r in results:
-                if possible[0]['orig'] == r[2]:
-                    return r
-        return None
-
-
-
-
-
-
-    # Function to only find phone number of customer
-    # (address already known)
-    def update_phone(self, customer, chain):
-        address = self.handler.payload['customers'][customer]['address']
-        for k in list(address.keys()):
-            address[k] = address[k].replace("'", "''")
-
-        sql_command = 'SELECT phone FROM stores WHERE '
-        sql_command += f"chain_id={self.chains[chain]} "
-        sql_command += f"AND address ILIKE '%{address['street'].split()[0]}%' " # Just search for the same street number
-        sql_command += f"AND address ILIKE '%{address['city']}%' "
-        sql_command += f"AND address ILIKE '%{address['state']}%' " # TO-DO: Standardize the state?
-        sql_command += f"AND address ILIKE '%{address['zip']}%'"
-
-        self.cur.execute(sql_command)
-        results = self.cur.fetchall()
-        if len(results) == 0:
-            #TO-DO: print('flag and check!')
-            return
-
-        address['phone'] = results[0][0]
-
-        return
-"""

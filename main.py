@@ -37,21 +37,26 @@ def new(drive_time):
     else:
         return False
 
-# Function to check if all information has been found
-def known(customer):
-    if type(customer) == str:
-        # look in the address book
-        print('known customer does nothing right now')
-        return False
-    elif type(customer) == dict:
-        required_keys = ["street", "city", "state", "zip"]
-        result = [False for rk in required_keys if customer["address"][rk] == ""]
-        if False not in result:
-            return True
-        else:
-            return False
-    else:
-        return False
+# Function to check if all address data is found
+def known(address):
+    rk = ['street', 'city', 'state', 'zip']
+    missing = [k for k in rk if address[k] == '']
+    return True if len(missing) == 0 else False
+
+# function to generate row
+def gen_row(customer, source, address, product):
+    return [
+        source,
+        customer.name,
+        address['street'],
+        address['city'],
+        address['state'],
+        address['zip'],
+        address['phone'],
+        product,
+        customer.premise,
+        customer.website
+    ]
 
 # Function to 'merge' csv files
 def append_csv(to, frm): #from -> to
@@ -66,6 +71,7 @@ def append_csv(to, frm): #from -> to
 
 
 dl = DriveDownloader()
+print('DriveDownloader Loaded')
 brands = dl.root.children
 files_present_queue = []
 unknowns_learned_queue = []
@@ -97,6 +103,8 @@ for brand in brands:
     for file in unifier_io.files:
         if new(file['createdTime']) and '_complete.csv' in file['name']:
             unknowns_learned_queue.append(file)
+print('New files flagged')
+
 
 # Files Present
 for container in files_present_queue:
@@ -104,6 +112,7 @@ for container in files_present_queue:
     dl.clear_storage()
     [dl.download_file(f) for f in container.files]
     downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
+    print('Downloaded', container)
 
     # Setup known and unknown files
     path = container.path.replace('/', '|')
@@ -114,65 +123,45 @@ for container in files_present_queue:
     unknown_file.writerow(header)
 
     # Get customer data by parsing XLSX
+    print('Parsing files')
     customers = []
     for download in downloads:
-        print('parsing', download)
+        print('.', end='', flush=True)
         Handler(download, customers)
 
+    print('\nConsulting Busybody')
     bbg = BusybodyGetter()
     # Merge addresses to find best data
     [c.execute(bbg) for c in customers]
-    print('merged customers')
     bbg.conn.close()
-    pdb.set_trace()
 
-"""
-# OLD METHOD FOR HANDLING FILES
-    # Process downloaded files
-    for download in downloads:
-        # Parse XLSX file with Handler
-        print('parsing', download)
-        file = Handler(download)
-        source_info = file.payload['source_file']
-        customer_info = file.payload['customers']
-        if source_info['identifier'] == 'skip':
-            print(source_info['name'], 'was skipped')
-            continue
-
-        # Check with Busybody
-        print('bodying', file)
-        BusybodyGetter(file) # Updates Haldner object
-
-        # Check Address Book
-        pass
-
-        # Check for duplicates
-
-        # Writer to known/unknown file
-        source = source_info['name']
-        customers = list(customer_info.keys())
-        for name in customers:
-            customer = customer_info[name]
-            parts = customer['address']
-            if len(customer['products']) == 0:
-                customer['products'] = ['']
-
-            row = [source, name, parts["street"], parts["city"], parts["state"], parts["zip"], parts["phone"], ', '.join(customer['products']), customer["premise"], customer["website"]]
-            if known(customer):
-                for product in customer['products']:
-                    row[7] = product
-                    known_file.writerow(row)
+    print('\nWriting files')
+    # Write to csv files
+    for customer in customers:
+        if customer.final:
+            sources = [e['source'] for e in customer.entries]
+            products = [e['product'] for e in customer.entries]
+            if known(customer.final):
+                rows = [gen_row(customer, sources[i], customer.final, products[i]) for i in range(len(sources))]
+                known_file.writerows(rows)
             else:
-                # check for duplicate unknowns
+                row = gen_row(customer, sources, customer.final, products)
                 unknown_file.writerow(row)
-"""
+        else:
+            #different address for each entry
+            for entry in customer.entries:
+                row = gen_row(customer, entry['source'], entry['address'], entry['product'])
+                if known(entry['address']):
+                    known_file.writerow(row)
+                else:
+                    unknown_file.writerow(row)
 
-    # TEMP UNCOMMENT
     # Upload and delete unknown file
-    # unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
-    # upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
-    # slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
-    # os.remove(unknown_path)
+    unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
+    upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
+    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+    os.remove(unknown_path)
+    print('finished', container)
 
 # Unknowns Completed
 for drive_file in unknowns_learned_queue:
