@@ -15,7 +15,7 @@ warnings.simplefilter("ignore") # Slider List Extension is not supported and wil
 header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
 #           0           1           2       3       4       5       6           7           8           9
 
-SLACK = True #Boolean for if slack should be notified
+SLACK = False #Boolean for if slack should be notified
 
 with open('last_run.txt', 'r') as f:
     # last_run = float(f.read())
@@ -58,16 +58,67 @@ def gen_row(customer, source, address, product):
         customer.website
     ]
 
+def address_from_row(row):
+    return {
+        'street': row[2],
+        'city': row[3],
+        'state': row[4],
+        'zip': row[5],
+        'phone': row[6]
+    }
+
 # Function to 'merge' csv files
 def append_csv(to, frm): #from -> to
     update_file = csv.writer(open(to, 'a'))
-    rows = pd.read_csv(frm).values
+
+    try:
+        # rows = pd. read_csv(frm).values
+        rows = pd.ExcelFile(frm).parse().values
+    except pd.errors.EmptyDataError:
+        # No unknowns
+        return
     for row in rows:
-        row = [str(v) if str(v) != 'nan' else '' for v in row]
-        for product in row[7].split(', '):
-            row[7] = product
+        row = clean(row)
+        address = address_from_row(row)
+        if known(address):
+            update_address_book(row[1], address)
+        sources = row[0][1:-1].split(',')
+        if row[7] == '':
+            # VA Removed the data for some reason?
+            products = ['' for _ in range(len(sources))]
+        else:
+            products = row[7][1:-1].split(',')
+        for ndx in range(len(sources)):
+            row[0] = sources[ndx][1:-1]
+            row[7] = products[ndx][1:-1]
             update_file.writerow(row)
     return
+
+# Function to clean the data from a parsed file
+def clean(row):
+    row = [str(v) for v in row]
+    for i in range(len(row)):
+        if row[i] == 'nan':
+            row[i] = ''
+        row[i] = row[i].strip()
+    # while len(row) < 10:
+    #     row.append('')
+    return row
+
+# Function to update the address book with new known customer
+def update_address_book(customer, address):
+    customer = customer.lower()
+    with open('address_book.json', 'r') as f:
+        address_book = json.load(f)
+    customers = list(address_book.keys())
+    if customer not in customers:
+        address_book[customer] = []
+    address_book[customer].append(address)
+    with open('address_book.json', 'w') as f:
+        json.dump(address_book, f, indent=2)
+    return
+
+
 
 
 dl = DriveDownloader()
@@ -101,18 +152,19 @@ for brand in brands:
             files_present_queue.append(container)
 
     for file in unifier_io.files:
-        if new(file['createdTime']) and '_complete.csv' in file['name']:
+        if new(file['createdTime']) and '_complete' in file['name']:
             unknowns_learned_queue.append(file)
 print('New files flagged')
-
 
 # Files Present
 for container in files_present_queue:
     # Download brand files
     dl.clear_storage()
-    [dl.download_file(f) for f in container.files]
-    downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
-    print('Downloaded', container)
+    downloads = []
+    print(f'Downloading {container}')
+    for f in container.files:
+        downloads.append(dl.download_file(f))
+        print('.', end='', flush=True)
 
     # Setup known and unknown files
     path = container.path.replace('/', '|')
@@ -123,21 +175,26 @@ for container in files_present_queue:
     unknown_file.writerow(header)
 
     # Get customer data by parsing XLSX
-    print('Parsing files')
+    print(f'\nParsing {len(downloads)} files')
     customers = []
     for download in downloads:
         print('.', end='', flush=True)
         Handler(download, customers)
 
-    print('\nConsulting Busybody')
+    print(f'\nConsulting Busybody on {len(customers)} customers')
     bbg = BusybodyGetter()
     # Merge addresses to find best data
     [c.execute(bbg) for c in customers]
     bbg.conn.close()
 
+    with open('test.json', 'w') as f:
+        import json
+        json.dump(bbg.failures, f, indent=2)
+
     print('\nWriting files')
     # Write to csv files
     for customer in customers:
+        # Same address for each entry
         if customer.final:
             sources = [e['source'] for e in customer.entries]
             products = [e['product'] for e in customer.entries]
@@ -148,12 +205,26 @@ for container in files_present_queue:
                 row = gen_row(customer, sources, customer.final, products)
                 unknown_file.writerow(row)
         else:
-            #different address for each entry
+            # Different address for entries
+            structs = [] #make each variation into a 'struct'
+            for variation in customer.variations:
+                structs.append({
+                    'address': variation,
+                    'sources': [],
+                    'products': []
+                })
             for entry in customer.entries:
-                row = gen_row(customer, entry['source'], entry['address'], entry['product'])
-                if known(entry['address']):
-                    known_file.writerow(row)
+                # Fill each struct with sources and products
+                struct = [s for s in structs if s['address'] == entry['address']][0]
+                struct['sources'].append(entry['source'])
+                struct['products'].append(entry['product'])
+            for struct in structs:
+                # Write struct data to files
+                if known(struct['address']):
+                    rows = [gen_row(customer, struct['sources'][i], struct['address'], struct['products'][i]) for i in range(len(struct['sources']))]
+                    known_file.writerows(rows)
                 else:
+                    row = gen_row(customer, struct['sources'], struct['address'], struct['products'])
                     unknown_file.writerow(row)
 
     # Upload and delete unknown file
@@ -167,8 +238,9 @@ for container in files_present_queue:
 for drive_file in unknowns_learned_queue:
     # Download file
     dl.clear_storage()
+    print('downloading', drive_file['name'])
     csv_path = dl.download_file(drive_file)
-    csv_name = csv_path.split('/')[-1].split('_complete.csv')[0]
+    csv_name = csv_path.split('/')[-1].split('_complete')[0]
 
     # Match to existing
     unifier_id = drive_file['parents'][0]

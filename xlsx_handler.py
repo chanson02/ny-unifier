@@ -265,7 +265,7 @@ class Handler:
             row_line += f'  {index:>8}'
         print(row_line)
 
-        for row_index in range(row_count):
+        for row_index in range(len(rows)):
             new_line = f' {row_index}'
             row = rows[row_index]
             for column in row:
@@ -291,7 +291,7 @@ class Handler:
                     self.payload["source_file"]["options"]["merge"][joiner] = [merge]
 
         if input("Does this file represent a chain? ") == "1":
-            self.payload["source_file"]["options"]["chain"] = True
+            self.payload["source_file"]["options"]["chain"] = input('  Chain name: ')
 
         if input("Does this file contain phone numbers? ") == "1":
             self.payload["source_file"]["options"]["phone"] = int(input("  Phone Column: "))
@@ -474,8 +474,8 @@ class Handler:
             'product': product,
         }
         customer.add_entry(entry_data)
-        customer.website = website if customer.website == '' and website != '' else False
-        customer.premise = premise if customer.premise == '' and premise != '' else False
+        customer.website = website if customer.website == '' and website != '' else customer.website
+        customer.premise = premise if customer.premise == '' and premise != '' else customer.premise
 
         return
 
@@ -502,6 +502,8 @@ class Handler:
                 row[options["customer_column"]] = (",".join(data[1:])).strip()
             else:
                 customer = row[options["customer_column"]]
+                if options['chain']:
+                    customer = options['chain'] + ' ' + customer
             # Remove phone from address if exists
             if options["phone"] == options["address_data"] and options['phone']:
                 target_col = row[options["phone"]].strip()

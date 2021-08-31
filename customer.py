@@ -1,5 +1,6 @@
 import pdb
 import json
+import traceback
 
 class Customer:
 
@@ -29,10 +30,14 @@ class Customer:
             book = json.load(f)
         k = self.name.lower()
         if k in list(book.keys()):
-            self.final = book[k]
+            # self.final = book[k]
+            # import pdb; pdb.set_trace()
+            # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
+            self.final = book[k][0]
         return
 
     def execute(self, bbg):
+        # print(f'Executing {self.name}')
         if self.name == 'Confidential':
             self.name = f'Confidential x{len(self.entries)}'
             self.entries = [self.entries[0]]
@@ -42,25 +47,37 @@ class Customer:
             return
 
         # check to see if there are different address entries
-        variations = self.find_variations()
-        if self.all_mergable(variations):
-            merged = self.merge_all(variations)
+        self.set_variations()
+        filename = self.entries[0]['source']
+        if self.all_mergable(self.variations):
+            merged = self.merge_all(self.variations)
             #send to busybody
-            filename = self.entries[0]['source']
-            self.final = self.bbg.get(customer=self.name, address=merged, filename=filename)
-            print('.', end='', flush=True)
-        else:
-            # THIS IS NOT FINISHED
-            self.final = None
+            try:
+                self.final = self.bbg.get(customer=self.name, address=merged, filename=filename)
+                print('.', end='', flush=True)
+            except Exception:
+                self.final = merged
+                print(f'\nError setting final address for {self}')
+                traceback.print_exc()
+                print('X', end='', flush=True)
+        else: #not all mergable
+            # send each variation to busybody
+            #TODO: Check sources for chainfile?
+            for variation in self.variations:
+                variation = self.bbg.get(customer=self.name, address=variation, filename=filename)
+                print(',', end='', flush=True)
+            for e in self.entries:
+                e['address'] = self.most_similar(e['address'], self.variations)
         return
 
     # Function to find different addresses within one customer
     # array
-    def find_variations(self):
+    def set_variations(self):
         uniq = []
         for entry in self.entries:
             if entry['address'] not in uniq:
                 uniq.append(entry['address'])
+        self.variations = uniq
         return uniq
 
     # Function to check if an address is empty
@@ -110,6 +127,14 @@ class Customer:
                 if len(variation[key]) > len(final_address[key]):
                     final_address[key] = variation[key]
         return final_address
+
+    # Function to return the most similar variation
+    def most_similar(self, address, variations):
+        if address in variations:
+            return address
+        else:
+            print('customer:most_similar() UNFINISHED')
+            return address
 
 """OLD STUFF
 def add_purchase(self, customer, product='', address='', premise='', website=''):

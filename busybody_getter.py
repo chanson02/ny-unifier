@@ -1,15 +1,24 @@
 import psycopg2, re, os, json, pdb
 from collections import Counter
-
+import secret
 
 # Class to check the Busybody database for information
 
 class BusybodyGetter:
 
     def __init__(self):
+        self.failures = []
         # Open connection to database
-        self.conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
+        self.conn = psycopg2.connect(host=secret.db_login['host'], database=secret.db_login['database'], user=secret.db_login['user'], password=secret.db_login['password'])
         self.cur = self.conn.cursor()
+
+        self.empty_address = {
+            'street': '',
+            'city': '',
+            'state': '',
+            'zip': '',
+            'phone': ''
+        }
 
         self.chains = self.get_chains()
         return
@@ -23,11 +32,11 @@ class BusybodyGetter:
         result = self.cur.fetchall()
         chains = {}
         for r in result:
-            chains[r[0]] = r[1]
+            chains[r[0].replace('!', '')] = r[1]
         return chains
 
     # Function to search busybody for data
-    def get(self, customer, address=None, filename=None):
+    def get(self, customer, address=None, filename=None, debug=None):
         blank = self.missing_data(address)
         if len(blank) == 0:
             return address
@@ -35,6 +44,8 @@ class BusybodyGetter:
         chain_file = self.is_chain(filename)
         chain_cust = self.is_chain(customer)
         chain_name = chain_file or chain_cust
+        if debug and chain_name:
+            print('Chain Detected!', chain_name, self.chains[chain_name])
 
         if chain_name is False:
             # Can't find anything // all info available
@@ -54,12 +65,17 @@ class BusybodyGetter:
         if chain_cust:
             # chain is in customer or is customer-- split chain and remote/city
             remote = self.parse_identifier(customer, chain_name, address)
-            results += self.remote_search(remote, self.chains[chain_name])
+            if debug:
+                print('identifier found', remote)
+            if remote is not None:
+                results += self.remote_search(remote, self.chains[chain_name])
 
-        if address is not None:
+        if address is not None and address != self.empty_address:
             results += self.partial_address_search(address, self.chains[chain_name])
 
-        return self.find_best_fit(results)
+        if debug:
+            [print(r) for r in results]
+        return self.find_best_fit(results, address)
 
     # Function to remove misc characters from string
     def clean(self, string):
@@ -84,20 +100,23 @@ class BusybodyGetter:
         return False
 
     # Function to choose one final address from multiple results
-    def find_best_fit(self, results):
+    def find_best_fit(self, results, address):
         results = [r for r in results if r is not None]
+        rv = None
         if len(results) == 0:
-            return None
+            return address
         elif len(results) == 1:
-            return results[0]
+            rv = results[0]
         else:
             # print('UNFINISHED: find_best_fit', results)
-            return results[0]
+            rv = results[0]
+        return self.overlay(address, rv)
 
     # Function to convert Busybody entry to Unifier entry
     def result_to_dict(self, result):
         addressor = self.addressor(result[2])
         if addressor is None:
+            self.failures.append(result[2])
             return None
         return {
             'street': addressor['street'],
@@ -143,6 +162,14 @@ class BusybodyGetter:
 
         return parts
 
+    # Function to put address1 ontop of address2
+    def overlay(self, a1, a2):
+        keys = list(a1.keys())
+        for k in keys:
+            if a1[k] != '' and a2[k] == '':
+                a2[k] = a1[k]
+        return a2
+
     ###############################
     ### Remote Search Functions ###
     # Function to search by remote id
@@ -166,7 +193,8 @@ class BusybodyGetter:
             # remote_id
             for word in customer.split():
                 if self.is_id_format(word):
-                    return word.replace('#', '')
+                    # return str(int(word.replace('#', '').split('-')[0]))
+                    return re.sub('[^0-9]', '', word)
         elif len(customer) > 0:
             # customer is a city?
             return customer
@@ -182,6 +210,8 @@ class BusybodyGetter:
 
     # Function to identify if an integer is in a string
     def contain_int(self, string):
+        if string is None:
+            return False
         for char in string:
             if char.isdigit():
                 return True
@@ -191,6 +221,8 @@ class BusybodyGetter:
     def is_id_format(self, string):
         #, #12 returns TRUE
         # 17th returns FALSE
+        if not self.contain_int(string):
+            return False
         if string[-2:] == 'st' or string[-2:] == 'nd' or string[-2:] == 'rd' or string[-2:] == 'th':
             return False
         if string[0] == '(' and string[-1] == ')':

@@ -150,7 +150,7 @@
       "sheet": 0,
       "start_row": 0,
       "merge": {},
-      "chain": true,
+      "chain": "Trader Joe's",
       "phone": false,
       "website": false,
       "product": false,
@@ -218,56 +218,6 @@
       "unique_instruction": false
     }
   },
-  "UNFI June": {
-    "name": "UNFI March 2021.xlsx",
-    "identifier": "column",
-    "options": {
-      "sheet": 0,
-      "start_row": 1,
-      "merge": {},
-      "chain": false,
-      "phone": false,
-      "website": false,
-      "product": 18,
-      "products": false,
-      "address_data": {
-        "address1": 7,
-        "address2": 8,
-        "city": 9,
-        "state": 10,
-        "zip": 11
-      },
-      "chain+address": false,
-      "premise": false,
-      "customer_column": 6,
-      "unique_instruction": false
-    }
-  },
-  "UNFI Nationwide Individual": {
-    "name": "UNFI March 2021.xlsx",
-    "identifier": "column",
-    "options": {
-      "sheet": 0,
-      "start_row": 13,
-      "merge": {},
-      "chain": false,
-      "phone": false,
-      "website": false,
-      "product": 19,
-      "products": false,
-      "address_data": {
-        "address1": 8,
-        "address2": 9,
-        "city": 10,
-        "state": 11,
-        "zip": 12
-      },
-      "chain+address": false,
-      "premise": false,
-      "customer_column": 7,
-      "unique_instruction": false
-    }
-  },
   "sep1": {
     "name": "sep1.xlsx",
     "identifier": "sep",
@@ -318,14 +268,14 @@
       "unique_instruction": false
     }
   },
-  "whole_foods": {
+  "Whole Foods Top Selling stores": {
     "name": "whole_foods.xlsx",
     "identifier": "column",
     "options": {
       "sheet": 0,
       "start_row": 0,
       "merge": {},
-      "chain": true,
+      "chain": "Whole Foods",
       "phone": false,
       "website": false,
       "product": 2,
@@ -569,25 +519,6 @@
       "unique_instruction": false
     }
   },
-  "SGWS Nationwide Individual by Store Sales Report": {
-    "name": "SGWS Nationwide Individual by Store Sales Report Week Ended April 30-2021.xlsx",
-    "identifier": "sep",
-    "options": {
-      "sheet": 2,
-      "start_row": 22,
-      "merge": {},
-      "chain": false,
-      "phone": false,
-      "website": false,
-      "product": 2,
-      "products": false,
-      "address_data": false,
-      "chain+address": false,
-      "premise": false,
-      "customer_column": 0,
-      "unique_instruction": false
-    }
-  },
   "KeHE": {
     "name": "KeHE Full POD Vendor (3).xlsx",
     "identifier": "column",
@@ -605,7 +536,7 @@
         "address2": 6,
         "city": 7,
         "state": 8,
-        "zip": -1
+        "zip": 9
       },
       "chain+address": false,
       "premise": false,
@@ -620,7 +551,7 @@
       "sheet": 1,
       "start_row": 3,
       "merge": {},
-      "chain": true,
+      "chain": "Walmart",
       "phone": 11,
       "website": false,
       "product": 1,
@@ -732,7 +663,7 @@
       "unique_instruction": false
     }
   },
-  "Baldor April": {
+  "Baldor": {
     "name": "Baldor April Report.xlsx",
     "identifier": "int",
     "options": {
@@ -798,8 +729,58 @@
       "unique_instruction": false
     }
   },
+  "SGWS Nationwide Individual by Store Sales Report": {
+    "name": "SGWS Nationwide Individual by Store Sales Report Week Ended April 30-2021.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 3,
+      "start_row": 1,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "product": 16,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 6,
+        "state": 0,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": 3,
+      "customer_column": 5,
+      "unique_instruction": false
+    }
+  },
   "WFM Locations": {
     "name": "WFM Locations by SKU Carried.xlsx",
+    "identifier": "column",
+    "options": {
+      "sheet": 0,
+      "start_row": 0,
+      "merge": {},
+      "chain": "Whole Foods",
+      "phone": false,
+      "website": false,
+      "product": 11,
+      "products": false,
+      "address_data": {
+        "address1": -1,
+        "address2": -1,
+        "city": 2,
+        "state": -1,
+        "zip": -1
+      },
+      "chain+address": false,
+      "premise": false,
+      "customer_column": 1,
+      "unique_instruction": false
+    }
+  },
+  "UNFI - March Report": {
+    "name": "UNFI - March Report.xlsx",
     "identifier": "column",
     "options": {
       "sheet": 0,
@@ -808,12 +789,18 @@
       "chain": false,
       "phone": false,
       "website": false,
-      "product": 11,
+      "product": 14,
       "products": false,
-      "address_data": false,
+      "address_data": {
+        "address1": 8,
+        "address2": 9,
+        "city": 10,
+        "state": 11,
+        "zip": 12
+      },
       "chain+address": false,
       "premise": false,
-      "customer_column": 2,
+      "customer_column": 7,
       "unique_instruction": false
     }
   }
