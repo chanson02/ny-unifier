@@ -6,11 +6,15 @@ import re
 from customer import Customer
 from collections import Counter
 
+import instructions
+
 import pdb
 
 with open("extra data/hella_codes.json", "r") as f:
     hella_codes = json.load(f)
 
+XLSX_TYPE = pd.io.excel._base.ExcelFile
+CSV_TYPE = pd.core.frame.DataFrame
 
 class Handler:
     def __init__(self, path, customers=[]):
@@ -26,72 +30,14 @@ class Handler:
             print(file_ext, 'not supported')
             return
 
-        self.payload = self.empty_payload()
-        self.load_filetype()
+        self.load_filetype() # sets self.sheet and self.instructions
 
-        try:
-            self.set_sheet()
-        except Exception as e:
-            print("There was an error", e)
-            return
-
-        # self.sheet = self.strip_null(self.sheet) #this is making things MORE complicated
-        self.load_rows()
+        self.load_rows() #sets self.rows
         self.parse()
+        return
 
     def __repr__(self):
         return f"{self.filename} file handler"
-
-    # Sheet is a dataframe object
-    def set_sheet(self):
-        if type(self.excel_file) == pd.core.frame.DataFrame:
-            self.sheet = self.excel_file
-        else:
-            self.sheet = self.excel_file.parse(self.excel_file.sheet_names[self.payload['source_file']['options']['sheet']])
-        return
-
-    # Function to prepare an empty payload to be populated
-    def empty_payload(self):
-        return {
-            "source_file": {
-                "name": self.filename,
-                "identifier": "skip",
-                "options": {
-                    "sheet": 0,
-                    "start_row": 0,
-                    "merge": {},
-                    "chain": False,
-                    "phone": False,
-                    "website": False,
-                    "product": False,
-                    "products": False,
-                    "address_data": False,
-                    "chain+address": False,
-                    "premise": False,
-                    "customer_column": 0,
-                    "unique_instruction": False
-                }
-            },
-            "customers": {}
-        }
-
-    # Function to remove extraneous data from the spreadsheet
-    def strip_null(self, dataframe):
-        dataframe.drop_duplicates(inplace=True) # Remove duplicate rows
-        dataframe.dropna(how='all', axis=1, inplace=True) # Remove empty columns
-        dataframe.reset_index(drop=True, inplace=True)
-
-        # Drop header rows with repeating data
-        rows = dataframe.values
-        for index in range(len(rows)):
-            row = rows[index]
-            c = Counter(row)
-            if c.most_common()[0][1] > len(row) / 2:
-                dataframe.drop(index=index, inplace=True)
-            else:
-                break
-        dataframe.reset_index(drop=True, inplace=True)
-        return dataframe
 
     # Function to check history
         # have we used this file before?
@@ -99,24 +45,63 @@ class Handler:
     def load_filetype(self):
         with open("filetypes.json", "r") as f:
             filetypes = json.load(f)
-        file = self.known_file(filetypes)
-        if not file:
-            self.register_filetype(filetypes)
-        else:
-            self.payload["source_file"] = filetypes[file]
-            self.payload["source_file"]["name"] = self.filename
 
-    # checks history for this file
-    def known_file(self, filetypes):
-        for file in list(filetypes.keys()):
-            if file in self.filename:
-                return file
-        return False
+        # search for filename in filetypes
+        file_key = self.search_file_key(filetypes)
+        if file_key is None:
+            # File key is not registered
+            file_key, filetypes = self.register_filetype(filetypes)
+
+        matching_header = self.find_matching_header(filetypes['file_keys'][file_key])
+        if matching_header is None:
+            # Register a filetype
+            _, filetypes = self.register_filetype(filetypes, file_key)
+            matching_header = self.find_matching_header(filetypes['file_keys'][file_key])
+        self.sheet = self.select_sheet(matching_header)
+        self.instructions = self.select_instructions(matching_header, filetypes)
+        return
+
+    # Function to search for filename in filetypes.json
+    def search_file_key(self, filetypes):
+        keys = filetypes['file_keys'].keys()
+        for k in keys:
+            if k in self.filename:
+                return k
+        return None
+
+    def find_matching_header(self, file_data):
+        file_headers = self.get_file_headers()
+        for index in range(len(file_data)):
+            header_value = file_data[index]['header_value']
+            if header_value in file_headers:
+                return file_data[index]
+        return None
+
+    def get_file_headers(self):
+        if type(self.excel_file) != XLSX_TYPE:
+            return [self.remove_unnamed_columns(self.excel_file.columns.tolist())]
+        return [self.remove_unnamed_columns(self.excel_file.parse(sheet).columns.tolist())
+        for sheet in self.excel_file.sheet_names]
+
+    def select_sheet(self, header):
+        if type(self.excel_file) != XLSX_TYPE:
+            return self.excel_file
+        sheet_count = len(self.excel_file.sheet_names)
+        for sheet in self.excel_file.sheet_names:
+            sheet = self.excel_file.parse(sheet)
+            h = self.remove_unnamed_columns(sheet.columns.tolist())
+            if h == header['header_value']:
+                return sheet
+        return None
+
+    def select_instructions(self, header_data, filetypes):
+        i = instructions.Instructions()
+        i.load_from_json(filetypes['headers'][str(header_data['header_id'])])
+        return i
 
     # Function to stringify all NULL values and repalce 'nan' with ''
     def load_rows(self):
-        options = self.payload["source_file"]["options"]
-        self.rows = self.sheet.values[options["start_row"]:]
+        self.rows = self.sheet.values[self.instructions.start_row:].tolist()
         for i_row in range(len(self.rows)):
             self.rows[i_row] = [str(v).strip() for v in self.rows[i_row]]
             for i_val in range(len(self.rows[i_row])):
@@ -131,7 +116,7 @@ class Handler:
     # Function to merge columns
     # ex: | Address, City, State | Zip
     def merge_columns(self):
-        merges = self.payload["source_file"]["options"]["merge"]
+        merges = self.instructions.merge_columns
         joiners = list(merges.keys())
         if len(joiners) == 0:
             return
@@ -147,34 +132,65 @@ class Handler:
         return
 
     # save this file in history
-    def register_filetype(self, filetypes):
-        new_type = {}
-        print(f"\n\n\nNew File Registry: {self.filename}")
+    def register_filetype(self, filetypes, file_key=None):
+        if file_key is None:
+            file_key = self.ask_file_key()
+            filetypes['file_keys'][file_key] = []
+        # Find the header(s)
+        sheet_number = self.ask_sheet()
+        if sheet_number is not None:
+            sheet = self.excel_file.parse(self.excel_file.sheet_names[sheet_number])
+        else:
+            sheet = self.excel_file
+        header_value = self.remove_unnamed_columns(sheet.columns.tolist())
+        header_id = str(len(list(filetypes['headers'].keys())))
+        filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
-        # name_id is the file key used for searching history
-        name_id = self.strip_filename()
-        print(f"Name Identifier Autodetect: {name_id}")
+        instruct = instructions.Instructions()
+        instruct.ask_instructions(header_id)
+        filetypes['headers'][header_id] = instruct.jsonify()
+
+        with open('filetypes.json', 'w') as f:
+            json.dump(filetypes, f, indent=2)
+        return file_key, filetypes
+
+    def ask_file_key(self):
+        print(f'\n\nNew File Registry: {self.filename}')
+        file_key = self.strip_filename()
+        print(f'Name Identifier Autodetect: {file_key}')
         user_in = input("Press Enter to Continue or manually enter name identifier (case-sensitive)\n")
         if user_in != "":
-            name_id = user_in
-            print(f"Name Identifier: {name_id}")
-        new_type["name_id"] = name_id
+            file_key = user_in
+            print(f"Name Identifier: {file_key}")
+        return file_key
 
-        self.payload['source_file']['options']['sheet'] = self.select_sheet()
-        self.set_sheet()
-        self.print_head()
-        self.set_options()
 
-        identifiers = ["column", "int", "sep", "indent"]
-        for index in range(len(identifiers)):
-            print(f"{index}: {identifiers[index]}")
-        self.payload["source_file"]["identifier"] = identifiers[int(input("Identify by: "))]
+    # must know which sheet to get header from when registering
+    def ask_sheet(self):
+        if type(self.excel_file) != XLSX_TYPE:
+            return None
+        sheet_count = len(self.excel_file.sheet_names)
+        if sheet_count == 1:
+            return 0
 
-        filetypes[name_id] = self.payload["source_file"]
-        with open("filetypes.json", "w") as f:
-            json.dump(filetypes, f, indent=2)
+        print("Which sheet would you like to use?")
+        for sheet_i in range(sheet_count):
+            print(f"{sheet_i}: {self.excel_file.sheet_names[sheet_i]}")
 
-        return
+        return eval(input('Sheet number: '))
+
+    # Function to get rid of unnamed columns
+    def remove_unnamed_columns(self, cols):
+        unnamed_count = 0
+        for c in cols[::-1]:
+            if 'Unnamed: ' in c:
+                unnamed_count += 1
+            else:
+                break
+        if unnamed_count > 0:
+            return cols[:-unnamed_count]
+        else:
+            return cols
 
     # Function to check if a string can be an integer
     def is_int(self, s):
@@ -241,19 +257,6 @@ class Handler:
 
         return base
 
-    def select_sheet(self):
-        if type(self.excel_file) == pd.core.frame.DataFrame:
-            return None
-        sheet_count = len(self.excel_file.sheet_names)
-        if sheet_count == 1:
-            return 0
-
-        print("Which sheet would you like to use?")
-        for sheet_i in range(sheet_count):
-            print(f"{sheet_i}: {self.excel_file.sheet_names[sheet_i]}")
-
-        return eval(input('Sheet number: '))
-
     # function to display just the first few rows
     def print_head(self, row_count=5):
         print("\n")
@@ -273,75 +276,19 @@ class Handler:
             print(new_line)
         print("\n")
 
-    # Function to ask user to input data used for collection
-    def set_options(self):
-        print("Enter a 1/0 for yes/no")
-        if input("Skip file? ") == "1":
-            return
-
-        self.payload["source_file"]["options"]["start_row"] = int(input("What row does the data start? "))
-
-        if input("Do any columns need to be merged? ") == "1":
-            for i in range(eval(input("  How many merges? "))):
-                joiner = input('  Character to combine columns: ')
-                merge = eval(input('  Array of columns: '))
-                if joiner in list(self.payload["source_file"]["options"]["merge"].keys()):
-                    self.payload["source_file"]["options"]["merge"][joiner].append(merge)
-                else:
-                    self.payload["source_file"]["options"]["merge"][joiner] = [merge]
-
-        if input("Does this file represent a chain? ") == "1":
-            self.payload["source_file"]["options"]["chain"] = input('  Chain name: ')
-
-        if input("Does this file contain phone numbers? ") == "1":
-            self.payload["source_file"]["options"]["phone"] = int(input("  Phone Column: "))
-
-        if input("Does this file contain websites? ") == "1":
-            self.payload["source_file"]["options"]["website"] = int(input("  Webbsite Column: "))
-
-        if input("Does this file contain products? ") == "1":
-            if input("  Do the products span multiple columns? ") == "1":
-                self.payload["source_file"]["options"]["products"] = eval(input("  Product rows- enter like this '[5,6,7]' "))
-            else:
-                self.payload["source_file"]["options"]["product"] = int(input("  Product column: "))
-
-        if input("Does this contain premise data? ") == "1":
-            self.payload["source_file"]["options"]["premise"] = int(input("  Premise column: "))
-
-        if input("Does this file contain addresses? ") == "1":
-            if input("Does this file seperate addresses? ") == "1":
-                print("(Input -1 for empty address column)")
-                self.payload["source_file"]["options"]["address_data"] = {}
-                self.payload["source_file"]["options"]["address_data"]["address1"] = int(input("  Address 1 column: "))
-                self.payload["source_file"]["options"]["address_data"]["address2"] = int(input("  Address 2 column: "))
-                self.payload["source_file"]["options"]["address_data"]["city"] = int(input("  City column: "))
-                self.payload["source_file"]["options"]["address_data"]["state"] = int(input("  State column: "))
-                self.payload["source_file"]["options"]["address_data"]["zip"] = int(input("  Zip column: "))
-            else:
-                if input("Does this file combine chain and addresses? ") == "1":
-                    self.payload["source_file"]["options"]["chain+address"] = True
-                self.payload["source_file"]["options"]["address_data"] = int(input("  Address column: "))
-
-        if self.payload["source_file"]["options"]["chain+address"]:
-            self.payload["source_file"]["options"]["customer_column"] = self.payload["source_file"]["options"]["address_data"]
-        else:
-            self.payload["source_file"]["options"]["customer_column"] = int(input("Customer column: "))
-
-        return
-
     # handle file differently depending on layout
     def parse(self):
-        identifier = self.payload["source_file"]["identifier"]
+        identifier = self.instructions.identifier
         if identifier == "skip":
             return
         elif identifier == "column":
             self.identify_by_column()
-        elif identifier == "int":
-            self.identify_by_int()
-        elif identifier == "sep":
-            self.identify_by_sep()
-        elif identifier == "indent":
-            self.identify_by_indent()
+        # elif identifier == "int":
+        #     self.identify_by_int()
+        # elif identifier == "sep":
+        #     self.identify_by_sep()
+        # elif identifier == "indent":
+        #     self.identify_by_indent()
         else:
             raise f"No Identifier for {self.filename} | {identifier}"
 
@@ -362,60 +309,65 @@ class Handler:
 
     # Function to return array of products
     # Cell example: Juice, Tea -> ['Juice', 'Tea']
-    def products_from_row(self, row, product_column):
-        if product_column is False:
-            return [""]
-        else:
+    def products_from_row(self, row):
+        prod = self.instructions.product
+        if prod is False:
+            return ['']
+        elif type(prod) == int:
             result = []
-            [result.append(p.strip()) for p in row[product_column].split(",")]
+            [result.append(p.strip()) for p in row[prod].split(', ')]
             return result
+        else:
+            print('products_from_row not complete')
+            return ['']
 
     # Function to return phone number from row
-    def phone_from_row(self, row, phone_column):
-        if phone_column is not False:
-            if self.valid_cell(row[phone_column]):
-                return self.standardize_phone(row[phone_column])
-        return ""
+    def phone_from_row(self, row):
+        if self.instructions.phone is not False:
+            if self.valid_cell(row[self.instructions.phone]):
+                return self.standardize_phone(row[self.instructions.phone])
+        return ''
 
     # Function to return website from row
-    def website_from_row(self, row, website_column):
-        if website_column is not False:
-            if self.valid_cell(row[website_column]):
-                return row[website_column]
+    def website_from_row(self, row):
+        col = self.instructions.website
+        if col is not False:
+            if self.valid_cell(row[col]):
+                return row[col]
         return ""
 
     # Function to return address from row
-    def address_from_row(self, row, address_data, phone=''):
+    def address_from_row(self, row, phone=''):
         address = {"street": "", "city": "", "state": "", "zip": "", "phone": phone}
-        if type(address_data) == int:
-            full_address = re.sub(' +', ' ', row[address_data].strip())
+        addr_data = self.instructions.address
+
+        if type(addr_data) == int:
+            full_address = re.sub(' +', ' ', row[addr_data].strip())
             parts = self.addressor(full_address)
             if parts is None:
-                # addressor error?
-                # bad input?
-                address["street"] = full_address
-                return address
-            address["street"] = parts["street"]
-            address["city"] = parts["city"]
-            address["state"] = parts["state"]
-            address["zip"] = parts["postal_code"]
+                address['street'] = full_address
+            else:
+                address['street'] = parts['street']
+                address['city'] = parts['city']
+                address['state'] = parts['state']
+                address['zip'] = parts['postal_code']
 
-        # If the address is seperated for us
-        elif type(address_data) == dict:
-            if self.valid_cell(row[address_data["address1"]]) and address_data["address1"] != -1:
-                address["street"] = row[address_data["address1"]]
-            if self.valid_cell(row[address_data["address2"]]) and address_data["address2"] != -1:
-                address["street"] += ", " + row[address_data["address2"]]
-            if self.valid_cell(row[address_data["city"]]) and address_data["city"] != -1:
-                address["city"] = row[address_data["city"]]
-            if self.valid_cell(row[address_data["state"]]) and address_data["state"] != -1:
-                address["state"] = row[address_data["state"]].split(', ')[-1] #sometimes 'city' | 'city, state'
-            if self.valid_cell(row[address_data["zip"]]) and address_data["zip"] != -1:
-                address["zip"] = row[address_data["zip"]]
+        elif type(addr_data) == dict:
+            if self.valid_cell(row[addr_data['address1']]) and addr_data['address1'] != -1:
+                address['street'] = row[addr_data['address1']]
+            if self.valid_cell(row[addr_data['address2']]) and addr_data['address2'] != -1:
+                address['street'] += ', ' + row[addr_data['address2']]
+            if self.valid_cell(row[addr_data['city']]) and addr_data['city'] != -1:
+                address['city'] = row[addr_data['city']]
+            if self.valid_cell(row[addr_data['state']]) and addr_data['state'] != -1:
+                address['state'] = row[addr_data['state']]
+            if self.valid_cell(row[addr_data['zip']]) and addr_data['zip'] != -1:
+                address['zip'] = row[addr_data['zip']]
 
         return address
 
-    def premise_from_row(self, row, col):
+    def premise_from_row(self, row):
+        col = self.instructions.premise
         if col is False:
             return ""
         else:
@@ -469,7 +421,7 @@ class Handler:
 
         # Update customer information
         entry_data = {
-            'source': self.payload['source_file']['name'],
+            'source': self.filename,
             'address': address,
             'product': product,
         }
@@ -489,35 +441,38 @@ class Handler:
 
     # Customer and Product in each row
     def identify_by_column(self):
-        options = self.payload["source_file"]["options"]
+        options = self.instructions
         for row in self.rows:
 
-            # Remove chain from address if exists
-            if options["chain+address"]:
-                target_col = row[options["customer_column"]]
-                if target_col == "":
+            if options.chain_address:
+                # Remove chain from address
+                target_col = row[options.customer]
+                if target_col == '':
                     continue
-                data = target_col.split(",")
-                customer = data[0]
-                row[options["customer_column"]] = (",".join(data[1:])).strip()
+                data = target_col.split(',')
+                customer = data[0] # chain name
+                row[options.customer] = (','.join(data[1:])).strip() # put address back
             else:
-                customer = row[options["customer_column"]]
-                if options['chain']:
-                    customer = options['chain'] + ' ' + customer
-            # Remove phone from address if exists
-            if options["phone"] == options["address_data"] and options['phone']:
-                target_col = row[options["phone"]].strip()
-                if target_col == "":
+                if options.chain:
+                    customer = f'{options.chain} {row[options.customer]}'
+                else:
+                    customer = row[options.customer]
+
+            if options.phone == options.address:
+                # Remove phone from address
+                target_col = row[options.phone].strip()
+                if target_col == '':
                     continue
                 data = target_col.split(' ')
                 phone = data[-1]
-                row[options["address_data"]] = ' '.join(data[:-1]).strip()
+                row[options.address] = ' '.join(data[:-1]).strip()
             else:
-                phone = self.phone_from_row(row, options["phone"])
-            address = self.address_from_row(row, options["address_data"], phone)
-            products = self.products_from_row(row, options["product"])
-            premise = self.premise_from_row(row, options["premise"])
-            website = self.website_from_row(row, options["website"])
+                phone = self.phone_from_row(row)
+
+            address = self.address_from_row(row, phone)
+            products = self.products_from_row(row)
+            premise = self.premise_from_row(row)
+            website = self.website_from_row(row)
 
             for product in products:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website)
