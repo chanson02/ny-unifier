@@ -22,7 +22,7 @@ class Handler:
         self.customers = customers
 
         file_ext = self.filename.split('.')[-1]
-        if  file_ext in ['xlsx', 'xls']:
+        if  file_ext in ['xlsx', 'xls', 'xlsm']:
             self.excel_file = pd.ExcelFile(path)
         elif file_ext == 'csv':
             self.excel_file = pd.read_csv(path)
@@ -201,6 +201,8 @@ class Handler:
 
     # Function to check if a string can be an integer
     def is_int(self, s):
+        if len(s) == 0:
+            return False
         try:
             int(s)
             return True
@@ -232,6 +234,10 @@ class Handler:
 
             # 04 09 2020
             if (len(word) == 2 or len(word) == 4) and self.is_int(word):
+                base[index] = ""
+
+            # 2021/3
+            elif (len(word) == 6 or len(word) == 7) and self.is_int(word.replace('/', '')):
                 base[index] = ""
 
             # Dec
