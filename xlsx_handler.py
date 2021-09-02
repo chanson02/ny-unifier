@@ -148,7 +148,7 @@ class Handler:
             sheet = self.excel_file
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
         header_value = [self.strip_date(v) for v in header_value]
-        self.print_header(sheet)
+        self.print_header(header_value)
         header_id = str(len(list(filetypes['headers'].keys())))
         filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
@@ -236,10 +236,6 @@ class Handler:
             if (len(word) == 2 or len(word) == 4) and self.is_int(word):
                 base[index] = ""
 
-            # 2021/3
-            elif (len(word) == 6 or len(word) == 7) and self.is_int(word.replace('/', '')):
-                base[index] = ""
-
             # Dec
             elif len(word) == 3 and word.lower() in months.values():
                 base[index] = ""
@@ -250,13 +246,13 @@ class Handler:
 
             # 12.15
             elif len(word) == 5:
-                if self.is_int(word[0:1]) and self.is_int(word[3:]):
+                if self.is_int(word[:1]) and self.is_int(word[3:]):
                     base[index] = ""
 
-            # 04-2020
-            elif len(word) == 7:
-                if self.is_int(word[0:1]) and self.is_int(word[3:]):
-                    base[index] = ""
+            # 04-2020, 202004, 042020, 04/2020, 2020/04
+            elif (len(word) == 7 or len(word) == 6) and (self.is_int(word.replace('/', '')) or self.is_int(word.replace('-', ''))):
+                # if self.is_int(word[0:1]) and self.is_int(word[3:]):
+                base[index] = ""
 
             # 04_09_2020 | 04-09-2020 | 04/09/2020
             elif len(word) == 10:
@@ -290,18 +286,17 @@ class Handler:
             print(new_line)
         print("\n")
 
-    def print_header(self, sheet):
+    def print_header(self, columns):
         print('\n')
-        columns = sheet.columns
         col_count = len(columns)
         count_line = ''
         for index in range(col_count):
-            count_line += f'  {index:>8}'
+            count_line += f'  {index:>8}  '
         print(count_line)
 
         header_line = ''
         for column in columns:
-            header_line += f'  {str(column)[:8]:>8}'
+            header_line += f'  {str(column)[:10]:>10}'
         print(header_line)
         return
 
