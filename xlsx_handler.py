@@ -133,6 +133,7 @@ class Handler:
 
     # save this file in history
     def register_filetype(self, filetypes, file_key=None):
+        print(f'New Filetype discovered!  |  {self.filename}')
         if file_key is None:
             file_key = self.ask_file_key()
             filetypes['file_keys'][file_key] = []
@@ -143,11 +144,11 @@ class Handler:
         else:
             sheet = self.excel_file
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
+        print('HEAD', header_value)
         header_id = str(len(list(filetypes['headers'].keys())))
         filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
         instruct = instructions.Instructions()
-        print('HEAD', header_value)
         instruct.ask_instructions(header_id)
         filetypes['headers'][header_id] = instruct.jsonify()
 
