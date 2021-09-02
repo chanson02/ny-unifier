@@ -57,6 +57,7 @@ class Handler:
             # Register a filetype
             _, filetypes = self.register_filetype(filetypes, file_key)
             matching_header = self.find_matching_header(filetypes['file_keys'][file_key])
+        
         self.sheet = self.select_sheet(matching_header)
         self.instructions = self.select_instructions(matching_header, filetypes)
         return
@@ -71,6 +72,7 @@ class Handler:
 
     def find_matching_header(self, file_data):
         file_headers = self.get_file_headers()
+        file_headers = [[self.strip_date(header) for header in headers] for headers in file_headers]
         for index in range(len(file_data)):
             header_value = file_data[index]['header_value']
             if header_value in file_headers:
@@ -90,6 +92,7 @@ class Handler:
         for sheet in self.excel_file.sheet_names:
             sheet = self.excel_file.parse(sheet)
             h = self.remove_unnamed_columns(sheet.columns.tolist())
+            h = [self.strip_date(v) for v in  h]
             if h == header['header_value']:
                 return sheet
         return None
@@ -133,7 +136,7 @@ class Handler:
 
     # save this file in history
     def register_filetype(self, filetypes, file_key=None):
-        print(f'New Filetype discovered!  |  {self.filename}')
+        print(f'\nNew Filetype discovered!  |  {self.filename}')
         if file_key is None:
             file_key = self.ask_file_key()
             filetypes['file_keys'][file_key] = []
@@ -144,6 +147,7 @@ class Handler:
         else:
             sheet = self.excel_file
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
+        header_value = [self.strip_date(v) for v in header_value]
         print('HEAD', header_value)
         header_id = str(len(list(filetypes['headers'].keys())))
         filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
@@ -158,7 +162,8 @@ class Handler:
 
     def ask_file_key(self):
         print(f'\n\nNew File Registry: {self.filename}')
-        file_key = self.strip_filename()
+        base, _ = os.path.splitext(self.filename)
+        file_key = self.strip_date(base)
         print(f'Name Identifier Autodetect: {file_key}')
         user_in = input("Press Enter to Continue or manually enter name identifier (case-sensitive)\n")
         if user_in != "":
@@ -204,9 +209,8 @@ class Handler:
 
 
     # Function to try automatically remove dates from filenames
-    def strip_filename(self):
-        base, ext = os.path.splitext(self.filename)
-        base = base.split(" ")
+    def strip_date(self, string):
+        base = string.split(" ")
 
         months = {
             "january":"jan",
