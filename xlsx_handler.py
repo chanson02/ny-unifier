@@ -147,6 +147,7 @@ class Handler:
         filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
         instruct = instructions.Instructions()
+        print('HEAD', header_value)
         instruct.ask_instructions(header_id)
         filetypes['headers'][header_id] = instruct.jsonify()
 
@@ -283,14 +284,14 @@ class Handler:
             return
         elif identifier == "column":
             self.identify_by_column()
-        # elif identifier == "int":
-        #     self.identify_by_int()
+        elif identifier == "int":
+            self.identify_by_int()
         # elif identifier == "sep":
         #     self.identify_by_sep()
         # elif identifier == "indent":
         #     self.identify_by_indent()
         else:
-            raise f"No Identifier for {self.filename} | {identifier}"
+            print(f"No Identifier for {self.filename} | {identifier}")
 
     # Function to check validity of cell
     def valid_cell(self, cell):
@@ -479,19 +480,19 @@ class Handler:
         return
 
     # Find values associated with an integer (ex: quantity)
-    # def identify_by_int(self, products_row, cust_column, start_row, start_column, end_column):
+    # ! instructions.product must be array
     def identify_by_int(self):
-        options = self.payload["source_file"]["options"]
+        options = self.instructions
         products = self.sheet.columns
 
         for row in self.rows:
-            customer = row[options["customer_column"]]
-            phone = self.phone_from_row(row, options["phone"])
-            address = self.address_from_row(row, options["address_data"], phone)
-            premise = self.premise_from_row(row, options["premise"])
-            website = self.website_from_row(row, options["website"])
+            customer = row[options.customer]
+            phone = self.phone_from_row(row)
+            address = self.address_from_row(row, phone)
+            premise = self.premise_from_row(row)
+            website = self.website_from_row(row)
 
-            for product_column in options["products"]:
+            for product_column in options.product:
                 if row[product_column].isdigit():
                     self.add_purchase(customer, product=products[product_column], address=address, premise=premise, website=website)
         return

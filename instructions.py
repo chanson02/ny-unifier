@@ -51,7 +51,7 @@ class Instructions:
             self.website = int(input("  Website Column: "))
 
         if self.ask('Does this file contain premise data? '):
-            self.premise = int(input("Premise Column: "))
+            self.premise = int(input("  Premise Column: "))
 
         if self.ask('Does this file contain products? '):
             print('   *for multiple products input [x,y,z]')
