@@ -57,7 +57,7 @@ class Handler:
             # Register a filetype
             _, filetypes = self.register_filetype(filetypes, file_key)
             matching_header = self.find_matching_header(filetypes['file_keys'][file_key])
-        
+
         self.sheet = self.select_sheet(matching_header)
         self.instructions = self.select_instructions(matching_header, filetypes)
         return
@@ -258,6 +258,8 @@ class Handler:
                     base[index] = ""
 
         base = " ".join(base)
+        if base == '':
+            return base
         while base[-1] == " " or base[-1] == "-":
             base = base[:-1]
 
