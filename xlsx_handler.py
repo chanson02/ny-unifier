@@ -148,7 +148,7 @@ class Handler:
             sheet = self.excel_file
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
         header_value = [self.strip_date(v) for v in header_value]
-        print('HEAD', header_value)
+        self.print_header(sheet)
         header_id = str(len(list(filetypes['headers'].keys())))
         filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
@@ -210,7 +210,7 @@ class Handler:
 
     # Function to try automatically remove dates from filenames
     def strip_date(self, string):
-        base = string.split(" ")
+        base = str(string).split(" ")
 
         months = {
             "january":"jan",
@@ -283,6 +283,21 @@ class Handler:
                 new_line += f'  {str(column)[:8]:>8}'
             print(new_line)
         print("\n")
+
+    def print_header(self, sheet):
+        print('\n')
+        columns = sheet.columns
+        col_count = len(columns)
+        count_line = ''
+        for index in range(col_count):
+            count_line += f'  {index:>8}'
+        print(count_line)
+
+        header_line = ''
+        for column in columns:
+            header_line += f'  {str(column)[:8]:>8}'
+        print(header_line)
+        return
 
     # handle file differently depending on layout
     def parse(self):

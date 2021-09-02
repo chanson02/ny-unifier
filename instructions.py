@@ -82,7 +82,7 @@ class Instructions:
             if joiner in list(self.merge_columns.keys()):
                 self.merge_columns[joiner].append(merge)
             else:
-                self.merge_columns[joiner] = [merge]
+                self.merge_columns[joiner] = merge
         return
 
     def ask_address_data(self):
