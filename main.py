@@ -153,9 +153,11 @@ for container in files_present_queue:
         downloads.append(dl.download_file(f))
         print('.', end='', flush=True)
     print()
+
     container_manager = ContainerManager(downloads, container)
-    pdb.set_trace()
-    exit()
+    print('Exporting files')
+    container_manager.generate_knowns()
+    unknown_path = container_manager.generate_unknowns()
 
 
     # Upload and delete unknown file

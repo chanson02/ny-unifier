@@ -122,7 +122,7 @@ class ContainerManager:
         return rows
 
     # Function to convert all known chains to HEAD format
-    def get_known_chain_rows(self, known=True):
+    def get_chain_rows(self, known=True):
         rows = []
         for customer in self.get_chains():
             structs = []
@@ -162,7 +162,7 @@ class ContainerManager:
         return path
 
     def generate_unknowns(self):
-        path = f'./tmp/{}_incomplete.csv'
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_incomplete.csv"
         unknown_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_unknown_customers())
