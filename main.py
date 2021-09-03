@@ -13,9 +13,6 @@ from datetime import datetime
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
-#           0           1           2       3       4       5       6           7           8           9
-
 SLACK = False #Boolean for if slack should be notified
 
 with open('last_run.txt', 'r') as f:
@@ -37,22 +34,8 @@ def new(drive_time):
         return True
     else:
         return False
-#
-# # function to generate row
-# def gen_row(customer, source, address, product):
-#     return [
-#         source,
-#         customer.name,
-#         address['street'],
-#         address['city'],
-#         address['state'],
-#         address['zip'],
-#         address['phone'],
-#         product,
-#         customer.premise,
-#         customer.website
-#     ]
-#
+
+
 # def address_from_row(row):
 #     return {
 #         'street': row[2],
@@ -171,7 +154,9 @@ for container in files_present_queue:
         print('.', end='', flush=True)
     print()
     container_manager = ContainerManager(downloads, container)
-    pdb.set_trace()
+    container_manager.generate_knowns()
+    # pdb.set_trace()
+    exit()
 
 
 
@@ -183,41 +168,6 @@ for container in files_present_queue:
     # known_file.writerow(header)
     # unknown_file.writerow(header)
 
-    print('\nWriting files')
-    # Write to csv files
-    for customer in customers:
-        # Same address for each entry
-        if customer.final:
-            sources = [e['source'] for e in customer.entries]
-            products = [e['product'] for e in customer.entries]
-            if known(customer.final):
-                rows = [gen_row(customer, sources[i], customer.final, products[i]) for i in range(len(sources))]
-                known_file.writerows(rows)
-            else:
-                row = gen_row(customer, sources, customer.final, products)
-                unknown_file.writerow(row)
-        else:
-            # Different address for entries
-            structs = [] #make each variation into a 'struct'
-            for variation in customer.variations:
-                structs.append({
-                    'address': variation,
-                    'sources': [],
-                    'products': []
-                })
-            for entry in customer.entries:
-                # Fill each struct with sources and products
-                struct = [s for s in structs if s['address'] == entry['address']][0]
-                struct['sources'].append(entry['source'])
-                struct['products'].append(entry['product'])
-            for struct in structs:
-                # Write struct data to files
-                if known(struct['address']):
-                    rows = [gen_row(customer, struct['sources'][i], struct['address'], struct['products'][i]) for i in range(len(struct['sources']))]
-                    known_file.writerows(rows)
-                else:
-                    row = gen_row(customer, struct['sources'], struct['address'], struct['products'])
-                    unknown_file.writerow(row)
 
     # Upload and delete unknown file
     unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
