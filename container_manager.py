@@ -12,7 +12,9 @@ ContainerManager
 .get_known_customers
 .get_unknown_customers
 .get_customers
-.get_total_entries
+.get_entries
+.get_known_entries
+.get_unknown_entries
 
 .load_knowns(complete_file)
 
@@ -74,3 +76,10 @@ class ContainerManager:
         rk = ['street', 'city', 'state', 'zip']
         missing = [k for k in rk if address[k] == '']
         return True if len(missing) == 0 else False
+
+    # Customer group: self.customers, self.get_customers(), self.known_customers()
+    def get_entries(self, customer_group):
+        result = []
+        for customer in customer_group:
+            result += customer.entries
+        return result
