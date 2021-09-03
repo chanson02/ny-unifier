@@ -154,19 +154,8 @@ for container in files_present_queue:
         print('.', end='', flush=True)
     print()
     container_manager = ContainerManager(downloads, container)
-    container_manager.generate_knowns()
-    # pdb.set_trace()
+    pdb.set_trace()
     exit()
-
-
-
-    # # Setup known and unknown files
-    # path = container.path.replace('/', '|')
-    # unknown_path = f'./tmp/{path}_incomplete.csv'
-    # known_file = csv.writer(open(f'./pending/{path}.csv', 'w'))
-    # unknown_file = csv.writer(open(unknown_path, 'w'))
-    # known_file.writerow(header)
-    # unknown_file.writerow(header)
 
 
     # Upload and delete unknown file

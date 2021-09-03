@@ -163,3 +163,9 @@ class ContainerManager:
 
     def generate_unknowns(self):
         path = f'./tmp/{}_incomplete.csv'
+        unknown_file = csv.writer(open(path, 'w'))
+        rows = [HEADER]
+        rows += self.get_customer_rows(self.get_unknown_customers())
+        rows += self.get_chain_rows(known=False)
+        unknown_file.writerows(rows)
+        return path
