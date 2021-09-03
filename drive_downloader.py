@@ -62,7 +62,18 @@ class DriveDownloader:
         for name in ['brand_io', 'unifier_io']]
         return
 
-
+    def find_folder(self, search_query, folder=None, search_by='id'):
+        if folder is None:
+            folder = self.root
+        if folder.folder_data[search_by] == search_query:
+            return folder
+        else:
+            # TO-DO: sort by updatedAt
+            for child in folder.children:
+                result = self.find_folder(search_query, folder=child, search_by=search_by)
+                if result is not None:
+                    return result
+        return None
 
 
 

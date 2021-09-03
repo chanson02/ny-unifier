@@ -31,6 +31,7 @@ class DriveFolder:
 
     # Function to return items in folder
     def get_contents(self):
+        import pdb; pdb.set_trace()
         return self.service.files().list(
             q=f"parents in '{self.folder_data['id']}'",
             fields='files(id, name, createdTime, mimeType, parents)'

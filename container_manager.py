@@ -140,13 +140,13 @@ class ContainerManager:
                 struct['products'].append(entry['product'])
 
             for struct in structs:
-                if known(struct['address']) and known:
+                if self.known(struct['address']) and known:
                     rows += [
                         self.gen_row(customer, struct['sources'][i], struct['address'], struct['products'][i])
                         for i in range(len(struct['sources']))
                     ]
                 else:
-                    row += [self.gen_row(customer, struct['sources'], struct['address'], struct['products'])]
+                    rows += [self.gen_row(customer, struct['sources'], struct['address'], struct['products'])]
         return rows
 
     # Function to generate  knowns file

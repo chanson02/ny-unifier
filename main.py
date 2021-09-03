@@ -167,19 +167,22 @@ for container in files_present_queue:
     os.remove(unknown_path)
     print('finished', container)
 
-# # Unknowns Completed
-# for drive_file in unknowns_learned_queue:
-#     # Download file
-#     dl.clear_storage()
-#     print('downloading', drive_file['name'])
-#     csv_path = dl.download_file(drive_file)
-#     csv_name = csv_path.split('/')[-1].split('_complete')[0]
-#
-#     # Match to existing
-#     unifier_id = drive_file['parents'][0]
-#     brand = search_brands(unifier_id)
-#     brand_name = brand.path.split('/')[-1]
-#     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
+# Unknowns Completed
+for drive_file in unknowns_learned_queue:
+    # Download file
+    dl.clear_storage()
+    print('downloading', drive_file['name'])
+    csv_path = dl.download_file(drive_file)
+    csv_name = csv_path.split('/')[-1].split('_complete')[0]
+
+    # Match to existing
+    unifier_id = drive_file['parents'][0]
+    brand = search_brands(unifier_id)
+    brand_name = brand.path.split('/')[-1]
+    pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
+
+    container_folder = dl.find_folder(drive_file['parents'][0]).parent
+    pdb.set_trace()
 #
 #     # Fill out missing info
 #     append_csv(pending_file_path, csv_path)
