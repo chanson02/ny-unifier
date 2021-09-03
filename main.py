@@ -145,6 +145,8 @@ print('New files flagged')
 
 # Files Present
 for container in files_present_queue:
+    # Update container time for recursive search
+    container.modify_time()
     # Download brand files
     dl.clear_storage()
     downloads = []

@@ -62,18 +62,21 @@ class DriveDownloader:
         for name in ['brand_io', 'unifier_io']]
         return
 
+    # Recursivley search for folder
     def find_folder(self, search_query, folder=None, search_by='id'):
         if folder is None:
             folder = self.root
         if folder.folder_data[search_by] == search_query:
             return folder
         else:
-            # TO-DO: sort by updatedAt
-            for child in folder.children:
+            # Sort by modifedTime to find latest results sooner
+            children = sorted(folder.children, key=lambda child: child.folder_data['modifiedTime'])[::-1]
+            for child in children:
                 result = self.find_folder(search_query, folder=child, search_by=search_by)
                 if result is not None:
                     return result
         return None
+
 
 
 
