@@ -184,6 +184,7 @@ for drive_file in unknowns_learned_queue:
     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
 
     container_folder = dl.find_folder(drive_file['parents'][0]).parent
+    test = ContainerManager([csv_path, pending_file_path], container_folder)
     pdb.set_trace()
 #
 #     # Fill out missing info

@@ -473,6 +473,24 @@
           "YoY Qty\nChange %"
         ]
       }
+    ],
+    "unifier": [
+      {
+        "header_id": "25",
+        "header_value": [
+          "Source",
+          "Customer",
+          "Street",
+          "City",
+          "State",
+          "Zip",
+          "Phone",
+          "Product",
+          "Premise",
+          "Website",
+          "Comments"
+        ]
+      }
     ]
   },
   "headers": {
@@ -905,6 +923,25 @@
         "city": 3,
         "state": 5,
         "zip": -1
+      },
+      "chain_address": false,
+      "customer": 1
+    },
+    "25": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": 6,
+      "website": 9,
+      "premise": 8,
+      "product": 7,
+      "address": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 4,
+        "zip": 5
       },
       "chain_address": false,
       "customer": 1
