@@ -84,10 +84,10 @@ class ContainerManager:
     # function to check if unknowns are needed to be generated
     def unknowns(self):
         if self.get_unknown_customers():
-            return False
+            return True
         if self.get_chain_rows(known=False):
-            return False
-        return True
+            return True
+        return False
 
     # Customer group: self.customers, self.get_customers(), self.known_customers()
     def get_entries(self, customer_group):

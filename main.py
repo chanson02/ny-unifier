@@ -138,6 +138,7 @@ print('New files flagged')
 for container in files_present_queue:
     # Update container time for recursive search
     container.modify_time()
+    unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
     # Download brand files
     dl.clear_storage()
     downloads = []
@@ -149,23 +150,22 @@ for container in files_present_queue:
 
     container_manager = ContainerManager(downloads, container)
     print('Exporting files')
-    pdb.set_trace()
+    known_path = container_manager.generate_knowns()
+    # pdb.set_trace()
+
     if container_manager.unknowns():
         # Upload Unknowns file
         unknown_path = container_manager.generate_unknowns()
-        unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
         upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
-        slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
         os.remove(unknown_path)
-        # Save knowns file
-        container_manager.generate_knowns()
     else:
         # Upload knowns, gap, new
-        print('this is not finished')
-        # add to unknwns queue?
-        pass
+        new_known_path = known_path.replace('_unifier', '_unifier_finished')
+        os.rename(known_path, new_known_path)
+        upload = dl.upload_file(new_known_path, unifier_io.folder_data['id'])
 
-    print('finished', container)
+    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+    print('finished', container, upload['name'])
 
 # Unknowns Completed
 for drive_file in unknowns_learned_queue:
