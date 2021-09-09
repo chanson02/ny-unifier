@@ -316,6 +316,8 @@ class Handler:
             self.identify_by_column()
         elif identifier == "int":
             self.identify_by_int()
+        elif identifier == "unifier":
+            self.identify_by_unifier()
         # elif identifier == "sep":
         #     self.identify_by_sep()
         # elif identifier == "indent":
@@ -436,10 +438,13 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer_name, product='', address='', premise='', website=''):
+    def add_purchase(self, customer_name, product='', address='', premise='', website='', source=None):
         # Return early if null
         if not self.valid_cell(customer_name) or product.lower() == 'total':
             return
+
+        if source is None:
+            source = self.filename
 
         # Check for hella
         if product in list(hella_codes.keys()):
@@ -452,7 +457,7 @@ class Handler:
 
         # Update customer information
         entry_data = {
-            'source': self.filename,
+            'source': source,
             'address': address,
             'product': product,
         }
@@ -546,6 +551,27 @@ class Handler:
             address = self.address_from_row(row, options['address_data'])
             self.add_purchase(customer, product=product, address=address)
 
+        return
+
+    def identify_by_unifier(self):
+        for row in self.rows:
+            customer = row[self.instructions.customer]
+            phone = self.phone_from_row(row)
+            address = self.address_from_row(row, phone)
+            # products = self.products_from_row(row)
+            premise = self.premise_from_row(row)
+            website = self.website_from_row(row)
+
+            product = row[self.instructions.product]
+            if len(product) == 0:
+                self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
+            elif product[0] == '[':
+                product = eval(product)
+                source = eval(row[0])
+                for index in range(len(product)):
+                    self.add_purchase(customer, product=product[index], address=address, premise=premise, website=website, source=source[index])
+            else:
+                self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
         return
 
     # DOES NOT FUNCTION !!!

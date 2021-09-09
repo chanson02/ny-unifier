@@ -86,6 +86,33 @@
           "Product Name",
           "  Cases"
         ]
+      },
+      {
+        "header_id": "27",
+        "header_value": [
+          "Cust name",
+          "Cust #",
+          "Unnamed: 2",
+          "On/Off Premise",
+          "Address 1",
+          "Address 2",
+          "City",
+          "State",
+          "Zip",
+          "Inv DateA",
+          "Inv DateB",
+          "Inv #",
+          "Case Qty",
+          "Avg Cs Retail",
+          "Avg Cs Disc",
+          "Avg Cs Net",
+          "Item #",
+          "UPC",
+          "Item Desc",
+          "Liters/Bott",
+          "Liters/case",
+          "Qty/Case"
+        ]
       }
     ],
     "Momentum": [
@@ -318,6 +345,37 @@
           "Units",
           " - 1"
         ]
+      },
+      {
+        "header_id": "7",
+        "header_value": [
+          "Region",
+          "Channel",
+          "Lawson #",
+          "Vendor Name",
+          "Chain",
+          "Chain Name",
+          "Cust #",
+          "Customer Name",
+          "Address",
+          "Address2",
+          "City",
+          "State",
+          "Zip Code",
+          "Warehouse",
+          "UPC",
+          "MFG #",
+          "MFG PROD CD",
+          "Brand",
+          "Prod #",
+          "Description",
+          "Pack",
+          "Size",
+          "UNFI Published Wholesale",
+          "Sales",
+          "Units",
+          " - 8"
+        ]
       }
     ],
     "eCommerce": [
@@ -489,6 +547,28 @@
           "Premise",
           "Website",
           "Comments"
+        ]
+      }
+    ],
+    "Fedway": [
+      {
+        "header_id": "26",
+        "header_value": [
+          "SUPERVISOR GROUP",
+          "CUSTOMER",
+          "ADDRESS",
+          "CITY",
+          "COUNTY",
+          "STATE",
+          "PHONE NUMBER",
+          "PREMISE",
+          "SALES PERSON",
+          "ITEM",
+          "SIZE",
+          "PACK",
+          "CASES",
+          "9L CASES",
+          "SALES"
         ]
       }
     ]
@@ -928,7 +1008,7 @@
       "customer": 1
     },
     "25": {
-      "identifier": "column",
+      "identifier": "unifier",
       "start_row": 0,
       "merge": {},
       "chain": false,
@@ -945,6 +1025,44 @@
       },
       "chain_address": false,
       "customer": 1
+    },
+    "26": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": 6,
+      "website": false,
+      "premise": 7,
+      "product": 9,
+      "address": {
+        "address1": 2,
+        "address2": -1,
+        "city": 3,
+        "state": 5,
+        "zip": -1
+      },
+      "chain_address": false,
+      "customer": 1
+    },
+    "27": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": 3,
+      "product": 18,
+      "address": {
+        "address1": 4,
+        "address2": 5,
+        "city": 6,
+        "state": 7,
+        "zip": 8
+      },
+      "chain_address": false,
+      "customer": 0
     }
   }
 }

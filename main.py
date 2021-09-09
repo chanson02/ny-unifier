@@ -36,44 +36,6 @@ def new(drive_time):
         return False
 
 
-# def address_from_row(row):
-#     return {
-#         'street': row[2],
-#         'city': row[3],
-#         'state': row[4],
-#         'zip': row[5],
-#         'phone': row[6]
-#     }
-#
-# # Function to 'merge' csv files
-# def append_csv(to, frm): #from -> to
-#     update_file = csv.writer(open(to, 'a'))
-#
-#     try:
-#         # rows = pd. read_csv(frm).values
-#         rows = pd.ExcelFile(frm).parse().values
-#     except pd.errors.EmptyDataError:
-#         # No unknowns
-#         return
-#     for row in rows:
-#         row = clean(row)
-#         address = address_from_row(row)
-#         if known(address):
-#             update_address_book(row[1], address)
-#         sources = row[0][1:-1].split(',')
-#         if row[7] == '':
-#             # VA Removed the data for some reason?
-#             products = ['' for _ in range(len(sources))]
-#         else:
-#             products = row[7][1:-1].split(',')
-#         for ndx in range(len(sources)):
-#             row[0] = sources[ndx][1:-1]
-#             row[7] = products[ndx][1:-1]
-#             update_file.writerow(row)
-#     return
-#
-
-
 # # Function to update the address book with new known customer
 # def update_address_book(customer, address):
 #     customer = customer.lower()
@@ -151,7 +113,6 @@ for container in files_present_queue:
     container_manager = ContainerManager(downloads, container)
     print('Exporting files')
     known_path = container_manager.generate_knowns()
-    # pdb.set_trace()
 
     if container_manager.unknowns():
         # Upload Unknowns file
@@ -173,6 +134,7 @@ for drive_file in unknowns_learned_queue:
     dl.clear_storage()
     print('downloading', drive_file['name'])
     csv_path = dl.download_file(drive_file)
+    #TO-DO: ADD CSV_PATH TO ADDRESS_BOOK
     csv_name = csv_path.split('/')[-1].split('_complete')[0]
 
     # Match to existing
@@ -182,20 +144,15 @@ for drive_file in unknowns_learned_queue:
     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
 
     container_folder = dl.find_folder(drive_file['parents'][0]).parent
-    test = ContainerManager([csv_path, pending_file_path], container_folder)
-    pdb.set_trace()
-#
-#     # Fill out missing info
-#     append_csv(pending_file_path, csv_path)
-#
-#     # Upload as '_finished.csv'
-#     complete_file_path = pending_file_path.replace('.csv', '_finished.csv')
-#     os.rename(pending_file_path, complete_file_path)
-#     dl.upload_file(complete_file_path, unifier_id)
-#
-#     # Delete local file
-#     os.remove(complete_file_path)
-#     slack(f'uploaded {brand.path}/unifier_io/{complete_file_path.split("/")[-1]}') if SLACK else False
+    container_manager = ContainerManager([csv_path, pending_file_path], container_folder)
+
+    old_path = container_manager.generate_knowns()
+    new_path = old_path.replace('_unifier', '_unifier_finished')
+    os.rename(old_path, new_path)
+
+    dl.upload_file(new_path, unifier_id)
+    os.remove(new_path)
+    slack(f'uploaded {brand.path}/unifier_io/{new_path.split("/")[-1]}') if SLACK else False
 
 
 print('Continue to record time')
