@@ -27,7 +27,7 @@ class Handler:
         elif file_ext == 'csv':
             self.excel_file = pd.read_csv(path)
         else:
-            print(file_ext, 'not supported')
+            print(file_ext, 'not supported', end='', flush=True)
             return
 
         self.load_filetype() # sets self.sheet and self.instructions
@@ -140,21 +140,28 @@ class Handler:
         if file_key is None:
             file_key = self.ask_file_key()
             filetypes['file_keys'][file_key] = []
+
         # Find the header(s)
         sheet_number = self.ask_sheet()
         if sheet_number is not None:
             sheet = self.excel_file.parse(self.excel_file.sheet_names[sheet_number])
         else:
             sheet = self.excel_file
+
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
         header_value = [self.strip_date(v) for v in header_value]
         self.print_header(header_value)
-        header_id = str(len(list(filetypes['headers'].keys())))
-        filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
-        instruct = instructions.Instructions()
-        instruct.ask_instructions(header_id)
-        filetypes['headers'][header_id] = instruct.jsonify()
+        if input("Does this header exist? ") == '1':
+            header_id = input('  header_id: ')
+        else:
+            header_id = str(len(list(filetypes['headers'].keys())))
+
+            instruct = instructions.Instructions()
+            instruct.ask_instructions(header_id)
+            filetypes['headers'][header_id] = instruct.jsonify()
+
+        filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
         with open('filetypes.json', 'w') as f:
             json.dump(filetypes, f, indent=2)

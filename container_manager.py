@@ -10,12 +10,11 @@ import csv
 
 """
 ContainerManager
-.get_known_customers
-.get_unknown_customers
-.get_customers
-.get_entries
-.get_known_entries
-.get_unknown_entries
+.get_known_customers []
+.get_unknown_customers []
+.get_customers []
+.get_entries(customers) []
+.unknowns bool
 
 .load_knowns(complete_file)
 
@@ -81,6 +80,14 @@ class ContainerManager:
         rk = ['street', 'city', 'state', 'zip']
         missing = [k for k in rk if address[k] == '']
         return True if len(missing) == 0 else False
+
+    # function to check if unknowns are needed to be generated
+    def unknowns(self):
+        if self.get_unknown_customers():
+            return False
+        if self.get_chain_rows(known=False):
+            return False
+        return True
 
     # Customer group: self.customers, self.get_customers(), self.known_customers()
     def get_entries(self, customer_group):
@@ -169,3 +176,12 @@ class ContainerManager:
         rows += self.get_chain_rows(known=False)
         unknown_file.writerows(rows)
         return path
+
+    # Function to clean data from a parsed file
+    def clean(self, row):
+        row = [str(v) for v in row]
+        for i in range(len(row)):
+            if row[i] == 'nan':
+                row[i] = ''
+            row[i] = row[i].strip()
+        return row

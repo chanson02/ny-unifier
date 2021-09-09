@@ -72,17 +72,8 @@ def new(drive_time):
 #             update_file.writerow(row)
 #     return
 #
-# # Function to clean the data from a parsed file
-# def clean(row):
-#     row = [str(v) for v in row]
-#     for i in range(len(row)):
-#         if row[i] == 'nan':
-#             row[i] = ''
-#         row[i] = row[i].strip()
-#     # while len(row) < 10:
-#     #     row.append('')
-#     return row
-#
+
+
 # # Function to update the address book with new known customer
 # def update_address_book(customer, address):
 #     customer = customer.lower()
@@ -158,15 +149,22 @@ for container in files_present_queue:
 
     container_manager = ContainerManager(downloads, container)
     print('Exporting files')
-    container_manager.generate_knowns()
-    unknown_path = container_manager.generate_unknowns()
+    pdb.set_trace()
+    if container_manager.unknowns():
+        # Upload Unknowns file
+        unknown_path = container_manager.generate_unknowns()
+        unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
+        upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
+        slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+        os.remove(unknown_path)
+        # Save knowns file
+        container_manager.generate_knowns()
+    else:
+        # Upload knowns, gap, new
+        print('this is not finished')
+        # add to unknwns queue?
+        pass
 
-
-    # Upload and delete unknown file
-    unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
-    upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
-    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
-    os.remove(unknown_path)
     print('finished', container)
 
 # Unknowns Completed
