@@ -7,6 +7,8 @@ from google.oauth2.credentials import Credentials
 from drive_folder import DriveFolder
 
 
+#Download file https://drive.google.com/uc?id={file_id}&export=download
+
 class DriveDownloader:
     def __init__(self, out_path='./drive_downloaded'):
         self.out_path = out_path

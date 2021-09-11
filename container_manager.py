@@ -31,7 +31,7 @@ HEADER = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Prod
 #           0           1           2       3       4       5       6           7           8           9
 
 class ContainerManager:
-    def __init__(self, container_files, drive_container):
+    def __init__(self, container_files, drive_container, unifier_files=False):
         self.files = container_files
         self.drive_container = drive_container
         self.bbg = BusybodyGetter()
@@ -43,10 +43,11 @@ class ContainerManager:
             print('.', end='', flush=True)
         print()
 
-        print(f'Consulting Busybody on {len(self.customers)} customers')
-        [c.execute(self.bbg) for c in self.customers]
-        self.bbg.conn.close()
-        print()
+        if not unifier_files:
+            print(f'Consulting Busybody on {len(self.customers)} customers')
+            [c.execute(self.bbg) for c in self.customers]
+            self.bbg.conn.close()
+            print()
 
         return
 
