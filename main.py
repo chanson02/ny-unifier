@@ -112,9 +112,10 @@ for container in files_present_queue:
         new_known_path = known_path.replace('_unifier', '_unifier_finished')
         os.rename(known_path, new_known_path)
         upload = dl.upload_file(new_known_path, unifier_io.folder_data['id'])
-        pdb.set_trace()
         transformer_file = container_manager.generate_transformer()
         dl.upload(transformer_file, unifier_io.folder_data['id'])
+        os.remove(transformer_file)
+        os.remove(new_known_path)
 
     slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
     print('finished', container, upload['name'])
@@ -136,24 +137,27 @@ for drive_file in unknowns_learned_queue:
     container_folder = dl.find_folder(drive_file['parents'][0]).parent
     container_manager = ContainerManager([csv_path, pending_file_path], container_folder)
 
-    old_path = container_manager.generate_knowns()
-    new_path = old_path.replace('_unifier', '_unifier_finished')
-    os.rename(old_path, new_path)
+    finished_file = container_manager.generate_finished()
+    transformer_file = container_manager.generate_transformer()
 
     # Compare to previous known/unknown
     unifier_io, _ = find_io_folders(brand)
     finished_files = [f for f in unifier_io.contents if '_unifier_transformer' in f['name']]
-    latest_run = sorted(finished_files, key=lambda f: f['createdTime'])[-1] # check drive_file datetime.fromisoformat(drive_time[:19])
-    if len(finished_files) > 1:
-        print('MAKE SURE THIS IS ORDERING CORRECTLY')
-        pdb.set_trace()
-    pdb.set_trace()
-    latest_run_path = dl.download_file(latest_run)
-    latest_manager = ContainerManager(latest_run_path, brand)
+    if len(finished_files) > 0:
+        pass
+    # latest_run = sorted(finished_files, key=lambda f: f['createdTime'])[-1] # check drive_file datetime.fromisoformat(drive_time[:19])
+    # if len(finished_files) > 1:
+    #     print('MAKE SURE THIS IS ORDERING CORRECTLY')
+    #     pdb.set_trace()
+    # pdb.set_trace()
+    # latest_run_path = dl.download_file(latest_run)
+    # latest_manager = ContainerManager(latest_run_path, brand)
 
-    dl.upload_file(new_path, unifier_id)
-    os.remove(new_path)
-    slack(f'uploaded {brand.path}/unifier_io/{new_path.split("/")[-1]}') if SLACK else False
+    dl.upload_file(finished_file, unifier_id)
+    dl.upload_file(transformer_file, unifier_id)
+    os.remove(finished_file)
+    os.remove(transformer_file)
+    slack(f'uploaded {brand.path}/unifier_io/{finished_file.split("/")[-1]}') if SLACK else False
 
 
 print('Continue to record time')

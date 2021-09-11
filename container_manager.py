@@ -207,13 +207,14 @@ class ContainerManager:
         return path
 
     def generate_finished(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_incomplete.csv"
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_finished.csv"
         finished_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
         rows += self.get_chain_rows(known=True, minimize=False)
         rows += self.get_customer_rows(self.get_unknown_customers(), minimize=False)
         rows += self.get_chain_rows(known=False, minimize=False)
+        finished_file.writerows(rows)
         return path
 
     def generate_transformer(self):
@@ -224,6 +225,7 @@ class ContainerManager:
         rows += self.get_chain_rows(known=True, minimize=True)
         rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
         rows += self.get_chain_rows(known=False, minimize=True)
+        transformer_file.writerows(rows)
         return path
 
     # Function to clean data from a parsed file
