@@ -45,6 +45,22 @@ def find_io_folders(container_folder):
         # No children means new brand
         return None, None
 
+def analize_last_run(current_manager):
+    unifier_io, _ = find_io_folders(current_manager.drive_container.parent.parent)
+    finished_files = [f for f in unifier_io.contents if '_unifier_transformer' in f['name']]
+    if len(finished_files) > 0:
+        latest_run = sorted(finished_files, key=lambda f: f['createdTime'])[-1] # check drive_file datetime.fromisoformat(drive_time[:19])
+        latest_run_path = dl.download_file(latest_run)
+        latest_manager = ContainerManager([latest_run_path], current_manager.drive_container)
+        gap_path = current_manager.generate_gap_report(latest_manager)
+        new_path = current_manager.generate_new_report(latest_manager)
+        dl.upload_file(gap_path, unifier_io.folder_data['id'])
+        dl.upload_file(new_path, unifier_io.folder_data['id'])
+        os.remove(gap_path)
+        os.remove(new_path)
+    else:
+        return None
+
 
 dl = DriveDownloader()
 print('DriveDownloader Loaded')
@@ -112,8 +128,11 @@ for container in files_present_queue:
         new_known_path = known_path.replace('_unifier', '_unifier_finished')
         os.rename(known_path, new_known_path)
         upload = dl.upload_file(new_known_path, unifier_io.folder_data['id'])
+
+        analize_last_run(container_manager)
+
         transformer_file = container_manager.generate_transformer()
-        dl.upload(transformer_file, unifier_io.folder_data['id'])
+        dl.upload_file(transformer_file, unifier_io.folder_data['id'])
         os.remove(transformer_file)
         os.remove(new_known_path)
 
@@ -140,23 +159,13 @@ for drive_file in unknowns_learned_queue:
     finished_file = container_manager.generate_finished()
     transformer_file = container_manager.generate_transformer()
 
-    # Compare to previous known/unknown
-    unifier_io, _ = find_io_folders(brand)
-    finished_files = [f for f in unifier_io.contents if '_unifier_transformer' in f['name']]
-    if len(finished_files) > 0:
-        pass
-    # latest_run = sorted(finished_files, key=lambda f: f['createdTime'])[-1] # check drive_file datetime.fromisoformat(drive_time[:19])
-    # if len(finished_files) > 1:
-    #     print('MAKE SURE THIS IS ORDERING CORRECTLY')
-    #     pdb.set_trace()
-    # pdb.set_trace()
-    # latest_run_path = dl.download_file(latest_run)
-    # latest_manager = ContainerManager(latest_run_path, brand)
+    #HERE
 
     dl.upload_file(finished_file, unifier_id)
     dl.upload_file(transformer_file, unifier_id)
     os.remove(finished_file)
     os.remove(transformer_file)
+    os.remove(pending_file_path)
     slack(f'uploaded {brand.path}/unifier_io/{finished_file.split("/")[-1]}') if SLACK else False
 
 

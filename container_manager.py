@@ -7,21 +7,11 @@ import csv
 # Object to  generate reports on a container
 
 #!  container_files is a list of paths
-#!  container_folder is the DriveFolder of the container
-
-"""
-DO thsis tomorrow
-GAP/NEW REPORT STEPS
-
-1) Download latest _unifier_finished.csv
-2) old_manager = ContainerManager(latest_unifier_finished)
-3) new_manager.generate_comparison_report(old_manager)
-
-def generate_comparison_reports(container_manager)
-"""
+#!  container_folder is the DriveFolder of the container/
 
 """
 ContainerManager
+.get_all() [] - returns known, unknown, customers and chains
 .get_known_customers []
 .get_unknown_customers []
 .get_customers []
@@ -59,6 +49,12 @@ class ContainerManager:
         print()
 
         return
+
+    def get_all(self):
+        result = []
+        result += self.get_customers()
+        result += self.get_chains()
+        return result
 
     def get_customers(self):
         result = []
@@ -236,3 +232,29 @@ class ContainerManager:
                 row[i] = ''
             row[i] = row[i].strip()
         return row
+
+    def generate_new_report(self, old_container):
+        current_customers = [c.name for c in self.get_all()]
+        old_customers = [c.name for c in old_container.get_all()]
+
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_new.csv"
+        gap_file = csv.writer(open(path, 'w'))
+        rows = [HEADER]
+        for customer in current_customers:
+            if customer not in old_customers:
+                rows.append([customer])
+        gap_file.writerows(rows)
+        return path
+
+    def generate_gap_report(self, old_container):
+        current_customers = [c.name for c in self.get_all()]
+        old_customers = [c.name for c in old_container.get_all()]
+
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_gap.csv"
+        gap_file = csv.writer(open(path, 'w'))
+        rows = [HEADER]
+        for customer in old_customers:
+            if customer not in current_customers:
+                rows.append([customer])
+        gap_file.writerows(rows)
+        return path
