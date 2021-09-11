@@ -197,7 +197,7 @@ class Handler:
     def remove_unnamed_columns(self, cols):
         unnamed_count = 0
         for c in cols[::-1]:
-            if 'Unnamed: ' in c:
+            if 'Unnamed: ' in str(c):
                 unnamed_count += 1
             else:
                 break

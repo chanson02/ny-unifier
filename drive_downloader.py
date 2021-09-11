@@ -70,7 +70,7 @@ class DriveDownloader:
             return folder
         else:
             # Sort by modifedTime to find latest results sooner
-            children = sorted(folder.children, key=lambda child: child.folder_data['modifiedTime'])[::-1]
+            children = sorted(folder.children, key=lambda child: child.folder_data['modifiedTime'])[::-1] #datetime.fromisoformat(drive_time[:19])
             for child in children:
                 result = self.find_folder(search_query, folder=child, search_by=search_by)
                 if result is not None:

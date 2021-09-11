@@ -35,25 +35,11 @@ def new(drive_time):
     else:
         return False
 
-
-# # Function to update the address book with new known customer
-# def update_address_book(customer, address):
-#     customer = customer.lower()
-#     with open('address_book.json', 'r') as f:
-#         address_book = json.load(f)
-#     customers = list(address_book.keys())
-#     if customer not in customers:
-#         address_book[customer] = []
-#     address_book[customer].append(address)
-#     with open('address_book.json', 'w') as f:
-#         json.dump(address_book, f, indent=2)
-#     return
-
 # Function to find important subdirectories from brand directory
 def find_io_folders(container_folder):
     try:
-        unifier_io = [f for f in container_folder if 'unifier_io' in f.path][0]
-        brand_io = [f for f in container_folder if 'brand_io' in f.path][0]
+        unifier_io = [f for f in container_folder.children if 'unifier_io' in f.path][0]
+        brand_io = [f for f in container_folder.children if 'brand_io' in f.path][0]
         return unifier_io, brand_io
     except IndexError:
         # No children means new brand
@@ -77,7 +63,7 @@ def search_brands(id):
 # Runs through each brand folder to find new files
 # adds them to their respective queue
 for brand in brands:
-    unifier_io, brand_io = find_io_folders(brand.children)
+    unifier_io, brand_io = find_io_folders(brand)
 
     if unifier_io is None: #Initialize new brand
         dl.initialize_brand(brand)
@@ -98,6 +84,8 @@ print('New files flagged')
 
 # Files Present
 for container in files_present_queue:
+    # TO-DO: DOWNLOAD OLD FILES AND SEARCH FOR UNKNOWNS
+
     # Update container time for recursive search
     container.modify_time()
     unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
@@ -120,10 +108,13 @@ for container in files_present_queue:
         upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
         os.remove(unknown_path)
     else:
-        # Upload knowns, gap, new
+        # Upload knowns, gap, new, for_transformer
         new_known_path = known_path.replace('_unifier', '_unifier_finished')
         os.rename(known_path, new_known_path)
         upload = dl.upload_file(new_known_path, unifier_io.folder_data['id'])
+        pdb.set_trace()
+        transformer_file = container_manager.generate_transformer()
+        dl.upload(transformer_file, unifier_io.folder_data['id'])
 
     slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
     print('finished', container, upload['name'])
@@ -134,7 +125,6 @@ for drive_file in unknowns_learned_queue:
     dl.clear_storage()
     print('downloading', drive_file['name'])
     csv_path = dl.download_file(drive_file)
-    #TO-DO: ADD CSV_PATH TO ADDRESS_BOOK
     csv_name = csv_path.split('/')[-1].split('_complete')[0]
 
     # Match to existing
@@ -149,6 +139,17 @@ for drive_file in unknowns_learned_queue:
     old_path = container_manager.generate_knowns()
     new_path = old_path.replace('_unifier', '_unifier_finished')
     os.rename(old_path, new_path)
+
+    # Compare to previous known/unknown
+    unifier_io, _ = find_io_folders(brand)
+    finished_files = [f for f in unifier_io.contents if '_unifier_transformer' in f['name']]
+    latest_run = sorted(finished_files, key=lambda f: f['createdTime'])[-1] # check drive_file datetime.fromisoformat(drive_time[:19])
+    if len(finished_files) > 1:
+        print('MAKE SURE THIS IS ORDERING CORRECTLY')
+        pdb.set_trace()
+    pdb.set_trace()
+    latest_run_path = dl.download_file(latest_run)
+    latest_manager = ContainerManager(latest_run_path, brand)
 
     dl.upload_file(new_path, unifier_id)
     os.remove(new_path)

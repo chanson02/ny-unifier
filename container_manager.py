@@ -10,6 +10,17 @@ import csv
 #!  container_folder is the DriveFolder of the container
 
 """
+DO thsis tomorrow
+GAP/NEW REPORT STEPS
+
+1) Download latest _unifier_finished.csv
+2) old_manager = ContainerManager(latest_unifier_finished)
+3) new_manager.generate_comparison_report(old_manager)
+
+def generate_comparison_reports(container_manager)
+"""
+
+"""
 ContainerManager
 .get_known_customers []
 .get_unknown_customers []
@@ -23,6 +34,7 @@ ContainerManager
 .generate_gap_report(old_container_manager)
 .generate_unknowns()
 .generate_knowns()
+.generate_transformer()
 """
 
 HEADER = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
@@ -114,12 +126,14 @@ class ContainerManager:
 
     # Function to convert all iterator into HEAD format
     # Iterator can be either known or unknown  customers
-    def get_customer_rows(self, iterator):
+    # minimize will condense products and sources
+    def get_customer_rows(self, iterator, minimize=False):
         rows = []
         for customer in iterator:
             sources = [e['source'] for e in customer.entries]
             products = [e['product'] for e in customer.entries]
-            if self.known(customer.final):
+            # if self.known(customer.final):
+            if not minimize:
                 rows += [
                     self.gen_row(customer, sources[i], customer.final, products[i])
                     for i in range(len(sources))
@@ -130,7 +144,8 @@ class ContainerManager:
         return rows
 
     # Function to convert all known chains to HEAD format
-    def get_chain_rows(self, known=True):
+    # Minimize will condense products and sources
+    def get_chain_rows(self, known=True, minimize=False):
         rows = []
         for customer in self.get_chains():
             structs = []
@@ -146,16 +161,29 @@ class ContainerManager:
                 struct = [s for s in structs if s['address'] == entry['address']][0]
                 struct['sources'].append(entry['source'])
                 struct['products'].append(entry['product'])
+            structs = remove_structs(known, structs)
 
             for struct in structs:
-                if self.known(struct['address']) and known:
+                if minimize:
+                    rows += [self.gen_row(customer, struct['sources'], struct['address'], struct['products'])]
+                else:
                     rows += [
                         self.gen_row(customer, struct['sources'][i], struct['address'], struct['products'][i])
                         for i in range(len(struct['sources']))
                     ]
-                else:
-                    rows += [self.gen_row(customer, struct['sources'], struct['address'], struct['products'])]
         return rows
+
+    # Function to remove unwanted structs
+    # only want known or unknown?
+    def remove_structs(known, structs):
+        result = []
+        for struct in structs:
+            if known and self.known(struct['address']):
+                result.append(struct)
+            else:
+                result.append(struct)
+        return result
+
 
     # Function to generate  knowns file
     # Returns file path
@@ -164,8 +192,8 @@ class ContainerManager:
         known_file = csv.writer(open(path, 'w'))
         # rows = [HEADER] + self.get_customer_rows(self.get_known_customers())
         rows = [HEADER]
-        rows += self.get_customer_rows(self.get_known_customers())
-        rows += self.get_chain_rows(known=True)
+        rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
+        rows += self.get_chain_rows(known=True, minimize=False)
         known_file.writerows(rows)
         return path
 
@@ -173,9 +201,29 @@ class ContainerManager:
         path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_incomplete.csv"
         unknown_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
-        rows += self.get_customer_rows(self.get_unknown_customers())
-        rows += self.get_chain_rows(known=False)
+        rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
+        rows += self.get_chain_rows(known=False, minimize=True)
         unknown_file.writerows(rows)
+        return path
+
+    def generate_finished(self):
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_incomplete.csv"
+        finished_file = csv.writer(open(path, 'w'))
+        rows = [HEADER]
+        rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
+        rows += self.get_chain_rows(known=True, minimize=False)
+        rows += self.get_customer_rows(self.get_unknown_customers(), minimize=False)
+        rows += self.get_chain_rows(known=False, minimize=False)
+        return path
+
+    def generate_transformer(self):
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_transformer.csv"
+        transformer_file = csv.writer(open(path, 'w'))
+        rows = [HEADER]
+        rows += self.get_customer_rows(self.get_known_customers(), minimize=True)
+        rows += self.get_chain_rows(known=True, minimize=True)
+        rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
+        rows += self.get_chain_rows(known=False, minimize=True)
         return path
 
     # Function to clean data from a parsed file
