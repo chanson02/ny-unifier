@@ -118,18 +118,22 @@ for container in files_present_queue:
     brand = container.parent.parent
     container.modify_time() # Update container time for recursive search
     unifier_io, _ = find_io_folders(brand)
+
     # Download brand files
     DL.clear_storage()
     print(f'Downloading {len(container.files)} {container} files from {brand}')
     current_downloads = download_files(container.files)
-
     # Download old files to get missing info
     old_transformer_files = find_finished_files(brand)
     print(f'Downloading {len(old_transformer_files)} old files from {brand}')
     previous_downloads = download_files(old_transformer_files)
-    previous_manager = ContainerManager(previous_downloads, unifier_io, True)
 
+    #  Parse files
     container_manager = ContainerManager(downloads, container)
+    if previous_downloads:
+        previous_manager = ContainerManager(previous_downloads, unifier_io, True)
+        container_manager.load_knowns(previous_manager)
+
     print('Exporting files')
     known_path = container_manager.generate_knowns()
 

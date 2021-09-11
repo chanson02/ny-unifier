@@ -18,8 +18,8 @@ ContainerManager
 .get_entries(customers) []
 .unknowns bool
 
-# .load_knowns(complete_file)
-.search_customer(name) :Customer
+.load_knowns(old_container_manager)
+.search_customer(name)
 
 .generate_new_report(old_container_manager)
 .generate_gap_report(old_container_manager)
@@ -261,3 +261,18 @@ class ContainerManager:
                 rows.append([customer])
         gap_file.writerows(rows)
         return path
+
+    def search_customer(self, name):
+        for customer in self.get_all():
+            if customer.name.lower() == name.lower():
+                return customer
+        return None
+
+    def load_knowns(self, old_manager):
+        old_manager_customer_names = [c.name.lower() for c in old_manager.get_known_customers()]
+        for customer in self.get_unknown_customers():
+            if customer.name.lower() in old_manager_customer_names:
+                known = old_manager.search_customer(customer.name)
+                customer.final = known.final
+                print('ContainerManager#load_knowns: This did something!')
+        return
