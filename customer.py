@@ -7,7 +7,7 @@ class Customer:
     def __init__(self, name):
         self.name = name
         self.final = None # Final address
-        self.search_address_book()
+        # self.search_address_book()
 
         self.entries = []
         self.website = ''
@@ -24,17 +24,17 @@ class Customer:
         self.entries.append(data)
         return
 
-    # Check to see if in address book
-    def search_address_book(self):
-        with open('address_book.json', 'r') as f:
-            book = json.load(f)
-        k = self.name.lower()
-        if k in list(book.keys()):
-            # self.final = book[k]
-            # import pdb; pdb.set_trace()
-            # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
-            self.final = book[k][0]
-        return
+    # # Check to see if in address book
+    # def search_address_book(self):
+    #     with open('address_book.json', 'r') as f:
+    #         book = json.load(f)
+    #     k = self.name.lower()
+    #     if k in list(book.keys()):
+    #         # self.final = book[k]
+    #         # import pdb; pdb.set_trace()
+    #         # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
+    #         self.final = book[k][0]
+    #     return
 
     def execute(self, bbg):
         # print(f'Executing {self.name}')

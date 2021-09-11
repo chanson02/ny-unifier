@@ -74,7 +74,7 @@ def analize_last_run(current_manager):
 files_present_queue = []
 unknowns_learned_queue = []
 
-# Find brand folder from unifier_io folder_id
+# Find brand folder from unifier_io or brand_io folder id
 def search_brands(id):
     for brand in BRANDS:
         ids = [c.folder_data['id'] for c in brand.children]
@@ -127,7 +127,7 @@ for container in files_present_queue:
     old_transformer_files = find_finished_files(brand)
     print(f'Downloading {len(old_transformer_files)} old files from {brand}')
     previous_downloads = download_files(old_transformer_files)
-    previous_manager = ContainerManager(previous_downloads, container, True)
+    previous_manager = ContainerManager(previous_downloads, unifier_io, True)
 
     container_manager = ContainerManager(downloads, container)
     print('Exporting files')
@@ -170,13 +170,13 @@ for drive_file in unknowns_learned_queue:
     brand_name = brand.path.split('/')[-1]
     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
 
-    container_folder = DL.find_folder(drive_file['parents'][0]).parent
-    container_manager = ContainerManager([csv_path, pending_file_path], container_folder, True)
+    brand_io = find_io_folders(brand)
+    container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
 
     finished_file = container_manager.generate_finished()
     transformer_file = container_manager.generate_transformer()
 
-    analize_last_run(container_folder)
+    analize_last_run(container_manager)
 
     DL.upload_file(finished_file, unifier_id)
     DL.upload_file(transformer_file, unifier_id)

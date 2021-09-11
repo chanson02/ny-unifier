@@ -18,7 +18,8 @@ ContainerManager
 .get_entries(customers) []
 .unknowns bool
 
-.load_knowns(complete_file)
+# .load_knowns(complete_file)
+.search_customer(name) :Customer
 
 .generate_new_report(old_container_manager)
 .generate_gap_report(old_container_manager)
@@ -32,6 +33,7 @@ HEADER = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Prod
 
 class ContainerManager:
     def __init__(self, container_files, drive_container, unifier_files=False):
+        print(f'Initializing {drive_container}')
         self.files = container_files
         self.drive_container = drive_container
         self.bbg = BusybodyGetter()
