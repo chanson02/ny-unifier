@@ -3,10 +3,10 @@ from container_manager import ContainerManager
 from drive_downloader import DriveDownloader
 from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
-from secret import slack_webhook
 from customer import Customer
 from string import digits
 import pandas as pd
+import slack_send
 
 from datetime import datetime
 
@@ -23,10 +23,7 @@ with open('last_run.txt', 'r') as f:
 
 # Function to send message to slack
 def slack(msg):
-    headers = {'Content-Type': 'application/json'}
-    data = json.dumps({'text': msg})
-    response = requests.post(slack_webhook, data=data, headers=headers)
-    return response
+    return slack_send.slack(msg)
 
 # Function to see if a file life is newer than a threshold
 def new(drive_time):
@@ -129,7 +126,7 @@ for container in files_present_queue:
     previous_downloads = download_files(old_transformer_files)
 
     #  Parse files
-    container_manager = ContainerManager(downloads, container)
+    container_manager = ContainerManager(current_downloads, container)
     if previous_downloads:
         previous_manager = ContainerManager(previous_downloads, unifier_io, True)
         container_manager.load_knowns(previous_manager)
