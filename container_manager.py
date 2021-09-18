@@ -45,11 +45,11 @@ class ContainerManager:
             print('.', end='', flush=True)
         print()
 
-        if not unifier_files:
-            print(f'Consulting Busybody on {len(self.customers)} customers')
-            [c.execute(self.bbg) for c in self.customers]
-            self.bbg.conn.close()
-            print()
+        # if not unifier_files:
+        print(f'Consulting Busybody on {len(self.customers)} customers')
+        [c.execute(self.bbg) for c in self.customers]
+        self.bbg.conn.close()
+        print()
 
         return
 
@@ -147,20 +147,8 @@ class ContainerManager:
     def get_chain_rows(self, known=True, minimize=False):
         rows = []
         for customer in self.get_chains():
-            structs = []
-            for variation in customer.variations:
-                structs.append({
-                    'address': variation,
-                    'sources': [],
-                    'products': []
-                })
-
-            for entry in customer.entries:
-                # Fill each struct with sources and products
-                struct = [s for s in structs if s['address'] == entry['address']][0]
-                struct['sources'].append(entry['source'])
-                struct['products'].append(entry['product'])
-            structs = remove_structs(known, structs)
+            structs = self.structs_from_chain(customer)
+            structs = self.remove_structs(known, structs)
 
             for struct in structs:
                 if minimize:
@@ -172,16 +160,39 @@ class ContainerManager:
                     ]
         return rows
 
+    # Returns struct objects
+    def structs_from_chain(self, chain):
+        results = []
+        for variation in chain.variations:
+            results.append({
+                'address': variation,
+                'sources': [],
+                'products': []
+            })
+
+        for entry in chain.entries:
+            # Fill each struct with sources and products
+            result = [r for r in results if r['address'] == entry['address']][0]
+            result['sources'].append(entry['source'])
+            result['products'].append(entry['product'])
+        return results
+
+
     # Function to remove unwanted structs
     # only want known or unknown?
-    def remove_structs(known, structs):
-        result = []
+    def remove_structs(self, known, structs):
+        known_structs = []
+        unknown_structs = []
         for struct in structs:
-            if known and self.known(struct['address']):
-                result.append(struct)
+            if self.known(struct['address']):
+                known_structs.append(struct)
             else:
-                result.append(struct)
-        return result
+                unknown_structs.append(struct)
+        return known_structs if known else unknown_structs
+        # if known:
+        #     return known_structs
+        # else:
+        #     return unknown_structs
 
 
     # Function to generate  knowns file
@@ -205,8 +216,8 @@ class ContainerManager:
         unknown_file.writerows(rows)
         return path
 
-    def generate_finished(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_finished.csv"
+    def generate_expanded(self):
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_expanded.csv"
         finished_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
@@ -216,8 +227,8 @@ class ContainerManager:
         finished_file.writerows(rows)
         return path
 
-    def generate_transformer(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_transformer.csv"
+    def generate_minimized(self):
+        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_minimized.csv"
         transformer_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_known_customers(), minimize=True)
@@ -226,6 +237,27 @@ class ContainerManager:
         rows += self.get_chain_rows(known=False, minimize=True)
         transformer_file.writerows(rows)
         return path
+    # def generate_finished(self):
+    #     path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_finished.csv"
+    #     finished_file = csv.writer(open(path, 'w'))
+    #     rows = [HEADER]
+    #     rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
+    #     rows += self.get_chain_rows(known=True, minimize=False)
+    #     rows += self.get_customer_rows(self.get_unknown_customers(), minimize=False)
+    #     rows += self.get_chain_rows(known=False, minimize=False)
+    #     finished_file.writerows(rows)
+    #     return path
+    #
+    # def generate_transformer(self):
+    #     path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_transformer.csv"
+    #     transformer_file = csv.writer(open(path, 'w'))
+    #     rows = [HEADER]
+    #     rows += self.get_customer_rows(self.get_known_customers(), minimize=True)
+    #     rows += self.get_chain_rows(known=True, minimize=True)
+    #     rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
+    #     rows += self.get_chain_rows(known=False, minimize=True)
+    #     transformer_file.writerows(rows)
+    #     return path
 
     # Function to clean data from a parsed file
     def clean(self, row):
@@ -258,7 +290,9 @@ class ContainerManager:
         rows = [HEADER]
         for customer in old_customers:
             if customer not in current_customers:
-                rows.append([customer])
+                # rows += [self.gen_row(customer, sources, customer.final, products)]
+                rows += self.get_customer_rows([old_container.search_customer(customer)], minimize=True)
+                # rows.append([customer])
         gap_file.writerows(rows)
         return path
 
@@ -268,11 +302,47 @@ class ContainerManager:
                 return customer
         return None
 
+    # Take old manager and search for data that applies to this quarter
     def load_knowns(self, old_manager):
+        # Known customers from old manager
         old_manager_customer_names = [c.name.lower() for c in old_manager.get_known_customers()]
+        # get all chain addresses from old manager
+        chains = {}
+        for chain in old_manager.get_chains():
+            structs = self.structs_from_chain(chain)
+            structs = self.remove_structs(True, structs)
+            chains[chain.name.lower()] = [s['address'] for s in structs]
+        chain_names = list(chains.keys())
+
+        # Check if old customers are in 'unknown customers'
         for customer in self.get_unknown_customers():
-            if customer.name.lower() in old_manager_customer_names:
+            cust_name = customer.name.lower()
+            if cust_name in old_manager_customer_names:
                 known = old_manager.search_customer(customer.name)
                 customer.final = known.final
-                print('ContainerManager#load_knowns: This did something!')
+
+
+            elif cust_name in chain_names:
+                # Match one address to a multiaddress customer
+                print('container_manager#load_knwons: is not finished', cust_name)
+
+        # Check if unknown chain entry can be found
+        # if new name in old names AND
+        # if new address unknown AND
+        # if new address is not empty AND
+        # if old address is part of new address
+        for chain in self.get_chains():
+            chain_name = chain.name.lower()
+            if chain_name in chain_names:
+                old_known_entries = chains[chain_name]
+                for entry in chain.entries:
+                    if not self.known(entry['address']):
+                        non_empty_keys = [k for k in list(entry['address'].keys()) if entry['address'][k] != '']
+                        if len(non_empty_keys) > 0:
+                            key = non_empty_keys[0]
+                            for known_entry in old_known_entries:
+                                if entry['address'][key].lower() == known_entry[key].lower():
+                                    entry['address'] = known_entry
+                                    break
+            chain.variations = chain.set_variations()
         return

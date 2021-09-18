@@ -38,6 +38,24 @@
           "MIXER BLOODY MARY SPICY PREMIUM 750 ML HELLA LCL",
           "Total Revenue"
         ]
+      },
+      {
+        "header_id": "29",
+        "header_value": [
+          "Customer Name",
+          "ShipTo Address1",
+          "ShipTo City",
+          "ShipTo State",
+          "ShipTo Zip",
+          "Premise",
+          "BITTER CITRUS 5 OZ HELLA",
+          "BITTER AROMATIC 5 OZ HELLA",
+          "BITTER ORANGE 5 OZ HELLA",
+          "BITTER SMOKED CHILI 5 OZ HELLA",
+          "MIX BLOODY MARY 750 ML HELLA",
+          "MIXER BLOODY MARY SPICY PREMIUM (6) 750 ML HELLA LCL",
+          "MIXER MARGARITA HABANERO PREMIUM  ML HELLA LCL"
+        ]
       }
     ],
     "Ruby Wines": [
@@ -376,6 +394,37 @@
           "Units",
           " - 8"
         ]
+      },
+      {
+        "header_id": "7",
+        "header_value": [
+          "Region",
+          "Channel",
+          "Lawson #",
+          "Vendor Name",
+          "Chain",
+          "Chain Name",
+          "Cust #",
+          "Customer Name",
+          "Address",
+          "Address2",
+          "City",
+          "State",
+          "Zip Code",
+          "Warehouse",
+          "UPC",
+          "MFG #",
+          "MFG PROD CD",
+          "Brand",
+          "Prod #",
+          "Description",
+          "Pack",
+          "Size",
+          "UNFI Published Wholesale",
+          "Sales",
+          "Units",
+          " - 7"
+        ]
       }
     ],
     "eCommerce": [
@@ -398,6 +447,17 @@
           "Revenue",
           "Premise",
           "Product"
+        ]
+      },
+      {
+        "header_id": "28",
+        "header_value": [
+          "Created",
+          "Ref",
+          "Total Incl",
+          "Company",
+          "Address",
+          "Premise"
         ]
       }
     ],
@@ -548,6 +608,17 @@
           "Website",
           "Comments"
         ]
+      },
+      {
+        "header_id": "33",
+        "header_value": [
+          "Name",
+          "Street Addrees",
+          "City",
+          "State",
+          "Zip code",
+          "Comments"
+        ]
       }
     ],
     "Fedway": [
@@ -569,6 +640,61 @@
           "CASES",
           "9L CASES",
           "SALES"
+        ]
+      },
+      {
+        "header_id": "30",
+        "header_value": [
+          " ALL STAR LIQUOR",
+          "132 ATLANTIC AVENUE",
+          "ATLANTIC CITY",
+          "ATLANTIC",
+          "NJ",
+          "(609) 344-5010",
+          "OFF PREMISE",
+          " ASHLEY ZIEMANN",
+          "000883740 HELLA SPICY MARGARITA COCKTAIL MIX",
+          "750 ML",
+          "6",
+          "1",
+          "0",
+          ""
+        ]
+      }
+    ],
+    "Associated": [
+      {
+        "header_id": "17",
+        "header_value": []
+      }
+    ],
+    "Burning Bros": [
+      {
+        "header_id": "31",
+        "header_value": [
+          ">",
+          "#",
+          "Product\u00a0\u00a0\u00a0Customer\u00a0\u00a0",
+          "Add'l",
+          "ITEMS",
+          "CASES",
+          "Beer CE",
+          "SALES",
+          "Unnamed: 8",
+          "SLPC"
+        ]
+      }
+    ],
+    "burning-brothers-brewing  2021_Output": [
+      {
+        "header_id": "32",
+        "header_value": [
+          "Name",
+          "Street Addrees",
+          "City",
+          "State",
+          "Zip code",
+          "Comments"
         ]
       }
     ]
@@ -1060,6 +1186,116 @@
         "city": 6,
         "state": 7,
         "zip": 8
+      },
+      "chain_address": false,
+      "customer": 0
+    },
+    "28": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": 5,
+      "product": false,
+      "address": 4,
+      "chain_address": false,
+      "customer": 3
+    },
+    "29": {
+      "identifier": "int",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": 5,
+      "product": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "address": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 3,
+        "zip": 4
+      },
+      "chain_address": false,
+      "customer": 0
+    },
+    "30": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": false,
+      "product": 8,
+      "address": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 4,
+        "zip": -1
+      },
+      "chain_address": false,
+      "customer": 0
+    },
+    "31": {
+      "identifier": "indent",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": false,
+      "product": 1,
+      "address": {
+        "address1": -1,
+        "address2": -1,
+        "city": 3,
+        "state": -1,
+        "zip": -1
+      },
+      "chain_address": false,
+      "customer": 2
+    },
+    "32": {
+      "identifier": "skip",
+      "start_row": false,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": false,
+      "product": false,
+      "address": false,
+      "chain_address": false,
+      "customer": false
+    },
+    "33": {
+      "identifier": "column",
+      "start_row": 0,
+      "merge": {},
+      "chain": false,
+      "phone": false,
+      "website": false,
+      "premise": false,
+      "product": false,
+      "address": {
+        "address1": 1,
+        "address2": -1,
+        "city": 2,
+        "state": 3,
+        "zip": 4
       },
       "chain_address": false,
       "customer": 0

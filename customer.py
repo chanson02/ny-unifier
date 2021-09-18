@@ -36,6 +36,10 @@ class Customer:
     #         self.final = book[k][0]
     #     return
 
+
+
+
+
     def execute(self, bbg):
         # print(f'Executing {self.name}')
         if self.name == 'Confidential':

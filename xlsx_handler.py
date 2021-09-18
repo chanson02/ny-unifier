@@ -318,12 +318,12 @@ class Handler:
             self.identify_by_int()
         elif identifier == "unifier":
             self.identify_by_unifier()
+        elif identifier == "indent":
+            self.identify_by_indent()
         # elif identifier == "sep":
         #     self.identify_by_sep()
-        # elif identifier == "indent":
-        #     self.identify_by_indent()
         else:
-            print(f"No Identifier for {self.filename} | {identifier}")
+            print(f"! No Identifier for {self.filename} | {identifier}")
 
     # Function to check validity of cell
     def valid_cell(self, cell):
@@ -533,25 +533,25 @@ class Handler:
         return
 
     # New product starts where space found
-    def identify_by_sep(self):
-        # if product_col is not a number: set new product
-        options = self.payload['source_file']['options']
-        product = ""
-
-        for row in self.rows:
-            # Set new product
-            product_cell = self.products_from_row(row, options['product'])
-            if not product_cell[0].isdigit() and product_cell[0] != "":
-                product = product_cell[0]
-
-            # Add purchase to current product (if there is a customer in this row)
-            customer = row[options["customer_column"]]
-            if customer == '':
-                continue
-            address = self.address_from_row(row, options['address_data'])
-            self.add_purchase(customer, product=product, address=address)
-
-        return
+    # def identify_by_sep(self):
+    #     # if product_col is not a number: set new product
+    #     options = self.payload['source_file']['options']
+    #     product = ""
+    #
+    #     for row in self.rows:
+    #         # Set new product
+    #         product_cell = self.products_from_row(row, options['product'])
+    #         if not product_cell[0].isdigit() and product_cell[0] != "":
+    #             product = product_cell[0]
+    #
+    #         # Add purchase to current product (if there is a customer in this row)
+    #         customer = row[options["customer_column"]]
+    #         if customer == '':
+    #             continue
+    #         address = self.address_from_row(row, options['address_data'])
+    #         self.add_purchase(customer, product=product, address=address)
+    #
+    #     return
 
     def identify_by_unifier(self):
         for row in self.rows:
@@ -574,20 +574,38 @@ class Handler:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
         return
 
-    # DOES NOT FUNCTION !!!
-    def identify_by_indent(self, product_column, cust_column, start_row):
-        # CUSTOMER
-            # PRODUCT
-        # CUSTOMER
-        rows = self.sheet.values[start_row:]
-        for row in rows:
-            if not (row[cust_column] is None or row[cust_column] != row[cust_column]):
-                # There is a customer
-                customer = row[cust_column]
-            elif not (row[product_column] is None or row[product_column] != row[product_column]):
-                product = row[product_column]
-                self.add_purchase(customer, product=product)
+    # Used for Burning Bros
+    # Product
+        # Customer
+    def identify_by_indent(self):
+        product = ""
+        for row in self.rows:
+            product_characters = re.sub('[0-9]', '', row[self.instructions.product])
+            if len(product_characters) > 1:
+                product = row[self.instructions.product]
+            else:
+                customer = row[self.instructions.customer]
+                phone = self.phone_from_row(row)
+                address = self.address_from_row(row, phone)
+                if product[0] == '1':
+                    pdb.set_trace()
+                self.add_purchase(customer, product=product, address=address)
         return
+
+    # # DOES NOT FUNCTION !!!
+    # def identify_by_indent(self, product_column, cust_column, start_row):
+    #     # CUSTOMER
+    #         # PRODUCT
+    #     # CUSTOMER
+    #     rows = self.sheet.values[start_row:]
+    #     for row in rows:
+    #         if not (row[cust_column] is None or row[cust_column] != row[cust_column]):
+    #             # There is a customer
+    #             customer = row[cust_column]
+    #         elif not (row[product_column] is None or row[product_column] != row[product_column]):
+    #             product = row[product_column]
+    #             self.add_purchase(customer, product=product)
+    #     return
 
 
     def write(self, path=None, filename=None):

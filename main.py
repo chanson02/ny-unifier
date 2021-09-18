@@ -13,7 +13,7 @@ from datetime import datetime
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-SLACK = False #Boolean for if slack should be notified
+SLACK = True #Boolean for if slack should be notified
 DL = DriveDownloader()
 print('DriveDownloader Loaded')
 BRANDS = DL.root.children
