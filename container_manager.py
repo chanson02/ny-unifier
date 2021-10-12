@@ -38,6 +38,7 @@ class ContainerManager:
         self.drive_container = drive_container
         self.bbg = BusybodyGetter()
         self.customers = [] #customers && chains
+        self.output = self.export_path()
 
         print(f'Parsing {len(self.files)} files')
         for f in self.files:
@@ -52,6 +53,12 @@ class ContainerManager:
         print()
 
         return
+
+    def export_path(self):
+        if self.drive_container is None:
+            return "/home/chanson/Desktop/nyunifier_test"
+        else:
+            return f"./tmp/{self.drive_container.path.replace('/', '|')}"
 
     def get_all(self):
         result = []
@@ -110,6 +117,8 @@ class ContainerManager:
 
     # Function to convert entry to HEADER format
     def gen_row(self, customer, source, address, product):
+        if address is None:
+            address = {'street': '', 'city': '', 'state': '', 'zip': '', 'phone':''}
         return [
             source,
             customer.name,
@@ -208,7 +217,7 @@ class ContainerManager:
         return path
 
     def generate_unknowns(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_incomplete.csv"
+        path = f"{self.output}_unifier_incomplete.csv"
         unknown_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
@@ -217,7 +226,7 @@ class ContainerManager:
         return path
 
     def generate_expanded(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_expanded.csv"
+        path = f"{self.output}_unifier_expanded.csv"
         finished_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
@@ -228,7 +237,7 @@ class ContainerManager:
         return path
 
     def generate_minimized(self):
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_minimized.csv"
+        path = f"{self.output}_unifier_minimized.csv"
         transformer_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_known_customers(), minimize=True)
@@ -238,7 +247,7 @@ class ContainerManager:
         transformer_file.writerows(rows)
         return path
     # def generate_finished(self):
-    #     path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_finished.csv"
+    #     path = f"{self.output}_unifier_finished.csv"
     #     finished_file = csv.writer(open(path, 'w'))
     #     rows = [HEADER]
     #     rows += self.get_customer_rows(self.get_known_customers(), minimize=False)
@@ -249,7 +258,7 @@ class ContainerManager:
     #     return path
     #
     # def generate_transformer(self):
-    #     path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_transformer.csv"
+    #     path = f"{self.output}_unifier_transformer.csv"
     #     transformer_file = csv.writer(open(path, 'w'))
     #     rows = [HEADER]
     #     rows += self.get_customer_rows(self.get_known_customers(), minimize=True)
@@ -272,12 +281,15 @@ class ContainerManager:
         current_customers = [c.name for c in self.get_all()]
         old_customers = [c.name for c in old_container.get_all()]
 
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_new.csv"
+        path = f"{self.output}_unifier_new.csv"
         gap_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         for customer in current_customers:
             if customer not in old_customers:
-                rows.append([customer])
+                rows += self.get_customer_rows([self.search_customer(customer)], minimize=True)
+                # import pdb; pdb.set_trace()
+                # row = ['', customer]
+                # rows.append(['', customer])
         gap_file.writerows(rows)
         return path
 
@@ -285,7 +297,7 @@ class ContainerManager:
         current_customers = [c.name for c in self.get_all()]
         old_customers = [c.name for c in old_container.get_all()]
 
-        path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier_gap.csv"
+        path = f"{self.output}_unifier_gap.csv"
         gap_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         for customer in old_customers:
@@ -325,6 +337,7 @@ class ContainerManager:
             elif cust_name in chain_names:
                 # Match one address to a multiaddress customer
                 print('container_manager#load_knwons: is not finished', cust_name)
+                import pdb; pdb.set_trace()
 
         # Check if unknown chain entry can be found
         # if new name in old names AND
