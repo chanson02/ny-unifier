@@ -567,9 +567,19 @@ class Handler:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
             elif product[0] == '[':
                 product = eval(product)
-                source = eval(row[0])
+                if row[0][:2] != "['":
+                    row[0] = "['Null']"
+                elif row[0][-2:] != "']":
+                    row[0] = row[0] + "']"
+
+                sourcce = eval(row[0])
+                source_count = len(sourcce)
                 for index in range(len(product)):
-                    self.add_purchase(customer, product=product[index], address=address, premise=premise, website=website, source=source[index])
+                    if source_count > index:
+                        s = sourcce[index]
+                    else:
+                        s = sourcce[-1]
+                    self.add_purchase(customer, product=product[index], address=address, premise=premise, website=website, source=s)
             else:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
         return
@@ -585,6 +595,9 @@ class Handler:
                 product = row[self.instructions.product]
             else:
                 customer = row[self.instructions.customer]
+                if len(customer) == 0:
+                    # No customer here--blank?
+                    continue
                 phone = self.phone_from_row(row)
                 address = self.address_from_row(row, phone)
                 if product[0] == '1':

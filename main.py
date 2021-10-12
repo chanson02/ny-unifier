@@ -13,7 +13,7 @@ from datetime import datetime
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-SLACK = True #Boolean for if slack should be notified
+SLACK = False #Boolean for if slack should be notified
 DL = DriveDownloader()
 print('DriveDownloader Loaded')
 BRANDS = DL.root.children
@@ -23,6 +23,7 @@ with open('last_run.txt', 'r') as f:
 
 # Function to send message to slack
 def slack(msg):
+    print('SLACK:', msg)
     return slack_send.slack(msg)
 
 # Function to see if a file life is newer than a threshold
@@ -47,7 +48,7 @@ def find_io_folders(container_folder):
 # Finds transformer files and sorts by date
 def find_finished_files(brand_folder):
     unifier_io, _ = find_io_folders(brand_folder)
-    finished_files = [f for f in unifier_io.contents if '_unifier_transformer' in f['name']]
+    finished_files = [f for f in unifier_io.contents if '_unifier_minimized' in f['name']]
     if len(finished_files) == 0:
         return []
     else:
@@ -139,20 +140,21 @@ for container in files_present_queue:
         unknown_path = container_manager.generate_unknowns()
         upload = DL.upload_file(unknown_path, unifier_io.folder_data['id'])
         os.remove(unknown_path)
+        slack(f'Unknowns found: uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
     else:
         # Upload knowns, gap, new, for_transformer
-        new_known_path = known_path.replace('_unifier', '_unifier_finished')
+        new_known_path = known_path.replace('_unifier', '_unifier_expanded')
         os.rename(known_path, new_known_path)
         upload = DL.upload_file(new_known_path, unifier_io.folder_data['id'])
 
         analize_last_run(container_manager)
 
-        transformer_file = container_manager.generate_transformer()
+        transformer_file = container_manager.generate_minimized()
         DL.upload_file(transformer_file, unifier_io.folder_data['id'])
         os.remove(transformer_file)
         os.remove(new_known_path)
+        slack(f'No unknowns found: uploaded {unifier_io.path}/{upload["name"]} + {transformer_file["name"]}') if SLACK else False
 
-    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
     print('finished', container, upload['name'])
 
 
@@ -174,8 +176,8 @@ for drive_file in unknowns_learned_queue:
     brand_io = find_io_folders(brand)
     container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
 
-    finished_file = container_manager.generate_finished()
-    transformer_file = container_manager.generate_transformer()
+    finished_file = container_manager.generate_expanded()
+    transformer_file = container_manager.generate_minimized()
 
     analize_last_run(container_manager)
 
