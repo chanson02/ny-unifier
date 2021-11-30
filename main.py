@@ -1,256 +1,198 @@
-import os, json, csv, psycopg2, re, pdb
+import os, json, csv, psycopg2, re, pdb, time, requests
+from container_manager import ContainerManager
 from drive_downloader import DriveDownloader
+from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
+from customer import Customer
 from string import digits
+import pandas as pd
+import slack_send
+
+from datetime import datetime
 
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-counter = 0 #for debugging
+SLACK = True #Boolean for if slack should be notified
+DL = DriveDownloader()
+print('DriveDownloader Loaded')
+BRANDS = DL.root.children
 
-#Open connection to database
-conn = psycopg2.connect(host='ec2-3-231-241-17.compute-1.amazonaws.com', database='d6g73dfmsb60j0', user='doysqqcsryonfs', password='c81802d940e8b3391362ed254f31e41c20254c6a4ec26322f78334d0308a86b3')
-cur = conn.cursor()
+with open('last_run.txt', 'r') as f:
+    last_run = datetime.fromisoformat(f.read())
 
-# Open address_book
-with open("address_book.json", "r") as f:
-    address_book = json.load(f)
+# Function to send message to slack
+def slack(msg):
+    print('SLACK:', msg)
+    return slack_send.slack(msg)
 
-def download_files():
-    downloader = DriveDownloader()
-    quarters = downloader.child_folders(downloader.root)
-    quarter = quarters[2] # Q4 2020 // downloader.latest_file(quarters)
+# Function to see if a file life is newer than a threshold
+def new(drive_time):
+    file_life = datetime.utcnow() - datetime.fromisoformat(drive_time[:19])
+    thresh = datetime.now() - last_run
+    if file_life < thresh:
+        return True
+    else:
+        return False
 
-    lists = downloader.child_folders(downloader.folder_contents(quarter))
+# Function to find important subdirectories from brand directory
+def find_io_folders(container_folder):
+    try:
+        unifier_io = [f for f in container_folder.children if 'unifier_io' in f.path][0]
+        brand_io = [f for f in container_folder.children if 'brand_io' in f.path][0]
+        return unifier_io, brand_io
+    except IndexError:
+        # No children means new brand
+        return None, None
+
+# Finds transformer files and sorts by date
+def find_finished_files(brand_folder):
+    unifier_io, _ = find_io_folders(brand_folder)
+    finished_files = [f for f in unifier_io.contents if '_unifier_minimized' in f['name']]
+    if len(finished_files) == 0:
+        return []
+    else:
+        return sorted(finished_files, key=lambda f: f['createdTime'])
+
+def analize_last_run(current_manager):
+    finished_files = find_finished_files(current_manager.drive_container.parent.parent) # MAKE SURE THIS WORKS
+    if len(finished_files) != 0:
+        latest_run = finished_files[-1] # datetime.fromisoformat(drive_time[:19])
+        latest_run_path = DL.download_file(latest_run)
+        latest_manager = ContainerManager([latest_run_path], current_manager.drive_container, True)
+        gap_path = current_manager.generate_gap_report(latest_manager)
+        new_path = current_manager.generate_new_report(latest_manager)
+        DL.upload_file(gap_path, unifier_io.folder_data['id'])
+        DL.upload_file(new_path, unifier_io.folder_data['id'])
+        os.remove(gap_path)
+        os.remove(new_path)
+        slack(f"Uploaded {current_manager.drive_container.path} New and Gap")
+    else:
+        return None
+
+files_present_queue = []
+unknowns_learned_queue = []
+
+# Find brand folder from unifier_io or brand_io folder id
+def search_brands(id):
+    for brand in BRANDS:
+        ids = [c.folder_data['id'] for c in brand.children]
+        if id in ids:
+            return brand
+    return None
+
+def download_files(files):
     downloads = []
-    for lst in lists:
-        contents = downloader.folder_contents(lst)
-        for item in contents:
-            try:
-                download = downloader.download_file(item, out_path="./drive_downloaded/")
-                downloads.append(download)
-            except Exception as e:
-                print("\nFailed to download", item["name"])
-                print(e)
-                print("\n")
-
+    for f in files:
+        downloads.append(DL.download_file(f))
+        print('.', end='', flush=True)
+    print()
     return downloads
 
-def load_chains():
-    cur.execute("SELECT ID, name FROM chains")
-    results = cur.fetchall()
+# Runs through each brand folder to find new files
+# adds them to their respective queue
+for brand in BRANDS:
+    unifier_io, brand_io = find_io_folders(brand)
 
-    chains = []
-    for result in results:
-        chains.append({"name":result[1], "id":result[0]})
-    return chains
-
-def strip_name(name):
-    name = str(name)
-    if name.isdigit():
-        return ""
-    while name[-1].isdigit() or name[-1] == "#" or name[-1] == ":":
-        name = name[:-1]
-    return re.sub(' +', ' ', os.path.splitext(name.lower())[0]
-        .replace("'", "")
-        .replace("liquors", "").replace("liquor", "")
-        .replace("and", "&")
-        .replace("wine & spirits", "").replace("wine & sp", "")
-        .strip())
-
-def is_chain(name):
-    for chain in chains:
-        if chain["name"].lower() in str(name).lower():
-            return chain["id"]
-        if "FRED MEYER" in str(name):
-            return name[15:].lower()
-        elif "TOTAL WINE" in str(name):
-            return re.sub("[^0-9]", "", name)
-    return False
-
-# False or address_object
-def is_known(customer):
-    customer = str(customer).lower()
-    for key in list(address_book.keys()):
-        saved_customer = key.lower()
-        if saved_customer == customer or saved_customer == re.sub(' +', ' ', customer):
-            return address_book[key]
-    if customer == "DAMON":
-        pdb.set_trace()
-    return False
-
-def is_address(string):
-    string = str(string)
-    sep_comma = string.split(", ")
-    sep_space = string.split(" ")
-    try:
-        if (sep_space[0].replace("-", "").isdigit() or sep_comma[1][0:2].isdigit()) and (sep_space[-1].isdigit() or sep_space[-1].lower() == "usa") and len(sep_comma) > 1:
-            return True
-    except IndexError:
-        pass
-    return False
-
-def addressor(address):
-    # Call the addressor from the command line
-    command = f"ruby ../ny-addressor/lib/from_cmd.rb '{address}'"
-    os.system(command)
-
-    try:
-        with open("addressor.json", "r") as f:
-            parts = json.load(f)
-        os.remove("addressor.json")
-    except:
-        print("Failed to address", address)
-        return address
-
-    if parts is None:
-        return address
-
-    # Make sure it has all required parts
-    required_keys = ["street_name", "street_number", "city", "state", "postal_code"]
-    keys = list(parts.keys())
-    for rk in required_keys:
-        if rk not in keys:
-            parts[rk] = ""
-
-    # Combine the 4 street parts into one
-    parts["street"] = f"{parts['street_number']} {parts['street_name']}"
-    if "street_label" in keys:
-        parts["street"] += f" {parts['street_label']}"
-    if "street_direction" in keys:
-        parts["street"] += f" {parts['street_direction']}"
-
-    return parts
-
-def write_addressor(source, store, address, products):
-    parts = addressor(address)
-    if type(parts) == dict:
-        known_file.writerow([source, store, parts["street"], parts["city"], parts["state"], parts["postal_code"], products])
-    else:
-        known_file.writerow([source, store, parts, "", "", "", products])
-
-def write_address(source, customer, products):
-    if is_address(customer):
-        # The customer already is an address
-        store = " ".join([word for word in source.split(" ") if not word[0].isdigit()])
-        write_addressor(source, strip_name(store), customer, products)
-    else:
-        if not customer.isdigit():
-            customer = customer.lstrip(digits).strip()
-        customer_info = is_known(customer)
-        if customer_info:
-            # known file
-            known_file.writerow([source, customer, customer_info["address"], customer_info["city"], customer_info["state"], customer_info["zip"], products])
-        else:
-            # unknown file
-            unknown_file.writerow([source, customer, "", "", "", "", products])
-
-
-
-
-
-
-
-
-# Open known and unknown files
-known_file = csv.writer(open("known.csv", "w"))
-unknown_file = csv.writer(open("unknown.csv", "w"))
-header = ["Source", "Customer", "Address", "City", "State", "Zip", "Products", "Comments"]
-known_file.writerow(header)
-unknown_file.writerow(header)
-
-chains = load_chains()
-downloads = ["drive_downloaded/UNFI Q4 2020 .xlsx"]
-downloads = [f"drive_downloaded/{file}" for file in os.listdir("drive_downloaded/") if file != ".gitkeep"]
-# downloads = download_files()
-for download in downloads:
-    file = Handler(download)
-    if file.payload["source_file_type"]["identifier"] == "skip":
+    if unifier_io is None: #Initialize new brand
+        DL.initialize_brand(brand)
+        slack(f'Initializing {brand.folder_data["name"]}') if SLACK else False
         continue
 
-    source = file.payload["source_file_name"]
-    customers = list(file.payload["customers"].keys())
+    [ # Get new container folders
+        files_present_queue.append(container)
+        for container in brand_io.children
+        if new(container.folder_data['createdTime'])
+    ]
+    [ # Get new complete files
+        unknowns_learned_queue.append(file)
+        for file in unifier_io.files
+        if new(file['createdTime']) and '_complete' in file['name']
+    ]
+print('New files flagged')
 
-    chain_id = is_chain(source)
-    if chain_id is False:
-        # The file does not represent a chain
-        for customer in customers:
-            customer = str(customer)
-            products = ", ".join(file.payload["customers"][customer])
-            chain_id = is_chain(customer)
-            if chain_id is False:
-                # Location is not a chain
-                write_address(source, customer, products)
+#####################
+### Files Present ###
+for container in files_present_queue:
+    brand = container.parent.parent
+    container.modify_time() # Update container time for recursive search
+    unifier_io, _ = find_io_folders(brand)
 
-            else:
-                ## TEMPORARY
-                if "FRED MEYER" in customer:
-                    with open("./temp/fred_meyer.json", "r") as f:
-                        fred_meyers = json.load(f)
-                    for fred_meyer in fred_meyers:
-                        if chain_id in str(fred_meyer["address"]).lower():
-                            known_file.writerow([source, customer, fred_meyer["address"], fred_meyer["city"], fred_meyer["state"], fred_meyer["zip"], products])
-                            continue
-                    continue
-                if "TOTAL WINE" in customer:
-                    with open("./temp/tw.json", "r") as f:
-                        tws = json.load(f)
-                    try:
-                        data = tws[chain_id]
-                        known_file.writerow([source, customer, data["address"], data["city"], data["state"], data["zip"], products])
-                    except:
-                        write_address(source, customer, products)
-                    continue
+    # Download brand files
+    DL.clear_storage()
+    print(f'Downloading {len(container.files)} {container} files from {brand}')
+    current_downloads = download_files(container.files)
+    # Download old files to get missing info
+    old_transformer_files = find_finished_files(brand)
+    print(f'Downloading {len(old_transformer_files)} old files from {brand}')
+    previous_downloads = download_files(old_transformer_files)
 
-                # Location is a chain
-                remote_id = re.sub("[^0-9]", "", customer).lstrip("0")
-                cur.execute(f"SELECT address FROM stores WHERE chain_id='{chain_id}' AND remote_id='{remote_id}'")
-                results = cur.fetchall()
-                if len(results) > 0:
-                    # Address found
-                    address = results[0][0]
-                    write_addressor(source, customer, address, products)
-                else:
-                    # Address not found
-                    # Pass back to address book
-                    write_address(source, customer, products)
+    #  Parse files
+    container_manager = ContainerManager(current_downloads, container)
+    if previous_downloads:
+        previous_manager = ContainerManager(previous_downloads, unifier_io, True)
+        container_manager.load_knowns(previous_manager)
 
+    print('Exporting files')
+    known_path = container_manager.generate_knowns()
 
-    # chaind_id is True
+    if container_manager.unknowns():
+        # Upload Unknowns file
+        unknown_path = container_manager.generate_unknowns()
+        upload = DL.upload_file(unknown_path, unifier_io.folder_data['id'])
+        os.remove(unknown_path)
+        slack(f'Unknowns found: uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
     else:
-        if chain_id == 42:
-            # Whole Foods
-            for store in customers:
-                products = ", ".join(file.payload["customers"][store])
-                cur.execute(f"SELECT address FROM stores WHERE chain_id='{chain_id}' and LOWER(address) LIKE '%{store.lower()}%'")
-                results = cur.fetchall()
-                if len(results) > 0:
-                    address = results[0][0]
-                    write_addressor(source, "Whole Foods", address, products)
-                    # parts = addressor(address)
-                    # known_file.writerow([source, store, address, "", "", "", products])
-                else:
-                    write_address(source, "Whole Foods " + store, products)
+        # Upload knowns, gap, new, for_transformer
+        new_known_path = known_path.replace('_unifier', '_unifier_expanded')
+        os.rename(known_path, new_known_path)
+        upload = DL.upload_file(new_known_path, unifier_io.folder_data['id'])
 
-        elif str(customers[0]).isdigit():
-            # The file represents a chain and has numeric id's
-            for remote_id in customers:
-                cur.execute(f"SELECT name FROM chains WHERE id='{chain_id}'")
-                customer = cur.fetchone()[0] + " " + remote_id
-                products = ", ".join(file.payload["customers"][remote_id])
-                cur.execute(f"SELECT address FROM stores WHERE remote_id='{remote_id}' and chain_id='{chain_id}'")
-                results = cur.fetchall()
-                if len(results) > 0:
-                    # Address found
-                    address = results[0][0]
-                    write_addressor(source, customer, address, products)
-                else:
-                    # Address not found
-                    # Pass it back to the address book
-                    write_address(source, customer, products)
-        else:
-            print("chain data not found", customers, source)
-            print("THIS DOES NOTHING")
+        analize_last_run(container_manager)
 
-conn.close()
-print("Done", counter)
+        transformer_file = container_manager.generate_minimized()
+        DL.upload_file(transformer_file, unifier_io.folder_data['id'])
+        os.remove(transformer_file)
+        os.remove(new_known_path)
+        slack(f'No unknowns found: uploaded {unifier_io.path}/{upload["name"]} + {transformer_file["name"]}') if SLACK else False
+
+    print('finished', container, upload['name'])
+
+
+##########################
+### Unknowns Completed ###
+for drive_file in unknowns_learned_queue:
+    # Download file
+    DL.clear_storage()
+    print('downloading', drive_file['name'])
+    csv_path = DL.download_file(drive_file)
+    csv_name = csv_path.split('/')[-1].split('_complete')[0]
+
+    # Match to existing
+    unifier_id = drive_file['parents'][0]
+    brand = search_brands(unifier_id)
+    brand_name = brand.path.split('/')[-1]
+    pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
+    # pending_file_path = './pending/pfile_unifier.csv'
+
+    brand_io = find_io_folders(brand)[1]
+    container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
+
+    finished_file = container_manager.generate_expanded()
+    transformer_file = container_manager.generate_minimized()
+
+    analize_last_run(container_manager)
+
+    DL.upload_file(finished_file, unifier_id)
+    DL.upload_file(transformer_file, unifier_id)
+    os.remove(finished_file)
+    os.remove(transformer_file)
+    os.remove(pending_file_path)
+    slack(f'uploaded {brand.path}/unifier_io/{finished_file.split("/")[-1]}') if SLACK else False
+
+
+print('Continue to record time')
+pdb.set_trace()
+print('done')
+with open('last_run.txt', 'w') as f:
+    f.write(datetime.now().isoformat())

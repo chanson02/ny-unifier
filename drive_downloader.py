@@ -1,69 +1,93 @@
 import os, pickle, io
 from datetime import datetime
 from googleapiclient.discovery import build
-from apiclient.http import MediaIoBaseDownload
+from apiclient.http import MediaIoBaseDownload, MediaFileUpload
+from google.oauth2.credentials import Credentials
+
+from drive_folder import DriveFolder
+
+
+#Download file https://drive.google.com/uc?id={file_id}&export=download
 
 class DriveDownloader:
-    def __init__(self):
-        root_id = "1294yduUFyoaQNU-x-Tv7dzCz0zpa0NR_"
-        self.service = build('drive', 'v3', credentials=self.get_creds())
-        self.root = self.folder_contents(root_id)
+    def __init__(self, out_path='./drive_downloaded'):
+        self.out_path = out_path
+        creds = Credentials.from_authorized_user_file('token.json', ['https://www.googleapis.com/auth/drive'])
+        self.service = build('drive', 'v3', credentials=creds)
+        # self.clear_storage()
+        self.root = DriveFolder(self.service, '1ZYtG8roWBaeEdrHk0KSahAh4gPEiTOG5')
 
-    def get_creds(self):
-        with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
-        return creds
+    # Function to remove previously downloaded files
+    def clear_storage(self):
+        files = os.listdir(self.out_path)
+        for f in files:
+            os.remove(os.path.join(self.out_path, f))
+        return
 
-    def folder_contents(self, folder):
-        try:
-            folder_id = folder["id"]
-        except TypeError:
-            folder_id = folder
+    # Function to download
+    def download_file(self, file_data):
+        filename = file_data['name'].replace('/', '-')
 
-        results = self.service.files().list(
-            pageSize=100,
-            q=f"parents in '{folder_id}'",
-            fields="files(id, name, createdTime, mimeType)"
-        ).execute()
-        return results.get('files', [])
-
-    def child_folders(self, folder):
-        items = []
-        for item in folder:
-            if item["mimeType"] == "application/vnd.google-apps.folder":
-                items.append(item)
-        return items
-
-    def latest_file(self, folder):
-        times = []
-        for item in folder:
-            times.append(datetime.fromisoformat(item["createdTime"][:19]))
-
-        recent = sorted(times)[-1]
-        for item in folder:
-            time = datetime.fromisoformat(item["createdTime"][:19])
-            if recent == time:
-                return item
-
-    def download_file(self, file, out_path="/home/cooperhanson/Desktop/drive_downloaded/"):
-        filename = file["name"].replace("/", "-")
-        sheet_mime = 'application/vnd.google-apps.spreadsheet'
-
-        if file["mimeType"] == sheet_mime:
-            xlsx_mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            request = self.service.files().export(fileId=file["id"], mimeType=xlsx_mime)
-            filename += ".xlsx"
+        if file_data['mimeType'] == 'application/vnd.google-apps.spreadsheet':
+            # Convert the Sheets file to XLSX file
+            download_request = self.service.files().export(fileId=file_data["id"], mimeType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            filename += '.xlsx'
         else:
-            request = self.service.files().get_media(fileId=file["id"])
+            download_request = self.service.files().get_media(fileId=file_data["id"])
 
+        path = os.path.join(self.out_path, filename)
         file_handler = io.BytesIO()
-        downloader = MediaIoBaseDownload(file_handler, request)
+        downloader = MediaIoBaseDownload(file_handler, download_request)
         done = False
-        while done is False:
+        while not done:
             _, done = downloader.next_chunk()
-
-        with io.open(out_path + filename, "wb") as f:
+        with io.open(path, 'wb') as f:
             file_handler.seek(0)
             f.write(file_handler.read())
+        return path
 
-        return out_path + filename
+    # Function to upload
+    def upload_file(self, path, parent_id):
+        mime_type = 'text/csv'
+        filename = path.split('|')[-1]
+        media = MediaFileUpload(path, mimetype=mime_type, resumable=True)
+        body = {'name': filename, 'description': 'Unifier -> Va', 'mimeType': mime_type, 'parents': [parent_id]}
+        upload = self.service.files().create(body=body, media_body=media).execute()
+        return upload
+
+    # Function to setup files for new brand
+    def initialize_brand(self, brand):
+        mime = 'application/vnd.google-apps.folder'
+        [self.service.files().create(
+            body={'name': name, 'mimeType': mime, 'parents': [brand.folder_data['id']]}
+        ).execute()
+        for name in ['brand_io', 'unifier_io']]
+        return
+
+    # Recursivley search for folder
+    def find_folder(self, search_query, folder=None, search_by='id'):
+        if folder is None:
+            folder = self.root
+        if folder.folder_data[search_by] == search_query:
+            return folder
+        else:
+            # Sort by modifedTime to find latest results sooner
+            children = sorted(folder.children, key=lambda child: child.folder_data['modifiedTime'])[::-1] #datetime.fromisoformat(drive_time[:19])
+            for child in children:
+                result = self.find_folder(search_query, folder=child, search_by=search_by)
+                if result is not None:
+                    return result
+        return None
+
+
+
+
+
+#id, name, mimeType, createdTime
+
+# dl = DriveDownloader()
+# root_folder_id = '1ZYtG8roWBaeEdrHk0KSahAh4gPEiTOG5'
+# files = dl.root.children[0].children[1].children[0].files
+
+# dir = './tmp/|root|burning-brothers|brand_io|March-April 2021|.csv'
+# folder_id = '12KlfgSMNXqb3C8VRocTQbqxIBu8KlEuy'
