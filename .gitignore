@@ -1,9 +1,9 @@
 __pycache__/
 drive_downloaded/
 credentials.json
-token.pickle
-token_gen.py
+token.json
 known.csv
 unknown.csv
 temp/
 .python-version
+temp.py
