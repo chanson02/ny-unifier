@@ -4,6 +4,9 @@ credentials.json
 token.json
 known.csv
 unknown.csv
-temp/
+tmp/
+extra data/
+pending/
 .python-version
 temp.py
+secret.py
