@@ -13,7 +13,7 @@ from datetime import datetime
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-SLACK = False #Boolean for if slack should be notified
+SLACK = True #Boolean for if slack should be notified
 DL = DriveDownloader()
 print('DriveDownloader Loaded')
 BRANDS = DL.root.children
@@ -55,8 +55,8 @@ def find_finished_files(brand_folder):
         return sorted(finished_files, key=lambda f: f['createdTime'])
 
 def analize_last_run(current_manager):
-    finished_files = find_finished_files(current_manager.drive_container.parent.parent)
-    if finished_files:
+    finished_files = find_finished_files(current_manager.drive_container.parent.parent) # MAKE SURE THIS WORKS
+    if len(finished_files) != 0:
         latest_run = finished_files[-1] # datetime.fromisoformat(drive_time[:19])
         latest_run_path = DL.download_file(latest_run)
         latest_manager = ContainerManager([latest_run_path], current_manager.drive_container, True)
@@ -66,6 +66,7 @@ def analize_last_run(current_manager):
         DL.upload_file(new_path, unifier_io.folder_data['id'])
         os.remove(gap_path)
         os.remove(new_path)
+        slack(f"Uploaded {current_manager.drive_container.path} New and Gap")
     else:
         return None
 
@@ -172,8 +173,9 @@ for drive_file in unknowns_learned_queue:
     brand = search_brands(unifier_id)
     brand_name = brand.path.split('/')[-1]
     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
+    # pending_file_path = './pending/pfile_unifier.csv'
 
-    brand_io = find_io_folders(brand)
+    brand_io = find_io_folders(brand)[1]
     container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
 
     finished_file = container_manager.generate_expanded()

@@ -181,7 +181,11 @@ class ContainerManager:
 
         for entry in chain.entries:
             # Fill each struct with sources and products
-            result = [r for r in results if r['address'] == entry['address']][0]
+            try:
+                result = [r for r in results if r['address'] == entry['address']][0]
+            except IndexError:
+                result = results[0]
+                print("container_manager:structs_from_chain failed")
             result['sources'].append(entry['source'])
             result['products'].append(entry['product'])
         return results
@@ -336,8 +340,12 @@ class ContainerManager:
 
             elif cust_name in chain_names:
                 # Match one address to a multiaddress customer
+                # if customer.final:
+                #     variations = chains[cust_name]
+                #     customer.most_similar(customer.final, variations)
+                # else:
                 print('container_manager#load_knwons: is not finished', cust_name)
-                import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
 
         # Check if unknown chain entry can be found
         # if new name in old names AND

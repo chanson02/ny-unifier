@@ -103,7 +103,7 @@ class Instructions:
         return
 
     def ask_identifier(self):
-        identifiers = ['column', 'int', 'sep', 'indent']
+        identifiers = ['column', 'int', 'sep', 'indent', 'unifier']
         for index in range(len(identifiers)):
             print(f"{index}: {identifiers[index]}")
         self.identifier = identifiers[int(input('Identify by: '))]
