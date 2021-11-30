@@ -33,7 +33,7 @@ class DriveFolder:
     def get_contents(self):
         return self.service.files().list(
             q=f"parents in '{self.folder_data['id']}'",
-            fields='files(id, name, createdTime, mimeType, parents)'
+            fields='files(id, name, createdTime, modifiedTime, mimeType, parents)'
         ).execute()['files']
 
     # Function to populate children and files arrays
@@ -44,3 +44,18 @@ class DriveFolder:
                 self.children.append(folder)
             else:
                 self.files.append(content)
+
+    # Function to update the modifiedTime
+    # Used for faster recursive search
+    def modify_time(self):
+        orig_name = self.folder_data['name']
+        orig_body = {'name': orig_name}
+        fake_body = {'name': f'{orig_name}_tmp'}
+        file_id = self.folder_data['id']
+        self.service.files().update(fileId=file_id, body=fake_body).execute()
+        self.service.files().update(fileId=file_id, body=orig_body).execute()
+        self.folder_data['modifiedTime'] = self.service.files().get(fileId=file_id, fields='modifiedTime').execute()['modifiedTime']
+        return
+
+
+## See modifiedTime self.service.files().get(fileId=self.folder_data['id'], fields='modifiedTime').execute()

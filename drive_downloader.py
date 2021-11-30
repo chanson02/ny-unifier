@@ -7,6 +7,8 @@ from google.oauth2.credentials import Credentials
 from drive_folder import DriveFolder
 
 
+#Download file https://drive.google.com/uc?id={file_id}&export=download
+
 class DriveDownloader:
     def __init__(self, out_path='./drive_downloaded'):
         self.out_path = out_path
@@ -62,6 +64,20 @@ class DriveDownloader:
         for name in ['brand_io', 'unifier_io']]
         return
 
+    # Recursivley search for folder
+    def find_folder(self, search_query, folder=None, search_by='id'):
+        if folder is None:
+            folder = self.root
+        if folder.folder_data[search_by] == search_query:
+            return folder
+        else:
+            # Sort by modifedTime to find latest results sooner
+            children = sorted(folder.children, key=lambda child: child.folder_data['modifiedTime'])[::-1] #datetime.fromisoformat(drive_time[:19])
+            for child in children:
+                result = self.find_folder(search_query, folder=child, search_by=search_by)
+                if result is not None:
+                    return result
+        return None
 
 
 

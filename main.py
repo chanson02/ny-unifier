@@ -1,32 +1,30 @@
 import os, json, csv, psycopg2, re, pdb, time, requests
+from container_manager import ContainerManager
 from drive_downloader import DriveDownloader
 from busybody_getter import BusybodyGetter
 from xlsx_handler import Handler
-from secret import slack_webhook
 from customer import Customer
 from string import digits
 import pandas as pd
+import slack_send
 
 from datetime import datetime
 
 import warnings
 warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
 
-header = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
-#           0           1           2       3       4       5       6           7           8           9
-
-SLACK = False #Boolean for if slack should be notified
+SLACK = True #Boolean for if slack should be notified
+DL = DriveDownloader()
+print('DriveDownloader Loaded')
+BRANDS = DL.root.children
 
 with open('last_run.txt', 'r') as f:
-    # last_run = float(f.read())
     last_run = datetime.fromisoformat(f.read())
 
 # Function to send message to slack
 def slack(msg):
-    headers = {'Content-Type': 'application/json'}
-    data = json.dumps({'text': msg})
-    response = requests.post(slack_webhook, data=data, headers=headers)
-    return response
+    print('SLACK:', msg)
+    return slack_send.slack(msg)
 
 # Function to see if a file life is newer than a threshold
 def new(drive_time):
@@ -37,209 +35,137 @@ def new(drive_time):
     else:
         return False
 
-# Function to check if all address data is found
-def known(address):
-    rk = ['street', 'city', 'state', 'zip']
-    missing = [k for k in rk if address[k] == '']
-    return True if len(missing) == 0 else False
-
-# function to generate row
-def gen_row(customer, source, address, product):
-    return [
-        source,
-        customer.name,
-        address['street'],
-        address['city'],
-        address['state'],
-        address['zip'],
-        address['phone'],
-        product,
-        customer.premise,
-        customer.website
-    ]
-
-def address_from_row(row):
-    return {
-        'street': row[2],
-        'city': row[3],
-        'state': row[4],
-        'zip': row[5],
-        'phone': row[6]
-    }
-
-# Function to 'merge' csv files
-def append_csv(to, frm): #from -> to
-    update_file = csv.writer(open(to, 'a'))
-
+# Function to find important subdirectories from brand directory
+def find_io_folders(container_folder):
     try:
-        # rows = pd. read_csv(frm).values
-        rows = pd.ExcelFile(frm).parse().values
-    except pd.errors.EmptyDataError:
-        # No unknowns
-        return
-    for row in rows:
-        row = clean(row)
-        address = address_from_row(row)
-        if known(address):
-            update_address_book(row[1], address)
-        sources = row[0][1:-1].split(',')
-        if row[7] == '':
-            # VA Removed the data for some reason?
-            products = ['' for _ in range(len(sources))]
-        else:
-            products = row[7][1:-1].split(',')
-        for ndx in range(len(sources)):
-            row[0] = sources[ndx][1:-1]
-            row[7] = products[ndx][1:-1]
-            update_file.writerow(row)
-    return
+        unifier_io = [f for f in container_folder.children if 'unifier_io' in f.path][0]
+        brand_io = [f for f in container_folder.children if 'brand_io' in f.path][0]
+        return unifier_io, brand_io
+    except IndexError:
+        # No children means new brand
+        return None, None
 
-# Function to clean the data from a parsed file
-def clean(row):
-    row = [str(v) for v in row]
-    for i in range(len(row)):
-        if row[i] == 'nan':
-            row[i] = ''
-        row[i] = row[i].strip()
-    # while len(row) < 10:
-    #     row.append('')
-    return row
+# Finds transformer files and sorts by date
+def find_finished_files(brand_folder):
+    unifier_io, _ = find_io_folders(brand_folder)
+    finished_files = [f for f in unifier_io.contents if '_unifier_minimized' in f['name']]
+    if len(finished_files) == 0:
+        return []
+    else:
+        return sorted(finished_files, key=lambda f: f['createdTime'])
 
-# Function to update the address book with new known customer
-def update_address_book(customer, address):
-    customer = customer.lower()
-    with open('address_book.json', 'r') as f:
-        address_book = json.load(f)
-    customers = list(address_book.keys())
-    if customer not in customers:
-        address_book[customer] = []
-    address_book[customer].append(address)
-    with open('address_book.json', 'w') as f:
-        json.dump(address_book, f, indent=2)
-    return
+def analize_last_run(current_manager):
+    finished_files = find_finished_files(current_manager.drive_container.parent.parent) # MAKE SURE THIS WORKS
+    if len(finished_files) != 0:
+        latest_run = finished_files[-1] # datetime.fromisoformat(drive_time[:19])
+        latest_run_path = DL.download_file(latest_run)
+        latest_manager = ContainerManager([latest_run_path], current_manager.drive_container, True)
+        gap_path = current_manager.generate_gap_report(latest_manager)
+        new_path = current_manager.generate_new_report(latest_manager)
+        DL.upload_file(gap_path, unifier_io.folder_data['id'])
+        DL.upload_file(new_path, unifier_io.folder_data['id'])
+        os.remove(gap_path)
+        os.remove(new_path)
+        slack(f"Uploaded {current_manager.drive_container.path} New and Gap")
+    else:
+        return None
 
-
-
-
-dl = DriveDownloader()
-print('DriveDownloader Loaded')
-brands = dl.root.children
 files_present_queue = []
 unknowns_learned_queue = []
 
-# Find brand folder from unifier_io folder_id
+# Find brand folder from unifier_io or brand_io folder id
 def search_brands(id):
-    for brand in brands:
+    for brand in BRANDS:
         ids = [c.folder_data['id'] for c in brand.children]
         if id in ids:
             return brand
     return None
 
+def download_files(files):
+    downloads = []
+    for f in files:
+        downloads.append(DL.download_file(f))
+        print('.', end='', flush=True)
+    print()
+    return downloads
 
-for brand in brands:
-    try:
-        unifier_io = [f for f in brand.children if 'unifier_io' in f.path][0]
-        brand_io = [f for f in brand.children if 'brand_io' in f.path][0]
-    except IndexError:
-        # No children means new brand
-        dl.initialize_brand(brand)
+# Runs through each brand folder to find new files
+# adds them to their respective queue
+for brand in BRANDS:
+    unifier_io, brand_io = find_io_folders(brand)
+
+    if unifier_io is None: #Initialize new brand
+        DL.initialize_brand(brand)
         slack(f'Initializing {brand.folder_data["name"]}') if SLACK else False
         continue
 
-    # Check to see if there is new files
-    for container in brand_io.children:
-        if new(container.folder_data['createdTime']):
-            files_present_queue.append(container)
-
-    for file in unifier_io.files:
-        if new(file['createdTime']) and '_complete' in file['name']:
-            unknowns_learned_queue.append(file)
+    [ # Get new container folders
+        files_present_queue.append(container)
+        for container in brand_io.children
+        if new(container.folder_data['createdTime'])
+    ]
+    [ # Get new complete files
+        unknowns_learned_queue.append(file)
+        for file in unifier_io.files
+        if new(file['createdTime']) and '_complete' in file['name']
+    ]
 print('New files flagged')
 
-# Files Present
+#####################
+### Files Present ###
 for container in files_present_queue:
+    brand = container.parent.parent
+    container.modify_time() # Update container time for recursive search
+    unifier_io, _ = find_io_folders(brand)
+
     # Download brand files
-    dl.clear_storage()
-    downloads = []
-    print(f'Downloading {container}')
-    for f in container.files:
-        downloads.append(dl.download_file(f))
-        print('.', end='', flush=True)
+    DL.clear_storage()
+    print(f'Downloading {len(container.files)} {container} files from {brand}')
+    current_downloads = download_files(container.files)
+    # Download old files to get missing info
+    old_transformer_files = find_finished_files(brand)
+    print(f'Downloading {len(old_transformer_files)} old files from {brand}')
+    previous_downloads = download_files(old_transformer_files)
 
-    # Setup known and unknown files
-    path = container.path.replace('/', '|')
-    unknown_path = f'./tmp/{path}_incomplete.csv'
-    known_file = csv.writer(open(f'./pending/{path}.csv', 'w'))
-    unknown_file = csv.writer(open(unknown_path, 'w'))
-    known_file.writerow(header)
-    unknown_file.writerow(header)
+    #  Parse files
+    container_manager = ContainerManager(current_downloads, container)
+    if previous_downloads:
+        previous_manager = ContainerManager(previous_downloads, unifier_io, True)
+        container_manager.load_knowns(previous_manager)
 
-    # Get customer data by parsing XLSX
-    print(f'\nParsing {len(downloads)} files')
-    customers = []
-    for download in downloads:
-        print('.', end='', flush=True)
-        Handler(download, customers)
+    print('Exporting files')
+    known_path = container_manager.generate_knowns()
 
-    print(f'\nConsulting Busybody on {len(customers)} customers')
-    bbg = BusybodyGetter()
-    # Merge addresses to find best data
-    [c.execute(bbg) for c in customers]
-    bbg.conn.close()
+    if container_manager.unknowns():
+        # Upload Unknowns file
+        unknown_path = container_manager.generate_unknowns()
+        upload = DL.upload_file(unknown_path, unifier_io.folder_data['id'])
+        os.remove(unknown_path)
+        slack(f'Unknowns found: uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+    else:
+        # Upload knowns, gap, new, for_transformer
+        new_known_path = known_path.replace('_unifier', '_unifier_expanded')
+        os.rename(known_path, new_known_path)
+        upload = DL.upload_file(new_known_path, unifier_io.folder_data['id'])
 
-    with open('test.json', 'w') as f:
-        import json
-        json.dump(bbg.failures, f, indent=2)
+        analize_last_run(container_manager)
 
-    print('\nWriting files')
-    # Write to csv files
-    for customer in customers:
-        # Same address for each entry
-        if customer.final:
-            sources = [e['source'] for e in customer.entries]
-            products = [e['product'] for e in customer.entries]
-            if known(customer.final):
-                rows = [gen_row(customer, sources[i], customer.final, products[i]) for i in range(len(sources))]
-                known_file.writerows(rows)
-            else:
-                row = gen_row(customer, sources, customer.final, products)
-                unknown_file.writerow(row)
-        else:
-            # Different address for entries
-            structs = [] #make each variation into a 'struct'
-            for variation in customer.variations:
-                structs.append({
-                    'address': variation,
-                    'sources': [],
-                    'products': []
-                })
-            for entry in customer.entries:
-                # Fill each struct with sources and products
-                struct = [s for s in structs if s['address'] == entry['address']][0]
-                struct['sources'].append(entry['source'])
-                struct['products'].append(entry['product'])
-            for struct in structs:
-                # Write struct data to files
-                if known(struct['address']):
-                    rows = [gen_row(customer, struct['sources'][i], struct['address'], struct['products'][i]) for i in range(len(struct['sources']))]
-                    known_file.writerows(rows)
-                else:
-                    row = gen_row(customer, struct['sources'], struct['address'], struct['products'])
-                    unknown_file.writerow(row)
+        transformer_file = container_manager.generate_minimized()
+        DL.upload_file(transformer_file, unifier_io.folder_data['id'])
+        os.remove(transformer_file)
+        os.remove(new_known_path)
+        slack(f'No unknowns found: uploaded {unifier_io.path}/{upload["name"]} + {transformer_file["name"]}') if SLACK else False
 
-    # Upload and delete unknown file
-    unifier_io = [f for f in container.parent.parent.children if 'unifier_io' in f.path][0]
-    upload = dl.upload_file(unknown_path, unifier_io.folder_data['id'])
-    slack(f'uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
-    os.remove(unknown_path)
-    print('finished', container)
+    print('finished', container, upload['name'])
 
-# Unknowns Completed
+
+##########################
+### Unknowns Completed ###
 for drive_file in unknowns_learned_queue:
     # Download file
-    dl.clear_storage()
+    DL.clear_storage()
     print('downloading', drive_file['name'])
-    csv_path = dl.download_file(drive_file)
+    csv_path = DL.download_file(drive_file)
     csv_name = csv_path.split('/')[-1].split('_complete')[0]
 
     # Match to existing
@@ -247,23 +173,26 @@ for drive_file in unknowns_learned_queue:
     brand = search_brands(unifier_id)
     brand_name = brand.path.split('/')[-1]
     pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
+    # pending_file_path = './pending/pfile_unifier.csv'
 
-    # Fill out missing info
-    append_csv(pending_file_path, csv_path)
+    brand_io = find_io_folders(brand)[1]
+    container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
 
-    # Upload as '_finished.csv'
-    complete_file_path = pending_file_path.replace('.csv', '_finished.csv')
-    os.rename(pending_file_path, complete_file_path)
-    dl.upload_file(complete_file_path, unifier_id)
+    finished_file = container_manager.generate_expanded()
+    transformer_file = container_manager.generate_minimized()
 
-    # Delete local file
-    os.remove(complete_file_path)
-    slack(f'uploaded {brand.path}/unifier_io/{complete_file_path.split("/")[-1]}') if SLACK else False
+    analize_last_run(container_manager)
+
+    DL.upload_file(finished_file, unifier_id)
+    DL.upload_file(transformer_file, unifier_id)
+    os.remove(finished_file)
+    os.remove(transformer_file)
+    os.remove(pending_file_path)
+    slack(f'uploaded {brand.path}/unifier_io/{finished_file.split("/")[-1]}') if SLACK else False
 
 
 print('Continue to record time')
 pdb.set_trace()
 print('done')
 with open('last_run.txt', 'w') as f:
-    # f.write(datetime.now(pytz.timezone('Etc/GMT+0')).isoformat())
     f.write(datetime.now().isoformat())

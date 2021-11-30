@@ -27,7 +27,7 @@ class Handler:
         elif file_ext == 'csv':
             self.excel_file = pd.read_csv(path)
         else:
-            print(file_ext, 'not supported')
+            print(file_ext, 'not supported', end='', flush=True)
             return
 
         self.load_filetype() # sets self.sheet and self.instructions
@@ -140,21 +140,28 @@ class Handler:
         if file_key is None:
             file_key = self.ask_file_key()
             filetypes['file_keys'][file_key] = []
+
         # Find the header(s)
         sheet_number = self.ask_sheet()
         if sheet_number is not None:
             sheet = self.excel_file.parse(self.excel_file.sheet_names[sheet_number])
         else:
             sheet = self.excel_file
+
         header_value = self.remove_unnamed_columns(sheet.columns.tolist())
         header_value = [self.strip_date(v) for v in header_value]
         self.print_header(header_value)
-        header_id = str(len(list(filetypes['headers'].keys())))
-        filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
-        instruct = instructions.Instructions()
-        instruct.ask_instructions(header_id)
-        filetypes['headers'][header_id] = instruct.jsonify()
+        if input("Does this header exist? ") == '1':
+            header_id = input('  header_id: ')
+        else:
+            header_id = str(len(list(filetypes['headers'].keys())))
+
+            instruct = instructions.Instructions()
+            instruct.ask_instructions(header_id)
+            filetypes['headers'][header_id] = instruct.jsonify()
+
+        filetypes['file_keys'][file_key].append({'header_id': header_id, 'header_value': header_value})
 
         with open('filetypes.json', 'w') as f:
             json.dump(filetypes, f, indent=2)
@@ -190,7 +197,7 @@ class Handler:
     def remove_unnamed_columns(self, cols):
         unnamed_count = 0
         for c in cols[::-1]:
-            if 'Unnamed: ' in c:
+            if 'Unnamed: ' in str(c):
                 unnamed_count += 1
             else:
                 break
@@ -309,12 +316,14 @@ class Handler:
             self.identify_by_column()
         elif identifier == "int":
             self.identify_by_int()
+        elif identifier == "unifier":
+            self.identify_by_unifier()
+        elif identifier == "indent":
+            self.identify_by_indent()
         # elif identifier == "sep":
         #     self.identify_by_sep()
-        # elif identifier == "indent":
-        #     self.identify_by_indent()
         else:
-            print(f"No Identifier for {self.filename} | {identifier}")
+            print(f"! No Identifier for {self.filename} | {identifier}")
 
     # Function to check validity of cell
     def valid_cell(self, cell):
@@ -429,10 +438,13 @@ class Handler:
 
 
     # Function to map purchases to customers
-    def add_purchase(self, customer_name, product='', address='', premise='', website=''):
+    def add_purchase(self, customer_name, product='', address='', premise='', website='', source=None):
         # Return early if null
         if not self.valid_cell(customer_name) or product.lower() == 'total':
             return
+
+        if source is None:
+            source = self.filename
 
         # Check for hella
         if product in list(hella_codes.keys()):
@@ -445,7 +457,7 @@ class Handler:
 
         # Update customer information
         entry_data = {
-            'source': self.filename,
+            'source': source,
             'address': address,
             'product': product,
         }
@@ -521,40 +533,92 @@ class Handler:
         return
 
     # New product starts where space found
-    def identify_by_sep(self):
-        # if product_col is not a number: set new product
-        options = self.payload['source_file']['options']
-        product = ""
+    # def identify_by_sep(self):
+    #     # if product_col is not a number: set new product
+    #     options = self.payload['source_file']['options']
+    #     product = ""
+    #
+    #     for row in self.rows:
+    #         # Set new product
+    #         product_cell = self.products_from_row(row, options['product'])
+    #         if not product_cell[0].isdigit() and product_cell[0] != "":
+    #             product = product_cell[0]
+    #
+    #         # Add purchase to current product (if there is a customer in this row)
+    #         customer = row[options["customer_column"]]
+    #         if customer == '':
+    #             continue
+    #         address = self.address_from_row(row, options['address_data'])
+    #         self.add_purchase(customer, product=product, address=address)
+    #
+    #     return
 
+    def identify_by_unifier(self):
         for row in self.rows:
-            # Set new product
-            product_cell = self.products_from_row(row, options['product'])
-            if not product_cell[0].isdigit() and product_cell[0] != "":
-                product = product_cell[0]
+            customer = row[self.instructions.customer]
+            phone = self.phone_from_row(row)
+            address = self.address_from_row(row, phone)
+            # products = self.products_from_row(row)
+            premise = self.premise_from_row(row)
+            website = self.website_from_row(row)
 
-            # Add purchase to current product (if there is a customer in this row)
-            customer = row[options["customer_column"]]
-            if customer == '':
-                continue
-            address = self.address_from_row(row, options['address_data'])
-            self.add_purchase(customer, product=product, address=address)
+            product = row[self.instructions.product]
+            if len(product) == 0:
+                self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
+            elif product[0] == '[':
+                product = eval(product)
+                if row[0][:2] != "['":
+                    row[0] = "['Null']"
+                elif row[0][-2:] != "']":
+                    row[0] = row[0] + "']"
 
+                sourcce = eval(row[0])
+                source_count = len(sourcce)
+                for index in range(len(product)):
+                    if source_count > index:
+                        s = sourcce[index]
+                    else:
+                        s = sourcce[-1]
+                    self.add_purchase(customer, product=product[index], address=address, premise=premise, website=website, source=s)
+            else:
+                self.add_purchase(customer, product=product, address=address, premise=premise, website=website, source=row[0])
         return
 
-    # DOES NOT FUNCTION !!!
-    def identify_by_indent(self, product_column, cust_column, start_row):
-        # CUSTOMER
-            # PRODUCT
-        # CUSTOMER
-        rows = self.sheet.values[start_row:]
-        for row in rows:
-            if not (row[cust_column] is None or row[cust_column] != row[cust_column]):
-                # There is a customer
-                customer = row[cust_column]
-            elif not (row[product_column] is None or row[product_column] != row[product_column]):
-                product = row[product_column]
-                self.add_purchase(customer, product=product)
+    # Used for Burning Bros
+    # Product
+        # Customer
+    def identify_by_indent(self):
+        product = ""
+        for row in self.rows:
+            product_characters = re.sub('[0-9]', '', row[self.instructions.product])
+            if len(product_characters) > 1:
+                product = row[self.instructions.product]
+            else:
+                customer = row[self.instructions.customer]
+                if len(customer) == 0:
+                    # No customer here--blank?
+                    continue
+                phone = self.phone_from_row(row)
+                address = self.address_from_row(row, phone)
+                if product[0] == '1':
+                    pdb.set_trace()
+                self.add_purchase(customer, product=product, address=address)
         return
+
+    # # DOES NOT FUNCTION !!!
+    # def identify_by_indent(self, product_column, cust_column, start_row):
+    #     # CUSTOMER
+    #         # PRODUCT
+    #     # CUSTOMER
+    #     rows = self.sheet.values[start_row:]
+    #     for row in rows:
+    #         if not (row[cust_column] is None or row[cust_column] != row[cust_column]):
+    #             # There is a customer
+    #             customer = row[cust_column]
+    #         elif not (row[product_column] is None or row[product_column] != row[product_column]):
+    #             product = row[product_column]
+    #             self.add_purchase(customer, product=product)
+    #     return
 
 
     def write(self, path=None, filename=None):

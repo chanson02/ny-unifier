@@ -7,7 +7,7 @@ class Customer:
     def __init__(self, name):
         self.name = name
         self.final = None # Final address
-        self.search_address_book()
+        # self.search_address_book()
 
         self.entries = []
         self.website = ''
@@ -24,17 +24,21 @@ class Customer:
         self.entries.append(data)
         return
 
-    # Check to see if in address book
-    def search_address_book(self):
-        with open('address_book.json', 'r') as f:
-            book = json.load(f)
-        k = self.name.lower()
-        if k in list(book.keys()):
-            # self.final = book[k]
-            # import pdb; pdb.set_trace()
-            # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
-            self.final = book[k][0]
-        return
+    # # Check to see if in address book
+    # def search_address_book(self):
+    #     with open('address_book.json', 'r') as f:
+    #         book = json.load(f)
+    #     k = self.name.lower()
+    #     if k in list(book.keys()):
+    #         # self.final = book[k]
+    #         # import pdb; pdb.set_trace()
+    #         # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
+    #         self.final = book[k][0]
+    #     return
+
+
+
+
 
     def execute(self, bbg):
         # print(f'Executing {self.name}')
@@ -135,97 +139,3 @@ class Customer:
         else:
             print('customer:most_similar() UNFINISHED')
             return address
-
-"""OLD STUFF
-def add_purchase(self, customer, product='', address='', premise='', website=''):
-    if not self.valid_cell(customer) or product.lower() == 'total':
-        return
-    customer = re.sub(' +', ' ', str(customer).strip())
-    if product in list(hella_codes.keys()):
-        product = hella_codes[product]
-    product = str(product).strip()
-
-    if customer in self.payload["customers"]:
-        if address == self.payload["customers"][customer]["address"]:
-            self.payload["customers"][customer]["products"].append(product)
-        else:
-            repeat = [k for k in list(self.payload["customers"].keys()) if customer in k]
-            for i in range(len(repeat)):
-                repeat_address = self.payload["customers"][repeat[i]]['address']
-                updated_address = self.same_address(address, repeat_address, merge=True)
-                if updated_address:
-                    self.payload["customers"][customer]['address'] = updated_address
-                    self.payload["customers"][customer]['products'].append(product)
-                    break
-                elif i < len(repeat)-1:
-                    # Go onto the next potential repeat address
-                    continue
-                else:
-                    # make a new customer key for this address
-                    uniq = f" ({len(repeat)})"
-                    self.payload['customers'][customer + uniq] = {'address': address, 'products': [product], 'premise': premise, 'website': website}
-    else:
-        self.payload["customers"][customer] = {"address": address, "products": [product], "premise": premise, "website": website}
-
-    return
-
-# Function to check if an address is the same
-# Returns either False or the better match
-def same_address(self, a1, a2, merge=False):
-    phone = self.same_key('phone', a1, a2)
-
-    # Check if full address in street
-    if a1['city'] == '' and a2['city'] == '' \
-    and a1['state'] == '' and a2['state'] == '' \
-    and a1['zip'] == '' and a2['zip'] == '' \
-    and (a1['street'] in a2['street'] or a2['street'] in a1['street']):
-        if merge:
-            # return longer address
-            if len(a1['street']) > len(a2['street']):
-                return {'street': a1['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
-            else:
-                return {'street': a2['street'], 'city': '', 'state': '', 'zip': '', 'phone': phone}
-        else:
-            return True
-
-    street = self.same_key('street', a1, a2)
-    city = self.same_key('city', a1, a2)
-    state = self.same_key('state', a1, a2)
-    zip = self.same_key('zip', a1, a2)
-
-    if False in [street, city, state, zip, phone]:
-        return False
-    if merge is False:
-        return True
-
-    return {'street': street, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
-
-# Function to check if keys from address dictionary have the same values
-# Returns 'more accurate' data
-def same_key(self, key, a1, a2):
-    if a1[key] is False and a2[key] is False:
-        return a1[key]
-    elif a1[key] is False and a2[key] is not False:
-        return a2[key]
-    elif a1[key] is not False and a2[key] is False:
-        return a1[key]
-    elif a1[key] == '' and a2[key] == '':
-        # Both empty
-        return a1[key]
-    elif a1[key] != '' and a2[key] == '':
-        # a2 empty
-        return a1[key]
-    elif a1[key] == '' and a2[key] != '':
-        # a1 empty
-        return a2[key]
-    elif a1[key] in a2[key]:
-        # a2 longer
-        return a2[key]
-    elif a2[key] in a1[key]:
-        #a1 longer
-        return a1[key]
-    else:
-        # they do not match
-        return False
-    return False #this is here for autotab
-"""

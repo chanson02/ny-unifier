@@ -93,6 +93,8 @@ class BusybodyGetter:
     def is_chain(self, string):
         if string is None:
             return False
+        elif 'WF-NE' in string:
+            string = string.replace('WF-NE', 'Whole Foods')
         str_name = self.clean(string)
         for name in list(self.chains.keys()):
             if self.clean(name) in str_name:
