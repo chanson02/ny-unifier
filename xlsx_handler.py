@@ -465,34 +465,33 @@ class Handler:
         customer.website = website if customer.website == '' and website != '' else customer.website
         customer.premise = premise if customer.premise == '' and premise != '' else customer.premise
 
-<<<<<<< HEAD
         if customer in self.payload["customers"]:
             self.payload["customers"][customer].append(product)
         else:
             self.payload["customers"][customer] = [product]
-
-    # Find 1 item in each row
-    def identify_by_column(self, start_index, cust_col=0, prod_col=1):
-        rows = self.sheet.values[start_index:]
-        for row in rows:
-            customer = row[cust_col]
-
-            try:
-                products = row[prod_col]
-            except IndexError:
-                products = ""
-
-            if products is not None and products == products and products != "":
-                try:
-                    products.split()
-                except:
-                    pdb.set_trace()
-                for product in products.split(", "):
-                    self.add_purchase(customer, product)
-            else:
-                self.add_purchase(customer, "")
-=======
         return
+
+    # # Find 1 item in each row
+    # def identify_by_column(self, start_index, cust_col=0, prod_col=1):
+    #     rows = self.sheet.values[start_index:]
+    #     for row in rows:
+    #         customer = row[cust_col]
+    #
+    #         try:
+    #             products = row[prod_col]
+    #         except IndexError:
+    #             products = ""
+    #
+    #         if products is not None and products == products and products != "":
+    #             try:
+    #                 products.split()
+    #             except:
+    #                 pdb.set_trace()
+    #             for product in products.split(", "):
+    #                 self.add_purchase(customer, product)
+    #         else:
+    #             self.add_purchase(customer, "")
+    #     return
 
     def search_customers(self, name):
         for cust in self.customers:
@@ -539,7 +538,6 @@ class Handler:
 
             for product in products:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website)
->>>>>>> 567b735a4eecf14758da69c6016a23d3bd1b21c1
         return
 
     # Find values associated with an integer (ex: quantity)
