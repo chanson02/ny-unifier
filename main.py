@@ -1,198 +1,81 @@
-import os, json, csv, psycopg2, re, pdb, time, requests
 from container_manager import ContainerManager
 from drive_downloader import DriveDownloader
-from busybody_getter import BusybodyGetter
-from xlsx_handler import Handler
-from customer import Customer
-from string import digits
-import pandas as pd
-import slack_send
-
 from datetime import datetime
+import slack_send
+import csv, os
 
-import warnings
-warnings.simplefilter("ignore") # Slider List Extension is not supported and will be removed
+"""
+PROCEDURE:
+Look for new file: done
+Add knowns (from history) to new file
+Post unknown file
+when unknown received -> add to history
+"""
 
-SLACK = True #Boolean for if slack should be notified
+HEADER = ["Source", "Customer", "Street", "City", "State", "Zip", "Phone", "Product", "Premise", "Website", "Comments"]
+SLACK = False # Boolean for if slack should bbe notified
 DL = DriveDownloader()
 print('DriveDownloader Loaded')
 BRANDS = DL.root.children
 
-with open('last_run.txt', 'r') as f:
-    last_run = datetime.fromisoformat(f.read())
-
 # Function to send message to slack
 def slack(msg):
     print('SLACK:', msg)
-    return slack_send.slack(msg)
+    return slack_send.slack('NY-UN-L: ' + msg) if SLACK else False
 
-# Function to see if a file life is newer than a threshold
-def new(drive_time):
-    file_life = datetime.utcnow() - datetime.fromisoformat(drive_time[:19])
-    thresh = datetime.now() - last_run
-    if file_life < thresh:
-        return True
-    else:
-        return False
+# Make new empty history file
+def init_history(brand):
+    pth = f'tmp/{brand.folder_data["name"]}_history.csv'
+    with open(pth, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(HEADER)
+    return DL.upload_file(pth, brand.folder_data['id'])
 
-# Function to find important subdirectories from brand directory
-def find_io_folders(container_folder):
-    try:
-        unifier_io = [f for f in container_folder.children if 'unifier_io' in f.path][0]
-        brand_io = [f for f in container_folder.children if 'brand_io' in f.path][0]
-        return unifier_io, brand_io
-    except IndexError:
-        # No children means new brand
-        return None, None
-
-# Finds transformer files and sorts by date
-def find_finished_files(brand_folder):
-    unifier_io, _ = find_io_folders(brand_folder)
-    finished_files = [f for f in unifier_io.contents if '_unifier_minimized' in f['name']]
-    if len(finished_files) == 0:
-        return []
-    else:
-        return sorted(finished_files, key=lambda f: f['createdTime'])
-
-def analize_last_run(current_manager):
-    finished_files = find_finished_files(current_manager.drive_container.parent.parent) # MAKE SURE THIS WORKS
-    if len(finished_files) != 0:
-        latest_run = finished_files[-1] # datetime.fromisoformat(drive_time[:19])
-        latest_run_path = DL.download_file(latest_run)
-        latest_manager = ContainerManager([latest_run_path], current_manager.drive_container, True)
-        gap_path = current_manager.generate_gap_report(latest_manager)
-        new_path = current_manager.generate_new_report(latest_manager)
-        DL.upload_file(gap_path, unifier_io.folder_data['id'])
-        DL.upload_file(new_path, unifier_io.folder_data['id'])
-        os.remove(gap_path)
-        os.remove(new_path)
-        slack(f"Uploaded {current_manager.drive_container.path} New and Gap")
-    else:
-        return None
-
-files_present_queue = []
-unknowns_learned_queue = []
-
-# Find brand folder from unifier_io or brand_io folder id
-def search_brands(id):
-    for brand in BRANDS:
-        ids = [c.folder_data['id'] for c in brand.children]
-        if id in ids:
-            return brand
-    return None
-
-def download_files(files):
-    downloads = []
-    for f in files:
-        downloads.append(DL.download_file(f))
-        print('.', end='', flush=True)
-    print()
-    return downloads
-
-# Runs through each brand folder to find new files
-# adds them to their respective queue
 for brand in BRANDS:
-    unifier_io, brand_io = find_io_folders(brand)
+    # io_folder = brand.children[-1]
+    io_folder = [f for f in brand.children if f.folder_data['name'] == 'io'][0]
 
-    if unifier_io is None: #Initialize new brand
-        DL.initialize_brand(brand)
-        slack(f'Initializing {brand.folder_data["name"]}') if SLACK else False
+    # check for new upload
+    drive_file = None
+    for file in io_folder.contents:
+        drive_file = file
+        slack(f'{brand} found file {file["name"]}')
+    # else move on
+    if drive_file is None:
         continue
 
-    [ # Get new container folders
-        files_present_queue.append(container)
-        for container in brand_io.children
-        if new(container.folder_data['createdTime'])
-    ]
-    [ # Get new complete files
-        unknowns_learned_queue.append(file)
-        for file in unifier_io.files
-        if new(file['createdTime']) and '_complete' in file['name']
-    ]
-print('New files flagged')
-
-#####################
-### Files Present ###
-for container in files_present_queue:
-    brand = container.parent.parent
-    container.modify_time() # Update container time for recursive search
-    unifier_io, _ = find_io_folders(brand)
-
-    # Download brand files
-    DL.clear_storage()
-    print(f'Downloading {len(container.files)} {container} files from {brand}')
-    current_downloads = download_files(container.files)
-    # Download old files to get missing info
-    old_transformer_files = find_finished_files(brand)
-    print(f'Downloading {len(old_transformer_files)} old files from {brand}')
-    previous_downloads = download_files(old_transformer_files)
-
-    #  Parse files
-    container_manager = ContainerManager(current_downloads, container)
-    if previous_downloads:
-        previous_manager = ContainerManager(previous_downloads, unifier_io, True)
-        container_manager.load_knowns(previous_manager)
-
-    print('Exporting files')
-    known_path = container_manager.generate_knowns()
-
-    if container_manager.unknowns():
-        # Upload Unknowns file
-        unknown_path = container_manager.generate_unknowns()
-        upload = DL.upload_file(unknown_path, unifier_io.folder_data['id'])
-        os.remove(unknown_path)
-        slack(f'Unknowns found: uploaded {unifier_io.path}/{upload["name"]}') if SLACK else False
+    # Is history not present?
+        # Create empty history file -> Upload
+    history = [f for f in brand.files if 'history' in f['name']]
+    if len(history) == 0:
+        history = init_history(brand)
     else:
-        # Upload knowns, gap, new, for_transformer
-        new_known_path = known_path.replace('_unifier', '_unifier_expanded')
-        os.rename(known_path, new_known_path)
-        upload = DL.upload_file(new_known_path, unifier_io.folder_data['id'])
+        history = history[0]
 
-        analize_last_run(container_manager)
-
-        transformer_file = container_manager.generate_minimized()
-        DL.upload_file(transformer_file, unifier_io.folder_data['id'])
-        os.remove(transformer_file)
-        os.remove(new_known_path)
-        slack(f'No unknowns found: uploaded {unifier_io.path}/{upload["name"]} + {transformer_file["name"]}') if SLACK else False
-
-    print('finished', container, upload['name'])
-
-
-##########################
-### Unknowns Completed ###
-for drive_file in unknowns_learned_queue:
-    # Download file
+    # Download file and history
     DL.clear_storage()
-    print('downloading', drive_file['name'])
-    csv_path = DL.download_file(drive_file)
-    csv_name = csv_path.split('/')[-1].split('_complete')[0]
+    run_file = DL.download_file(drive_file)
+    history_file = DL.download_file(history)
+    # Run through xlsx_handler
+    manager = ContainerManager([run_file], brand)
+    old_manager = ContainerManager([history_file], brand)
+    manager.load_knowns(old_manager)
+    # Delete file
+    os.remove(run_file)
+    os.remove(history_file)
 
-    # Match to existing
-    unifier_id = drive_file['parents'][0]
-    brand = search_brands(unifier_id)
-    brand_name = brand.path.split('/')[-1]
-    pending_file_path = [f'./pending/{file}' for file in os.listdir('./pending/') if brand_name in file and csv_name in file][0]
-    # pending_file_path = './pending/pfile_unifier.csv'
+    # upload known and unknown
+    known = manager.generate_knowns()
+    unknown = manager.generate_unknowns()
+    dir_name = os.path.splitext(drive_file['name'])[0] + ' output'
+    dir = DL.make_folder(dir_name, brand.folder_data['id'])
+    k_file = manager.generate_knowns()
+    uk_file = manager.generate_unknowns()
+    DL.upload_file(k_file, dir['id'])
+    DL.upload_file(uk_file, dir['id'])
+    os.remove(k_file)
+    os.remove(uk_file)
+    slack(f'Uploaded {brand.path}/{dir_name}')
 
-    brand_io = find_io_folders(brand)[1]
-    container_manager = ContainerManager([csv_path, pending_file_path], brand_io.children[0], True)
-
-    finished_file = container_manager.generate_expanded()
-    transformer_file = container_manager.generate_minimized()
-
-    analize_last_run(container_manager)
-
-    DL.upload_file(finished_file, unifier_id)
-    DL.upload_file(transformer_file, unifier_id)
-    os.remove(finished_file)
-    os.remove(transformer_file)
-    os.remove(pending_file_path)
-    slack(f'uploaded {brand.path}/unifier_io/{finished_file.split("/")[-1]}') if SLACK else False
-
-
-print('Continue to record time')
-pdb.set_trace()
-print('done')
-with open('last_run.txt', 'w') as f:
-    f.write(datetime.now().isoformat())
+    # Delete drive_file
+    DL.delete_file(drive_file['id'])

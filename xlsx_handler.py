@@ -10,9 +10,6 @@ import instructions
 
 import pdb
 
-with open("extra data/hella_codes.json", "r") as f:
-    hella_codes = json.load(f)
-
 XLSX_TYPE = pd.io.excel._base.ExcelFile
 CSV_TYPE = pd.core.frame.DataFrame
 
@@ -446,10 +443,6 @@ class Handler:
         if source is None:
             source = self.filename
 
-        # Check for hella
-        if product in list(hella_codes.keys()):
-            product = hella_codes[product]
-
         # Standardize
         product = str(product).strip()
         customer_name = re.sub(' +', ' ', str(customer_name).strip())
@@ -464,35 +457,29 @@ class Handler:
         customer.add_entry(entry_data)
         customer.website = website if customer.website == '' and website != '' else customer.website
         customer.premise = premise if customer.premise == '' and premise != '' else customer.premise
-
-<<<<<<< HEAD
-        if customer in self.payload["customers"]:
-            self.payload["customers"][customer].append(product)
-        else:
-            self.payload["customers"][customer] = [product]
+        return
 
     # Find 1 item in each row
-    def identify_by_column(self, start_index, cust_col=0, prod_col=1):
-        rows = self.sheet.values[start_index:]
-        for row in rows:
-            customer = row[cust_col]
-
-            try:
-                products = row[prod_col]
-            except IndexError:
-                products = ""
-
-            if products is not None and products == products and products != "":
-                try:
-                    products.split()
-                except:
-                    pdb.set_trace()
-                for product in products.split(", "):
-                    self.add_purchase(customer, product)
-            else:
-                self.add_purchase(customer, "")
-=======
-        return
+    # def identify_by_column(self, start_index, cust_col=0, prod_col=1):
+    #     rows = self.sheet.values[start_index:]
+    #     for row in rows:
+    #         customer = row[cust_col]
+    #
+    #         try:
+    #             products = row[prod_col]
+    #         except IndexError:
+    #             products = ""
+    #
+    #         if products is not None and products == products and products != "":
+    #             try:
+    #                 products.split()
+    #             except:
+    #                 pdb.set_trace()
+    #             for product in products.split(", "):
+    #                 self.add_purchase(customer, product)
+    #         else:
+    #             self.add_purchase(customer, "")
+    #     return
 
     def search_customers(self, name):
         for cust in self.customers:
@@ -539,7 +526,6 @@ class Handler:
 
             for product in products:
                 self.add_purchase(customer, product=product, address=address, premise=premise, website=website)
->>>>>>> 567b735a4eecf14758da69c6016a23d3bd1b21c1
         return
 
     # Find values associated with an integer (ex: quantity)
@@ -628,8 +614,6 @@ class Handler:
                     continue
                 phone = self.phone_from_row(row)
                 address = self.address_from_row(row, phone)
-                if product[0] == '1':
-                    pdb.set_trace()
                 self.add_purchase(customer, product=product, address=address)
         return
 

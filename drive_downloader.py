@@ -15,7 +15,7 @@ class DriveDownloader:
         creds = Credentials.from_authorized_user_file('token.json', ['https://www.googleapis.com/auth/drive'])
         self.service = build('drive', 'v3', credentials=creds)
         # self.clear_storage()
-        self.root = DriveFolder(self.service, '1ZYtG8roWBaeEdrHk0KSahAh4gPEiTOG5')
+        self.root = DriveFolder(self.service, '1jmSO6x3ZDdREmxPoJmwzdNze0QzTGbzP')
 
     # Function to remove previously downloaded files
     def clear_storage(self):
@@ -49,11 +49,22 @@ class DriveDownloader:
     # Function to upload
     def upload_file(self, path, parent_id):
         mime_type = 'text/csv'
-        filename = path.split('|')[-1]
+        filename = path.split('/')[-1].split('|')[-1]
         media = MediaFileUpload(path, mimetype=mime_type, resumable=True)
         body = {'name': filename, 'description': 'Unifier -> Va', 'mimeType': mime_type, 'parents': [parent_id]}
         upload = self.service.files().create(body=body, media_body=media).execute()
         return upload
+
+    # Create new folder
+    def make_folder(self, name, parent_id):
+        mime_type = 'application/vnd.google-apps.folder'
+        body = {'name': name, 'mimeType': mime_type, 'parents':[parent_id]}
+        upload = self.service.files().create(body=body, fields='id').execute()
+        return upload
+
+    # Delete a file
+    def delete_file(self, file_id):
+        self.service.files().delete(fileId=file_id).execute()
 
     # Function to setup files for new brand
     def initialize_brand(self, brand):

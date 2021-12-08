@@ -211,7 +211,8 @@ class ContainerManager:
     # Function to generate  knowns file
     # Returns file path
     def generate_knowns(self):
-        path = f"./pending/{self.drive_container.path.replace('/', '|')}_unifier.csv"
+        # path = f"./tmp/{self.drive_container.path.replace('/', '|')}_unifier.csv"
+        path = './tmp/known.csv'
         known_file = csv.writer(open(path, 'w'))
         # rows = [HEADER] + self.get_customer_rows(self.get_known_customers())
         rows = [HEADER]
@@ -221,7 +222,8 @@ class ContainerManager:
         return path
 
     def generate_unknowns(self):
-        path = f"{self.output}_unifier_incomplete.csv"
+        # path = f"{self.output}_unifier_incomplete.csv"
+        path = './tmp/unknown.csv'
         unknown_file = csv.writer(open(path, 'w'))
         rows = [HEADER]
         rows += self.get_customer_rows(self.get_unknown_customers(), minimize=True)
