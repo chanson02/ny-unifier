@@ -1,141 +1,126 @@
-import pdb
-import json
-import traceback
+import un_util
 
+# Unifier class to hold customer data
 class Customer:
+    def __init__(self, name, entries, bbg=None):
+        self.known = False # all locations are known
 
-    def __init__(self, name):
+        self.is_chain = False
+        self.locations = []
+        self.loc_to_ent = {} # {location_ndx => [Entry]}
+
         self.name = name
-        self.final = None # Final address
-        # self.search_address_book()
+        self.entries = entries
 
-        self.entries = []
-        self.website = ''
-        self.premise = ''
+        self.website = self.get_website()
+        self.premise = self.get_premise()
 
-        self.bbg = None #BusyBodyGetter
+        if bbg is None:
+            bbg = un_util.new_bbg()
 
+        # Compile addresses, is it a chain?
+        self._remove_duplicate_entries()
+        self._set_locations()
+
+        if len(self.locations) == 0:
+            # No location data found?
+            return
+        elif len(self.locations) == 1:
+            # One location! <3
+            # Send to busybody
+            self.locations[0] = bbg.get(
+                customer=self.name,
+                address=self.locations[0],
+                filename=self.entries[0].source
+            )
+
+        else:
+            # multiple locations, represents chain?
+            self.is_chain = True
+            self.known = True
+            for ndx in range(len(self.locations)):
+                self.locations[ndx] = bbg.get(
+                    customer=self.name,
+                    address=self.locations[ndx]
+                )
+
+        self.update_known()
         return
 
     def __repr__(self):
-        return f'{self.name} Object'
+        return f'{self.name} Customer Object'
 
-    def add_entry(self, data):
-        self.entries.append(data)
+    # Sets the known property
+    # Call this whenever updating location
+    def update_known(self):
+        for loc in self.locations:
+            if loc is None or loc.is_missing_parts():
+                self.known = False
+                return
+        self.known = True
         return
 
-    # # Check to see if in address book
-    # def search_address_book(self):
-    #     with open('address_book.json', 'r') as f:
-    #         book = json.load(f)
-    #     k = self.name.lower()
-    #     if k in list(book.keys()):
-    #         # self.final = book[k]
-    #         # import pdb; pdb.set_trace()
-    #         # print(f'\n\ncustomer.py:search_address_book NOT FINISHED !\ndefaulting {self}')
-    #         self.final = book[k][0]
-    #     return
+    # Remove entries with the same address and product
+    def _remove_duplicate_entries(self):
+        result = []
 
+        for ent in self.entries:
+            if not self.in_list(ent, result):
+                result.append(ent)
 
-
-
-
-    def execute(self, bbg):
-        # print(f'Executing {self.name}')
-        if self.name == 'Confidential':
-            self.name = f'Confidential x{len(self.entries)}'
-            self.entries = [self.entries[0]]
-
-        self.bbg = bbg # Set the busybody getter
-        if self.final is not None:
-            return
-
-        # check to see if there are different address entries
-        self.set_variations()
-        filename = self.entries[0]['source']
-        if self.all_mergable(self.variations):
-            merged = self.merge_all(self.variations)
-            #send to busybody
-            try:
-                self.final = self.bbg.get(customer=self.name, address=merged, filename=filename)
-                print('.', end='', flush=True)
-            except Exception:
-                self.final = merged
-                print(f'\nError setting final address for {self}')
-                traceback.print_exc()
-                print('X', end='', flush=True)
-        else: #not all mergable
-            # send each variation to busybody
-            #TODO: Check sources for chainfile?
-            for variation in self.variations:
-                variation = self.bbg.get(customer=self.name, address=variation, filename=filename)
-                print(',', end='', flush=True)
-            for e in self.entries:
-                e['address'] = self.most_similar(e['address'], self.variations)
+        self.entries = result
         return
 
-    # Function to find different addresses within one customer
-    # array
-    def set_variations(self):
-        uniq = []
+    def in_list(self, obj, list):
+        for item in list:
+            if item.equals(obj):
+                return True
+        return False
+
+    # Find different addresses within the same customer
+    def _set_locations(self):
         for entry in self.entries:
-            if entry['address'] not in uniq:
-                uniq.append(entry['address'])
-        self.variations = uniq
-        return uniq
+            is_uniq = True
 
-    # Function to check if an address is empty
-    # bool
-    def empty_address(self, address):
-        parts = list(address.values())[:-1]
-        found_parts = [part for part in parts if part != '']
-        if len(found_parts) == 0:
-            return True
-        else:
-            return False
+            for ndx in range(len(self.locations)):
+                if self.locations[ndx] is None:
+                    if None in self.locations:
+                        is_uniq = False
 
-    # Function to check if all addresses can be merged
-    # bool
-    def all_mergable(self, addresses):
-        checked_addresses = []
-        for v1 in addresses:
-            checked_addresses.append(v1)
-            for v2 in addresses:
-                if v2 not in checked_addresses:
-                    if not self.mergable(v1, v2):
-                        return False
-        return True
+                elif self.locations[ndx].mergable(entry.address):
+                    self.locations[ndx] = self.locations[ndx].merge(entry.address)
+                    is_uniq = False
+                    self.loc_to_ent[ndx].append(entry)
 
-    # Function to check if two addresses can be merged
-    # bool
-    def mergable(self, a1, a2):
-        if self.empty_address(a1) or self.empty_address(a2):
-            return True
+            if is_uniq:
+                self.loc_to_ent[len(self.locations)] = [entry]
+                self.locations.append(entry.address)
+        return
 
-        a1_parts = list(a1.values())[:-1]
-        a2_parts = list(a2.values())[:-1]
+    def get_website(self):
+        for ent in self.entries:
+            if ent.website is not None:
+                return ent.website
+        return None
 
-        for ndx in range(len(a1_parts)):
-            if a1_parts[ndx] in a2_parts[ndx] or a2_parts[ndx] in a1_parts[ndx]:
-                pass
-            else:
-                return False
 
-        return True
+    def get_premise(self):
+        for ent in self.entries:
+            if ent.premise is not None:
+                return ent.premise
+        return None
 
-    # Function to attempt to merge all entry addresses
-    def merge_all(self, variations):
-        final_address = {'street': '', 'city': '', 'state': '', 'zip': '', 'phone': ''}
-        for variation in variations:
-            for key in list(variation.keys()):
-                if len(variation[key]) > len(final_address[key]):
-                    final_address[key] = variation[key]
-        return final_address
+    # Returns the location index
+    # That matches an entry
+    def find_location_from_entry(self, ent):
+        for ndx in list(self.loc_to_ent.keys()):
+            if ent in self.loc_to_ent[ndx]:
+                return self.locations[ndx]
+        return None
 
-    # Function to return the most similar variation
-    def most_similar(self, address, variations):
-        if address in variations:
-            return address
-        else:
-            print('customer:most_similar() UNFINISHED')
-            return address
+    # Search for a location that overlays given address
+    def search_locations(self, address):
+        for loc in self.locations:
+            if loc.overlays(address):
+                return loc
+        return None

@@ -1,12 +1,9 @@
-__pycache__/
-drive_downloaded/
+secret.py
 credentials.json
 token.json
-known.csv
-unknown.csv
-tmp/
-extra data/
-pending/
 .python-version
+__pycache__/
+extra data/
+input/
+output/
 temp.py
-secret.py
