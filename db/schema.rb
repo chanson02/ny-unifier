@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_134123) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_140115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,12 +42,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_134123) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "distributions", force: :cascade do |t|
+    t.bigint "report_id", null: false
+    t.bigint "retailer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["report_id"], name: "index_distributions_on_report_id"
+    t.index ["retailer_id"], name: "index_distributions_on_retailer_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "retailers", force: :cascade do |t|
+    t.string "name"
+    t.string "adr_hash"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "distributions", "reports"
+  add_foreign_key "distributions", "retailers"
 end
