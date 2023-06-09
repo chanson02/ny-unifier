@@ -1,4 +1,5 @@
 class Instruction < ApplicationRecord
+  has_many :header
   enum structure: {
     row: 'row'
   }
