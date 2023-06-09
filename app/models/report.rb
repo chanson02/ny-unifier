@@ -37,7 +37,6 @@ class Report < ApplicationRecord
       # download blob
       fname = ActiveStorage::Filename.new(blob.filename.to_s).sanitized
       path = Rails.root.join('tmp', fname).to_s
-      debugger
       File.open(path, 'wb') do |tf|
         tf.write(blob.download)
       end
@@ -66,13 +65,5 @@ class Report < ApplicationRecord
 
   def set_head
     return unless header.nil?
-  end
-
-  def parse_excel(path)
-    xl = Roo::Excelx.new(path)
-  end
-
-  def parse_csv(path)
-    #CSV.foreach(path, headers:true) do |row|
   end
 end
