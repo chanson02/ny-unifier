@@ -6,8 +6,6 @@ class Report < ApplicationRecord
   has_many_attached :files
   attr_reader :file_types
 
-  #after_commit :xl_to_csv, on: :create
-
   @@file_types = [
     'text/csv',
     'application/vnd.ms-excel',
@@ -16,8 +14,10 @@ class Report < ApplicationRecord
 
   def parse
     return unless files.attached? && files.blobs.present?
+
     xl_to_csv
-    set_head
+    find_head # and set it
+    return unless header&.instruction
   end
 
   def blob
@@ -26,7 +26,7 @@ class Report < ApplicationRecord
     files.blobs.find_by(key: selected_blob)
   end
 
-  #private
+  # private
 
   def xl_to_csv
     return unless files.attached? & files.blobs.present?
@@ -58,31 +58,34 @@ class Report < ApplicationRecord
       end
 
       File.delete(path) # cleanup
-      # blob.purge # can't figure out how to make this work
       blob.attachments.first.purge
       blob.purge
     end
   end
 
-  def set_head
+  def find_head
     # is there a selected_blob? if not go through all files
     blobs = (selected_blob.nil? ? files.blobs : [blob])
 
     # check if user set a specific start row
     if head_row && (blobs.length == 1 || blob)
       b = blob || blobs.first
-      value = Header.clean(csv_rows(b)[head_row])
-      self.header = Header.find_or_create_by(value: value)
-      self.header.save!
+      set_head(b, head_row)
       return
     end
 
     # find a row that is similar to one of the `headers`
 
     # make a new header out of the first row
-    value = Header.clean(csv_rows(blobs.first)[0])
-    self.header = Header.find_or_create_by(value: value)
-    self.header.save!
+    set_head(blobs.first, 0)
+  end
+
+  def set_head(blob, row)
+    value = Header.clean(csv_rows(blob)[row])
+    self.header = Header.find_or_create_by(value)
+    selected_blob = blob.key
+    save
+    header
   end
 
   def csv_rows(blob, headers: false)
