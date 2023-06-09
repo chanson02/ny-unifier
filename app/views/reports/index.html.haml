@@ -1,0 +1,3 @@
+%h1 Uploaded reports
+- @reports.each do |r|
+  = link_to r.name, report_path(r)
