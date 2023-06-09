@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
     upload = params[:report][:file]
     @report = Report.new
     @report.name = upload.original_filename
-    @report.file.attach(upload)
+    @report.files.attach(upload)
 
     if @report.save
       redirect_to reports_path, notice: "Uploaded #{@report.name}"

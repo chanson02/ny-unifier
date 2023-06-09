@@ -3,10 +3,10 @@
 # Report
 class Report < ApplicationRecord
   belongs_to :header, optional: true
-  has_many_attached :file
+  has_many_attached :files
   attr_reader :file_types
 
-  after_commit :xl_to_csv, on: :create
+  #after_commit :xl_to_csv, on: :create
 
   @@file_types = [
     'text/csv',
@@ -15,22 +15,20 @@ class Report < ApplicationRecord
   ]
 
   def parse
-    return unless file.attached? && file.blob.present?
-
-    fname = ActiveStorage::Filename.new(file.blob.filename.to_s).sanitized
-    path = Rails.root.join('tmp', fname)
-    File.open(path.to_s, 'wb') do |tf|
-      tf.write(file.download)
-    end
-
+    return unless files.attached? && files.blobs.present?
     set_head
   end
 
+  def blob
+    return unless selected_blob.present?
+
+    files.blobs.find_by(key: selected_blob)
+  end
 
   def xl_to_csv
-    return unless file.attached? & file.blobs.present?
+    return unless files.attached? & files.blobs.present?
 
-    file.blobs.each do |blob|
+    files.blobs.each do |blob|
       type = blob.content_type
       next unless @@file_types[1..2].include? type
 
@@ -53,10 +51,12 @@ class Report < ApplicationRecord
           content_type: 'text/csv'
         )
 
-        file.attach(new_blob)
+        files.attach(new_blob)
       end
 
       File.delete(path) # cleanup
+      # blob.purge # can't figure out how to make this work
+      blob.attachments.first.purge
       blob.purge
     end
   end
