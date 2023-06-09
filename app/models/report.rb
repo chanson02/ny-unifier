@@ -27,9 +27,8 @@ class Report < ApplicationRecord
   end
 
   def blob
-    return unless selected_blob.present?
-
-    files.blobs.find_by(key: selected_blob)
+    return files.blobs.find_by(key: selected_blob) if selected_blob.present?
+    return files.blobs.first if files.blobs.length == 1
   end
 
   # private
@@ -95,7 +94,7 @@ class Report < ApplicationRecord
   end
 
   def csv_rows(blob, headers: false)
-    return unless @@file_types[0] == blob.content_type
+    return unless @@file_types[0] == blob&.content_type
 
     # download blob
     fname = ActiveStorage::Filename.new(blob.filename.to_s).sanitized
