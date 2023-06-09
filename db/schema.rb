@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_164720) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_204141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_164720) do
 
   create_table "headers", force: :cascade do |t|
     t.string "value"
-    t.bigint "instruction_id", null: false
+    t.bigint "instruction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["instruction_id"], name: "index_headers_on_instruction_id"

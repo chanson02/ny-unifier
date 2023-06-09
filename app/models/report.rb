@@ -26,7 +26,7 @@ class Report < ApplicationRecord
     files.blobs.find_by(key: selected_blob)
   end
 
-  private
+  #private
 
   def xl_to_csv
     return unless files.attached? & files.blobs.present?
@@ -66,13 +66,14 @@ class Report < ApplicationRecord
 
   def set_head
     # is there a selected_blob? if not go through all files
-    blobs = (selected_blob.nil? ? file.blobs : [blob])
+    blobs = (selected_blob.nil? ? files.blobs : [blob])
 
     # check if user set a specific start row
     if head_row && (blobs.length == 1 || blob)
       b = blob || blobs.first
       value = Header.clean(csv_rows(b)[head_row])
-      header = Header.find_or_create_by(value: value)
+      self.header = Header.find_or_create_by(value: value)
+      self.header.save!
       return
     end
 
@@ -80,7 +81,8 @@ class Report < ApplicationRecord
 
     # make a new header out of the first row
     value = Header.clean(csv_rows(blobs.first)[0])
-    header = Header.find_or_create_by(value: value)
+    self.header = Header.find_or_create_by(value: value)
+    self.header.save!
   end
 
   def csv_rows(blob, headers: false)
@@ -94,7 +96,7 @@ class Report < ApplicationRecord
     end
 
     result = []
-    CSV.foreach(path, headers) do |r|
+    CSV.foreach(path, headers: headers) do |r|
       result << r
     end
 

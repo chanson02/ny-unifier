@@ -1,12 +1,9 @@
 class Header < ApplicationRecord
-  belongs_to :instruction
+  belongs_to :instruction, optional: true
   has_many :reports
 
   # this is intended to be a row from a csv
   def self.clean(str)
-    result = str.strip
-    result.gsub!(/s+/, ' ')  # remove spaces
-    result.gsub!(/\W+/, '_') # _ any weird chars
-    result.downcase
+    str.to_s.strip.downcase.parameterize
   end
 end
