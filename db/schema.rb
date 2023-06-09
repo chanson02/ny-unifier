@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_140115) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_09_154441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,10 +51,34 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_140115) do
     t.index ["retailer_id"], name: "index_distributions_on_retailer_id"
   end
 
+  create_table "headers", force: :cascade do |t|
+    t.string "value"
+    t.bigint "instruction_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instruction_id"], name: "index_headers_on_instruction_id"
+  end
+
+  create_table "instructions", force: :cascade do |t|
+    t.string "structure"
+    t.integer "account"
+    t.text "brand"
+    t.text "address"
+    t.integer "phone"
+    t.integer "website"
+    t.integer "premise"
+    t.string "chain"
+    t.string "condition"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "reports", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "header_id"
+    t.index ["header_id"], name: "index_reports_on_header_id"
   end
 
   create_table "retailers", force: :cascade do |t|
@@ -68,4 +92,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_140115) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "distributions", "reports"
   add_foreign_key "distributions", "retailers"
+  add_foreign_key "headers", "instructions"
+  add_foreign_key "reports", "headers"
 end

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  structure: MyString
+  account: 1
+  brand: MyText
+  address: MyText
+  phone: 1
+  website: 1
+  premise: 1
+  chain: MyString
+  condition: MyString
+
+two:
+  structure: MyString
+  account: 1
+  brand: MyText
+  address: MyText
+  phone: 1
+  website: 1
+  premise: 1
+  chain: MyString
+  condition: MyString
