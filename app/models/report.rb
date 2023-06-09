@@ -17,12 +17,13 @@ class Report < ApplicationRecord
 
     xl_to_csv
     find_head # and set it
+
     return unless header&.instruction
 
     parser = find_parser
     return unless parser
 
-    parser.new(self)
+    parser.new(self).execute
   end
 
   def blob
@@ -87,7 +88,7 @@ class Report < ApplicationRecord
 
   def set_head(blob, row)
     value = Header.clean(csv_rows(blob)[row])
-    self.header = Header.find_or_create_by(value)
+    self.header = Header.find_or_create_by(value: value)
     selected_blob = blob.key
     save
     header
