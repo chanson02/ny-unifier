@@ -18,6 +18,11 @@ class Report < ApplicationRecord
     xl_to_csv
     find_head # and set it
     return unless header&.instruction
+
+    parser = find_parser
+    return unless parser
+
+    parser.new(self)
   end
 
   def blob
@@ -105,5 +110,15 @@ class Report < ApplicationRecord
 
     File.delete(path)
     result
+  end
+
+  def find_parser
+    ins = header.instruction
+    return unless ins&.structure
+
+    case ins.structure
+    when 'row'
+      RowParser
+    end
   end
 end
