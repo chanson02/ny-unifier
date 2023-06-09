@@ -16,6 +16,7 @@ class Report < ApplicationRecord
 
   def parse
     return unless files.attached? && files.blobs.present?
+    xl_to_csv
     set_head
   end
 
@@ -24,6 +25,8 @@ class Report < ApplicationRecord
 
     files.blobs.find_by(key: selected_blob)
   end
+
+  private
 
   def xl_to_csv
     return unless files.attached? & files.blobs.present?
@@ -61,9 +64,41 @@ class Report < ApplicationRecord
     end
   end
 
-  private
-
   def set_head
-    return unless header.nil?
+    # is there a selected_blob? if not go through all files
+    blobs = (selected_blob.nil? ? file.blobs : [blob])
+
+    # check if user set a specific start row
+    if head_row && (blobs.length == 1 || blob)
+      b = blob || blobs.first
+      value = Header.clean(csv_rows(b)[head_row])
+      header = Header.find_or_create_by(value: value)
+      return
+    end
+
+    # find a row that is similar to one of the `headers`
+
+    # make a new header out of the first row
+    value = Header.clean(csv_rows(blobs.first)[0])
+    header = Header.find_or_create_by(value: value)
+  end
+
+  def csv_rows(blob, headers: false)
+    return unless @@file_types[0] == blob.content_type
+
+    # download blob
+    fname = ActiveStorage::Filename.new(blob.filename.to_s).sanitized
+    path = Rails.root.join('tmp', fname).to_s
+    File.open(path, 'wb') do |tf|
+      tf.write(blob.download)
+    end
+
+    result = []
+    CSV.foreach(path, headers) do |r|
+      result << r
+    end
+
+    File.delete(path)
+    result
   end
 end
