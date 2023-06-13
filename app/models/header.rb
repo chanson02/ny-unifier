@@ -8,6 +8,8 @@ class Header < ApplicationRecord
   def self.clean(str)
     # replace all digits with |
     # replace all months with |
+    # replace all , with _
+    str = str.join('_') if str.is_a?(Array)
     str.to_s.strip.downcase.parameterize.gsub(/\d+/, '|').gsub(/\b(?:#{MONTHS.join('|')})\b/, '|')
   end
 end
