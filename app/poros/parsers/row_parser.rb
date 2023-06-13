@@ -16,8 +16,14 @@ class RowParser < BaseParser
 
 
       # Then brand
+      brands = [nil]
 
-      # Create the distribution
+      brands.each do |brand|
+        # Create the distribution
+        d = Distribution.new(report_id: @report.id, retailer_id: retailer.id)
+        d.brand_id = brand.id if brand&.id
+        d.save
+      end
     end
   end
 end
