@@ -12,14 +12,18 @@ class RowParser < BaseParser
       # Then look for the retailer name
       account = row[@instruction.retailer]
       adr = address_from_row(row)
+      next if (account.nil? || account&.empty?) && (adr.nil? || adr&.empty?)
+
       retailer = find_or_create_retailer(account, adr)
 
 
-      # Then brand
-      brands = [nil]
-
+      brands = brands_from_row(row)
       brands.each do |brand|
         # Create the distribution
+        unless brand.nil?
+          brand = Brand.find_or_create_by(name: brand)
+          brand.save
+        end
         d = Distribution.new(report_id: @report.id, retailer_id: retailer.id)
         d.brand_id = brand.id if brand&.id
         d.save

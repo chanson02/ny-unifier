@@ -37,4 +37,14 @@ class BaseParser
     # TODO: use the row data to set street, city, state, postal
   end
 
+  def brands_from_row(row)
+    return unless @instruction.brand
+
+    [@instruction.brand] unless @instruction.brand.is_a?(Array)
+    result = []
+    @instruction.brand.each do |i|
+      result << row[i].split(',')
+    end
+    result.flatten(&:strip)
+  end
 end
