@@ -10,6 +10,9 @@ class InstructionsController < ApplicationController
   def create
     @instruction = Instruction.from_params(params)
     if @instruction&.save
+      h = Header.find(params[:instruction][:header_id])
+      h.instruction_id = @instruction.id
+      h.save
       redirect_to reports_path, notice: 'Instruction saved'
     else
       render :new
@@ -19,6 +22,6 @@ class InstructionsController < ApplicationController
   private
 
   def allowed_params
-    params.require(:instruction).permit(:header, :structure, :retailer, :brand, :street1, :street2, :city, :state, :postal, :country, :website, :phone, :premise, :chain, :condition)
+    params.require(:instruction)
   end
 end

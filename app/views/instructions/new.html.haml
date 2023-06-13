@@ -1,15 +1,16 @@
 %select
-  %option{value: ''} Report Select
+  %option{value: '', data: ''} Report Select
   - @reports.each do |report|
-    %option{value: report.raw_head}= report.name
+    %option{value: report.raw_head, data: report.header.id}= report.name
 
-%table
+%table{:border=>1}
   %thead
     %tr
   %tbody
     %tr
 
 = form_with(model: @instruction) do |form|
+  = form.hidden_field :header_id
   .field
     = form.label :structure
     = form.select :structure, ['row']
@@ -59,8 +60,20 @@
     = form.text_field :chain
 
   .field
-    = form.label :condition
-    = form.text_field :condition
+    = form.label :condition, onclick: 'toggle_condition();'
+    .invis
+      %p Conditionally apply rows. Enter ruby code that will be executed.
+      %p The last line must evaluate to true or false
+      %p You have access to a `raw_head` array of all the columns
+      %p You have access to a `row` array of all the columns
+      %p You have access to a `month` integer of the container. jan=1
+      %pre
+        Example:
+        col = raw_head.each_index.find { |i| Date.parse(raw_head[i]).month == month rescue false };
+        row[col]&.to_i > 0 resuce false
+      %p
+        Row valid if
+        = form.text_area :condition
 
   = form.submit 'Create'
 
@@ -73,20 +86,29 @@
 
   function report_changed() {
     clear_table();
-    const data = JSON.parse(document.getElementsByTagName('select')[0].value);
-    const table = document.getElementsByTagName('table')[0];
-    console.log('the data is', data, 'and is this long', data.length);
+    const select = document.getElementsByTagName('select')[0];
+    const head_id = select.selectedOptions[0].getAttribute('data');
+    document.getElementById('instruction_header_id').value = head_id;
 
-    for (let i=0; i<data.length; i++) {
+    const head = JSON.parse(select.value);
+    const table = document.getElementsByTagName('table')[0];
+
+    for (let i=0; i<head.length; i++) {
       const ndx = document.createElement('td');
       ndx.innerHTML = i;
 
       const col = document.createElement('td');
-      col.innerHTML = data[i];
+      col.innerHTML = head[i];
 
       table.children[0].children[0].appendChild(ndx);
       table.children[1].children[0].appendChild(col);
     }
+    return;
+  }
+
+  function toggle_condition() {
+    const container = document.getElementsByTagName('pre')[0].parentElement;
+    container.classList.toggle('invis');
     return;
   }
 

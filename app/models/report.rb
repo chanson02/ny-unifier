@@ -70,6 +70,7 @@ class Report < ApplicationRecord
       blob.attachments.first.purge #.purge_all?
       blob.purge
     end
+    save
   end
 
   def find_head
