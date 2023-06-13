@@ -9,6 +9,7 @@ class RetailersController < ApplicationController
   def update
     @retailer = Retailer.find(params[:id])
     if @retailer.update(allowed_params)
+      @retailer.regen
       redirect_to retailer_path(@retailer), notice: 'Retailer updated successfully'
     else
       render :edit
