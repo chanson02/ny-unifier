@@ -86,9 +86,10 @@ class Report < ApplicationRecord
   end
 
   def set_head(blob, row)
+    self.head_row = row
     value = Header.clean(csv_rows(blob)[row])
     self.header = Header.find_or_create_by(value: value)
-    selected_blob = blob.key
+    self.selected_blob = blob.key
     save
     header
   end
