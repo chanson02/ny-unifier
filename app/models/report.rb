@@ -6,7 +6,9 @@ class Report < ApplicationRecord
   has_many :distributions
   has_many :retailers, through: :distributions
   has_many_attached :files
+
   attr_reader :file_types
+  serialize :raw_head, Array
 
   @@file_types = [
     'text/csv',
@@ -91,9 +93,9 @@ class Report < ApplicationRecord
   end
 
   def set_head(blob, row)
-    debugger
     self.head_row = row
-    value = Header.clean(csv_rows(blob)[row])
+    self.raw_head = csv_rows(blob)[row]
+    value = Header.clean(raw_head)
     self.header = Header.find_or_create_by(value: value)
     self.selected_blob = blob.key
     save

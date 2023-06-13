@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_13_170656) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_13_183818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,6 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_170656) do
     t.integer "head_row"
     t.string "selected_blob"
     t.boolean "parsed", default: false
+    t.text "raw_head"
     t.index ["header_id"], name: "index_reports_on_header_id"
   end
 
