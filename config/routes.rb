@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   resources :reports
-  resources :retailers, only: [:edit, :update]
-  resources :instructions, only: [:new, :create]
-  # root "articles#index"
+  resources :retailers, only: %i[edit update]
+  resources :instructions, only: %i[new create]
+  root 'reports#index'
 end
