@@ -1,3 +1,7 @@
+%h3 Reports
+%span
+  = link_to 'Unifier Report', unifier_report_path(@report)
+
 %h3 Unknown (#{@unknown.count})
 %ol
   - @unknown.each do |retailer|

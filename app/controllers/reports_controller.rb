@@ -26,6 +26,14 @@ class ReportsController < ApplicationController
     @unknown = @report.retailers.select(&:unknown?)
   end
 
+  def unifier_report
+    report = Report.find(params[:id])
+    data = CSV.generate do |csv|
+      csv << %w[this is a test]
+    end
+    send_data data, filename: "#{report.name}_unifier_report.csv", type: 'text/csv'
+  end
+
   private
 
   def report_params
