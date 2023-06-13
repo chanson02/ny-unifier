@@ -1,0 +1,93 @@
+%select
+  %option{value: ''} Report Select
+  - @reports.each do |report|
+    %option{value: report.raw_head}= report.name
+
+%table
+  %thead
+    %tr
+  %tbody
+    %tr
+
+= form_with(model: @instruction) do |form|
+  .field
+    = form.label :structure
+    = form.select :structure, ['row']
+
+  .field
+    = form.label :retailer
+    = form.number_field :retailer
+
+  .field
+    = form.label :brand
+    = form.number_field :brand
+
+  .field
+    = form.label :street1
+    = form.number_field :street1
+
+  .field
+    = form.label :street2
+    = form.number_field :street2
+
+  .field
+    = form.label :city
+    = form.number_field :city
+
+  .field
+    = form.label :state
+    = form.number_field :state
+
+  .field
+    = form.label :postal
+    = form.number_field :postal
+
+  .field
+    = form.label :phone
+    = form.number_field :phone
+
+  .field
+    = form.label :website
+    = form.number_field :website
+
+  .field
+    = form.label :premise
+    = form.number_field :premise
+
+  .field
+    = form.label :chain
+    = form.text_field :chain
+
+  .field
+    = form.label :condition
+    = form.text_field :condition
+
+  = form.submit 'Create'
+
+:javascript
+  function clear_table() {
+    document.getElementsByTagName('thead')[0].children[0].innerHTML = '';
+    document.getElementsByTagName('tbody')[0].children[0].innerHTML = '';
+    return;
+  }
+
+  function report_changed() {
+    clear_table();
+    const data = JSON.parse(document.getElementsByTagName('select')[0].value);
+    const table = document.getElementsByTagName('table')[0];
+    console.log('the data is', data, 'and is this long', data.length);
+
+    for (let i=0; i<data.length; i++) {
+      const ndx = document.createElement('td');
+      ndx.innerHTML = i;
+
+      const col = document.createElement('td');
+      col.innerHTML = data[i];
+
+      table.children[0].children[0].appendChild(ndx);
+      table.children[1].children[0].appendChild(col);
+    }
+    return;
+  }
+
+  document.getElementsByTagName('select')[0].onclick = report_changed;
