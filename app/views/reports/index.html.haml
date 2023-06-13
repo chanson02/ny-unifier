@@ -11,3 +11,5 @@
         %td= link_to r.name, report_path(r)
         %td= r.header&.instruction ? 'Y' : 'N'
         %td= r.parsed ? 'Y' : 'N'
+        %td
+          %button Parse (unimplemented)
