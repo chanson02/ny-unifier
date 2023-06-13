@@ -1,0 +1,5 @@
+class AddParsedToReports < ActiveRecord::Migration[7.0]
+  def change
+    add_column :reports, :parsed, :boolean, default: false
+  end
+end

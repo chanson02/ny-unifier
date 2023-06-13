@@ -25,5 +25,7 @@ class RowParser < BaseParser
         d.save
       end
     end
+    @report.processed = true
+    @report.save
   end
 end
