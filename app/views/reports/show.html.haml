@@ -1,1 +1,10 @@
-unimplemented
+%h3 Unknown (#{@unknown.count})
+%ol
+  - @unknown.each do |retailer|
+    %li
+      %p= retailer.name
+%h3 Known (#{@known.count})
+%ol
+  - @known.each do |retailer|
+    %li
+      %p= retailer.name

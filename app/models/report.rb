@@ -3,6 +3,8 @@
 # Report
 class Report < ApplicationRecord
   belongs_to :header, optional: true
+  has_many :distributions
+  has_many :retailers, through: :distributions
   has_many_attached :files
   attr_reader :file_types
 

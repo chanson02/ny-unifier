@@ -20,6 +20,12 @@ class ReportsController < ApplicationController
     end
   end
 
+  def show
+    @report = Report.find(params[:id])
+    @known = @report.retailers.select(&:known?)
+    @unknown = @report.retailers.select(&:unknown?)
+  end
+
   private
 
   def report_params
