@@ -9,8 +9,4 @@ class Retailer < ApplicationRecord
   def unknown?
     !known?
   end
-
-  def update(params)
-    puts 'not yet implemented'
-  end
 end

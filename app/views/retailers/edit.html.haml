@@ -1,0 +1,19 @@
+%h1
+  = @retailer.name
+= form_with(model: @retailer, url: retailer_path(@retailer), method: :patch) do |form|
+  = form.label :street
+  = form.text_field :street, value: @retailer.street
+
+  = form.label :city
+  = form.text_field :city, value: @retailer.city
+
+  = form.label :state
+  = form.text_field :state, value: @retailer.state
+
+  = form.label :postal
+  = form.text_field :postal, value: @retailer.postal
+
+  = form.label :country
+  = form.text_field :country, value: @retailer.country
+
+  = form.submit 'Update'

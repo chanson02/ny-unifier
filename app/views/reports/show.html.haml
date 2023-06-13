@@ -2,9 +2,9 @@
 %ol
   - @unknown.each do |retailer|
     %li
-      %p= retailer.name
+      %p= link_to retailer.name, edit_retailer_path(retailer)
 %h3 Known (#{@known.count})
 %ol
   - @known.each do |retailer|
     %li
-      %p= retailer.name
+      %p= link_to retailer.name, edit_retailer_path(retailer)
