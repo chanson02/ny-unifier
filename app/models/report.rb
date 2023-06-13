@@ -65,7 +65,7 @@ class Report < ApplicationRecord
       end
 
       File.delete(path) # cleanup
-      blob.attachments.first.purge
+      blob.attachments.first.purge #.purge_all?
       blob.purge
     end
   end
@@ -82,12 +82,16 @@ class Report < ApplicationRecord
     end
 
     # find a row that is similar to one of the `headers`
+    blobs.each do |blob|
+      # get the first few rows and check to see if there is a header existing
+    end
 
     # make a new header out of the first row
     set_head(blobs.first, 0)
   end
 
   def set_head(blob, row)
+    debugger
     self.head_row = row
     value = Header.clean(csv_rows(blob)[row])
     self.header = Header.find_or_create_by(value: value)

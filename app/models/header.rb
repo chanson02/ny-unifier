@@ -4,6 +4,7 @@ class Header < ApplicationRecord
 
   # this is intended to be a row from a csv
   def self.clean(str)
-    str.to_s.strip.downcase.parameterize
+    # replace all digits with |
+    str.to_s.strip.downcase.parameterize.gsub(/\d+/, '|')
   end
 end
