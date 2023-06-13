@@ -19,6 +19,6 @@ class RetailersController < ApplicationController
   private
 
   def allowed_params
-    params.require(:retailer).permit(:street, :city, :state, :postal, :country)
+    params.require(:retailer).permit(:street, :unit, :city, :state, :postal, :country)
   end
 end

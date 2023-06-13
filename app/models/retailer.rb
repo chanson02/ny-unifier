@@ -21,6 +21,7 @@ class Retailer < ApplicationRecord
     return unless street
 
     full_address = street
+    full_address += ", #{unit}" if unit
     full_address += ", #{city}" if city
     full_address += " #{state}" if state
     full_address += ", #{postal}" if postal
