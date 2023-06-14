@@ -8,6 +8,7 @@ class RowParser < BaseParser
     rows = @report.csv_rows(@report.blob)[@report.head_row + 1..]
 
     rows.each do |row|
+      next unless parse_row?(row)
       # start with address, the hash may lead us to a retailer
       # Then look for the retailer name
       account = row[@instruction.retailer]

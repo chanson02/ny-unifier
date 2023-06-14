@@ -8,6 +8,19 @@ class BaseParser
     raise NotImplementedError if self.class.instance_of?(BaseParser)
   end
 
+  def parse_row?(row)
+    return true unless @instruction.condition
+
+    head = @report.raw_head
+    date = Date.parse('2023-04-01')
+    begin
+      return eval(@instruction.condition)
+    rescue StandardError => e
+      puts "some sort of error message here #{e}"
+    end
+    false
+  end
+
   # full address as string
   def address_from_row(row)
     parts = @instruction.address
