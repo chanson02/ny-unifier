@@ -11,8 +11,10 @@ class BaseParser
   def parse_row?(row)
     return true unless @instruction.condition
 
+    # TODO: Make this a sandbox'd environment
+
     head = @report.raw_head
-    date = Date.parse('2023-04-01')
+    date = Date.parse('2023-04-01') # TODO: Make this dynamic
     begin
       return eval(@instruction.condition)
     rescue StandardError => e
