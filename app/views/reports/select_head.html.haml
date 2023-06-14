@@ -12,4 +12,4 @@
 - @report.files.blobs.each do |b|
   .sheet
     %h4= b.filename
-    = render partial: 'sheet_preview', locals: { rows: @report.csv_rows(b)[..9] }
+    = render partial: 'sheet_preview', locals: { rows: @report.csv_rows(b)[..15] }
