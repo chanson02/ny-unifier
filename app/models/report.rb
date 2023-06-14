@@ -94,6 +94,7 @@ class Report < ApplicationRecord
   end
 
   def set_head(blob, row)
+    # delete old head? If there's no instruction?
     self.head_row = row
     self.raw_head = csv_rows(blob)[row]
     value = Header.clean(raw_head)
