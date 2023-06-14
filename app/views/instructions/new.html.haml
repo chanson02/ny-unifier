@@ -67,12 +67,12 @@
     .invis
       %p Conditionally apply rows. Enter ruby code that will be executed.
       %p The last line must evaluate to true or false
-      %p You have access to a `raw_head` array of all the columns
+      %p You have access to a `head` array of all the columns
       %p You have access to a `row` array of all the columns
-      %p You have access to a `month` integer of the container. jan=1
+      %p You have access to a `date` ruby object that comes from the container
       %pre
-        Example:
-        col = raw_head.each_index.find { |i| Date.parse(raw_head[i]).month == month rescue false };
+        Example: Parse this row if the column contains a date that is in the containers month
+        col = head.each_index.find { |i| Date.parse(raw_head[i]).month == date.month rescue false };
         row[col]&.to_i > 0 resuce false
       %p
         Row valid if
