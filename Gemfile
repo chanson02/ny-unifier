@@ -51,6 +51,7 @@ gem "bootsnap", require: false
 gem 'haml-rails'
 gem 'roo'
 gem 'ny-addressor', github: 'nearestyou/ny-addressor'
+gem 'sidekiq'
 
 
 group :development, :test do

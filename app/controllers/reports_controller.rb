@@ -46,6 +46,12 @@ class ReportsController < ApplicationController
     @report.set_head(@report.blob, @report.head_row)
   end
 
+  def parse
+    @report = Report.find(params[:id])
+    # delete the old parsing
+    Rails.env.production? ? ParseReportJob.perform_later(@report.id) : @report.parse
+  end
+
   private
 
   def report_params
