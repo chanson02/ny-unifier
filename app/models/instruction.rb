@@ -9,7 +9,7 @@ class Instruction < ApplicationRecord
   def self.from_params(params)
     params = params[:instruction].transform_values { |v| v.blank? ? nil : v }
     address = [params[:street1], params[:street2], params[:city], params[:state], params[:postal]].map { |v| v&.to_i }
-    ins = Instruction.new(
+    ins = Instruction.find_or_create_by(
       structure: params[:structure],
       retailer: params[:retailer],
       brand: [params[:brand&.to_i]],
