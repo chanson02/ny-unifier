@@ -1,3 +1,6 @@
+- if @report.raw_head && @report.header
+  %h1 Selected Header
+  = @report.raw_head.join(' | ')
 %h1 Select Header
 
 = form_for @report, url: save_head_path(@report), method: :patch do |f|
