@@ -16,8 +16,8 @@
           = button_tag 'Parse', disabled: r.header&.instruction.nil?, class: 'btn-parse', data: { report_id: r.id }
 
 :javascript
-  function parse(report_id) {
-    console.log('parsing', report_id);
+  async function parse(report_id) {
+    fetch(`/reports/${report_id}/parse`, { method: 'GET' });
     return;
   }
 

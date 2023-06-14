@@ -7,8 +7,8 @@ class Report < ApplicationRecord
   has_many :retailers, through: :distributions
   has_many_attached :files
 
-  attr_reader :file_types
   serialize :raw_head, Array
+  attr_reader :file_types
 
   @@file_types = [
     'text/csv',
@@ -18,11 +18,7 @@ class Report < ApplicationRecord
 
   def parse
     return unless files.attached? && files.blobs.present?
-
-    xl_to_csv
-    find_head # and set it
-
-    return unless header&.instruction
+    return unless blob && header&.instruction
 
     parser = find_parser
     return unless parser

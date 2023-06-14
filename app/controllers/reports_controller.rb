@@ -15,6 +15,7 @@ class ReportsController < ApplicationController
 
     if @report.save
       redirect_to reports_path, notice: "Uploaded #{@report.name}"
+      @report.xl_to_csv
     else
       render :new
     end
@@ -50,6 +51,7 @@ class ReportsController < ApplicationController
     @report = Report.find(params[:id])
     # delete the old parsing
     Rails.env.production? ? ParseReportJob.perform_later(@report.id) : @report.parse
+    render json: { status: 'ok' }
   end
 
   private
