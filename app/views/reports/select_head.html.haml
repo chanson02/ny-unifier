@@ -1,0 +1,12 @@
+%h1 Select Header
+
+= form_for @report, url: save_head_path(@report), method: :patch do |f|
+  = f.collection_select :selected_blob, @report.files.blobs, :key, :filename, prompt: 'Select Sheet'
+  = f.number_field :head_row
+  = f.submit 'Save Head'
+
+%h2 Sheet Preview
+- @report.files.blobs.each do |b|
+  .sheet
+    %h4= b.filename
+    = render partial: 'sheet_preview', locals: { rows: @report.csv_rows(b)[..9] }

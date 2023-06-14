@@ -34,6 +34,16 @@ class ReportsController < ApplicationController
     send_data data, filename: "#{report.name}_unifier_report.csv", type: 'text/csv'
   end
 
+  def select_head
+    @report = Report.find(params[:id])
+    render 'select_head'
+  end
+
+  def save_head
+    @report = Report.find(params[:id])
+    redirect_to report_path(@report)
+  end
+
   private
 
   def report_params

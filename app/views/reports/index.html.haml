@@ -3,12 +3,13 @@
 %table{:border => 1}
   %thead
     %tr
-      - ['Report', 'Instructions?', 'Parsed?'].each do |data|
+      - ['Report', 'Header?', 'Instructions?', 'Parsed?'].each do |data|
         %td= data
   %tbody
     - @reports.each do |r|
       %tr
         %td= link_to r.name, report_path(r)
+        %td= r.header ? 'Y' : 'N'
         %td= r.header&.instruction ? 'Y' : 'N'
         %td= r.parsed ? 'Y' : 'N'
         %td

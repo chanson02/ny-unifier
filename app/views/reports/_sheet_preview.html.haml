@@ -1,0 +1,12 @@
+%table{:border=>1}
+  - debugger
+  %thead
+    %tr
+      - (rows[0].length + 1).times do |i|
+        %td= i - 1
+  %tbody
+    - rows.each_with_index do |row, i|
+      %tr
+        %td= i
+        - row.each do |v|
+          %td= v
