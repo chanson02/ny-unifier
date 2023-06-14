@@ -1,5 +1,8 @@
 %select
-  %option{value: '', data: ''} Report Select
+  - if @report
+    %option{value: @report.raw_head, data: @report.header.id}= @report.name
+  - else
+    %option{value: '', data: ''} Report Select
   - @reports.each do |report|
     %option{value: report.raw_head, data: report.header.id}= report.name
 
@@ -113,3 +116,4 @@
   }
 
   document.getElementsByTagName('select')[0].onclick = report_changed;
+  report_changed();

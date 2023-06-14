@@ -8,5 +8,6 @@ Rails.application.routes.draw do
 
   resources :retailers, only: %i[edit update]
   resources :instructions, only: %i[new create]
+  get 'instructions/new/:report_id', to: 'instructions#new', as: 'new_report_instruction'
   root 'reports#index'
 end

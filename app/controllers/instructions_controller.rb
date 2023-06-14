@@ -4,6 +4,7 @@
 class InstructionsController < ApplicationController
   def new
     @reports = Report.all
+    @report = Report.find(params[:report_id]) if params[:report_id]
     @instruction = Instruction.new
   end
 

@@ -9,8 +9,8 @@
     - @reports.each do |r|
       %tr
         %td= link_to r.name, report_path(r)
-        %td= r.header ? 'Y' : 'N'
-        %td= r.header&.instruction ? 'Y' : 'N'
+        %td= link_to (r.header ? 'Y' : 'N'), select_head_path(r)
+        %td= link_to (r.header&.instruction ? 'Y' : 'N'), new_report_instruction_path(r)
         %td= r.parsed ? 'Y' : 'N'
         %td
           %button Parse (unimplemented)
