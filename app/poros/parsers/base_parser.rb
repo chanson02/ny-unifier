@@ -45,7 +45,6 @@ class BaseParser
   end
 
   def find_or_create_retailer(name, addressor)
-    #addressor = NYAddressor.new(address)
     retailer = Retailer.find_by(adr_hash: addressor.hash) if addressor.hash
     retailer ||= Retailer.find_by(slug: name.parameterize) if name&.parameterize
     return retailer if retailer
@@ -67,21 +66,23 @@ class BaseParser
     retailer.state = row[parts[3]] if parts[3] && retailer.state.nil?
     retailer.postal = row[parts[4]] if parts[4] && retailer.postlal.nil?
 
-    snum = addressor&.parts&.fetch(:street_number)
-    snam = addressor&.parts&.fetch(:street_name)
-    slab = addressor&.parts&.fetch(:street_label)
-    sdir = addressor&.parts&.fetch(:street_direction)
-    street = snum || ''
-    street += " #{snam}" if snam
-    street += " #{slab}" if slab
-    street += " #{sdir}" if sdir
+    unless addressor&.parts
+      retailer.save
+      return retailer
+    end
+
+    parts = addressor.parts
+    street = parts[:street_number] || ''
+    street += " #{parts[:street_name]}" if parts[:street_name]
+    street += " #{parts[:street_label]}" if parts[:street_label]
+    street += " #{parts[:street_direction]}" if parts[:street_direction]
     street = nil if street.empty?
 
     retailer.street = street if street && retailer.street.nil?
-    retailer.unit = addressor&.parts&.fetch(:unit) unless retailer.unit
-    retailer.city = addressor&.parts&.fetch(:city) unless retailer.city
-    retailer.state = addressor&.parts&.fetch(:state) unless retailer.state
-    retailer.postal = addressor&.parts&.fetch(:postal) unless retailer.postal
+    retailer.unit = parts[:unit] unless retailer.unit || parts[:unit].nil?
+    retailer.city = parts[:city] unless retailer.city || parts[:city].nil?
+    retailer.state = parts[:state] unless retailer.state || parts[:state].nil?
+    retailer.postal = parts[:postal] unless retailer.postal || parts[:postal].nil?
 
     retailer.save
     retailer
