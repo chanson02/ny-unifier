@@ -24,6 +24,12 @@ class ContainersController < ApplicationController
     render :show
   end
 
+  def parse
+    @container = Container.find(params[:id])
+    @container.reports.map(&:parse)
+    render json: { status: 'ok' }
+  end
+
   private
 
   def allowed_params

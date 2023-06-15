@@ -1,4 +1,5 @@
 %h1 Container reports
+= button_tag 'Parse all', onclick: 'parse_all();'
 = render 'shared/reports_table', reports: @container.reports
 
 %h1 Change container date
@@ -6,3 +7,9 @@
   = f.label :date
   = f.date_field :date, value: @container.date
   = f.submit 'Update'
+
+:javascript
+  async function parse_all() {
+    fetch("/containers/#{@container.id}/parse");
+    return;
+  }

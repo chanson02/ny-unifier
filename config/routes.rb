@@ -11,5 +11,6 @@ Rails.application.routes.draw do
   resources :instructions, only: %i[new create]
   get 'instructions/new/:report_id', to: 'instructions#new', as: 'new_report_instruction'
   resources :containers
+  get 'containers/:id/parse', to: 'containers#parse', as: 'parse_container'
   root 'containers#index'
 end
