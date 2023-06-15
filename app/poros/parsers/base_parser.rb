@@ -18,7 +18,7 @@ class BaseParser
     # TODO: Make this a sandbox'd environment
 
     head = @report.raw_head
-    date = Date.parse('2023-04-01') # TODO: Make this dynamic
+    date = @report.container.date
     begin
       return eval(@instruction.condition)
     rescue StandardError => e
