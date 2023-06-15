@@ -3,7 +3,7 @@ class Header < ApplicationRecord
   has_many :reports
 
   IGNORE_SYMBOL = '#'.freeze
-  MONTHS = %w[january jan february feb march mar april apr may june jun july jul august aug september sep october oct november nov december dec].freeze
+  MONTHS = %w[january jan february feb march mar april apr may june jun july jul august aug september sep october oct november nov december dec].join('|').freeze
 
   # this is intended to be a row from a csv
   def self.clean(str)
@@ -18,6 +18,7 @@ class Header < ApplicationRecord
       .downcase
       .parameterize
       .gsub(/\d+/, IGNORE_SYMBOL)
-      .gsub(/\b(?:#{MONTHS.join('|')})\b/, IGNORE_SYMBOL)
+      .gsub(/(?:#{MONTHS})/, IGNORE_SYMBOL)
+      .split(IGNORE_SYMBOL).uniq.join(IGNORE_SYMBOL) # attempt to remove jan|feb|mar...
   end
 end
