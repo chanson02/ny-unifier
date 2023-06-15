@@ -21,8 +21,8 @@ class ReportsController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
-    @known = @report.retailers.select(&:known?)
-    @unknown = @report.retailers.select(&:unknown?)
+    @known = @report.retailers.select(&:known?).uniq
+    @unknown = @report.retailers.select(&:unknown?).uniq
   end
 
   def unifier_report
