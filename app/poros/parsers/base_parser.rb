@@ -59,8 +59,8 @@ class BaseParser
   def add_address_to_retailer(row, retailer, addressor)
     return if retailer.known?
 
+    parts = @instruction.address
     unless parts.compact.length < 2
-      parts = @instruction.address
       retailer.street = row[parts[0]] if parts[0] && retailer.street.nil?
       retailer.unit = row[parts[1]] if parts[1] && retailer.unit.nil?
       retailer.city = row[parts[2]] if parts[2] && retailer.city.nil?
