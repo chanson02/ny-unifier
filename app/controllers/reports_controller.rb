@@ -41,7 +41,7 @@ class ReportsController < ApplicationController
   def save_head
     @report = Report.find(params[:id])
     @report.update(selected_blob: params[:report][:selected_blob], head_row: params[:report][:head_row])
-    @report.save ? redirect_to(report_path(@report)) : render('select_head')
+    render 'select_head'
     @report.set_head(@report.blob, @report.head_row)
   end
 
