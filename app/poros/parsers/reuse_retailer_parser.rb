@@ -13,9 +13,11 @@ class ReuseRetailerParser < BaseParser
 
       account = row[@instruction.retailer]
       adr = address_from_row(row)
-      retailer = account.nil? ? last_known_retailer : find_or_create_retailer(account, adr, row)
+      addressor = NYAddressor.new(adr)
+      retailer = account.nil? ? last_known_retailer : find_or_create_retailer(account, addressor)
       last_known_retailer = retailer if retailer
 
+      add_address_to_retailer(row, retailer, addressor)
       brands = brands_from_row(row)
       brands.each do |brand|
         unless brand.nil?

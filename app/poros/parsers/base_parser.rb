@@ -44,8 +44,8 @@ class BaseParser
     full_address
   end
 
-  def find_or_create_retailer(name, address, row=nil)
-    addressor = NYAddressor.new(address)
+  def find_or_create_retailer(name, addressor)
+    #addressor = NYAddressor.new(address)
     retailer = Retailer.find_by(adr_hash: addressor.hash) if addressor.hash
     retailer ||= Retailer.find_by(slug: name.parameterize) if name&.parameterize
     return retailer if retailer
@@ -55,7 +55,36 @@ class BaseParser
     retailer = Retailer.new(name: name, slug: name.parameterize, adr_hash: addressor.hash)
     retailer.save
     retailer
-    # TODO: use the row data to set street, city, state, postal
+  end
+
+  def add_address_to_retailer(row, retailer, addressor)
+    return if retailer.known?
+
+    parts = @instruction.address
+    retailer.street = row[parts[0]] if parts[0] && retailer.street.nil?
+    retailer.unit = row[parts[1]] if parts[1] && retailer.unit.nil?
+    retailer.city = row[parts[2]] if parts[2] && retailer.city.nil?
+    retailer.state = row[parts[3]] if parts[3] && retailer.state.nil?
+    retailer.postal = row[parts[4]] if parts[4] && retailer.postlal.nil?
+
+    snum = addressor&.parts&.fetch(:street_number)
+    snam = addressor&.parts&.fetch(:street_name)
+    slab = addressor&.parts&.fetch(:street_label)
+    sdir = addressor&.parts&.fetch(:street_direction)
+    street = snum || ''
+    street += " #{snam}" if snam
+    street += " #{slab}" if slab
+    street += " #{sdir}" if sdir
+    street = nil if street.empty?
+
+    retailer.street = street if street && retailer.street.nil?
+    retailer.unit = addressor&.parts&.fetch(:unit) unless retailer.unit
+    retailer.city = addressor&.parts&.fetch(:city) unless retailer.city
+    retailer.state = addressor&.parts&.fetch(:state) unless retailer.state
+    retailer.postal = addressor&.parts&.fetch(:postal) unless retailer.postal
+
+    retailer.save
+    retailer
   end
 
   def brands_from_row(row)

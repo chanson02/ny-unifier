@@ -16,9 +16,11 @@ class RowParser < BaseParser
       adr = address_from_row(row)
       next if (account.nil? || account&.empty?) && (adr.nil? || adr&.empty?)
 
-      retailer = find_or_create_retailer(account, adr, row)
+      addressor = NYAddressor.new(adr)
+      retailer = find_or_create_retailer(account, addressor)
       next unless retailer # something failed
 
+      add_address_to_retailer(row, retailer, addressor)
       brands = brands_from_row(row)
       brands.each do |brand|
         # Create the distribution
