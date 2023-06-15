@@ -27,11 +27,19 @@ class BaseParser
     false
   end
 
+  def account_from_row(row)
+    return row[@instruction.retailer] unless @instruction.address.include?(@instruction.retailer)
+
+    row[@instruction.retailer].split(',')[0]
+  end
+
   # full address as string
   def address_from_row(row)
     parts = @instruction.address
     mask = parts.compact
     return if mask.empty?
+
+    row = row.split(',')[1].strip if parts[0] == @instruction.retailer
 
     # no street address, probably state and city
     return mask.map { |i| row[i] }.compact.join(', ') if parts[0].nil?
