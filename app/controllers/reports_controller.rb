@@ -13,6 +13,7 @@ class ReportsController < ApplicationController
     if @report.save
       render json: { status: 'ok' }
       @report.xl_to_csv
+      @report.find_head
     else
       render json: @report.errors, status: :unprocessable_entity
     end

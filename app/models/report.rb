@@ -81,12 +81,23 @@ class Report < ApplicationRecord
     end
 
     # find a row that is similar to one of the `headers`
+    blb = nil
+    ndx = nil
+    hed = nil
     blobs.each do |blob|
-      # get the first few rows and check to see if there is a header existing
+      blb = blob
+      rows = csv_rows(blob)[..20]
+      rows.each_with_index do |row, i|
+        ndx = i
+        hed = Header.find_by(value: Header.clean(row))
+        break if hed
+      end
+      break if hed
     end
+    set_head(blb, ndx) && return if hed
 
     # make a new header out of the first row
-    set_head(blobs.first, 0)
+    # set_head(blobs.first, 0)
   end
 
   def set_head(blob, row)
