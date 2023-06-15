@@ -1,0 +1,9 @@
+%h1 Create Container
+= form_with model: @container, url: containers_path do |f|
+  = f.label :name
+  = f.text_field :name
+
+  = f.label :date
+  = f.date_field :date
+
+  = f.submit 'Create'

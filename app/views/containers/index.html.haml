@@ -1,0 +1,6 @@
+%h1 Containers
+%ul
+  - @containers.each do |c|
+    %li= link_to "#{c.name} - #{c.date}", container_path(c)
+
+= link_to 'Create Container', new_container_path

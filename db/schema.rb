@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_13_203329) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_15_141524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_203329) do
 
   create_table "brands", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "containers", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -90,6 +97,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_203329) do
     t.string "selected_blob"
     t.boolean "parsed", default: false
     t.text "raw_head"
+    t.bigint "container_id"
+    t.index ["container_id"], name: "index_reports_on_container_id"
     t.index ["header_id"], name: "index_reports_on_header_id"
   end
 
@@ -113,5 +122,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_203329) do
   add_foreign_key "distributions", "reports"
   add_foreign_key "distributions", "retailers"
   add_foreign_key "headers", "instructions"
+  add_foreign_key "reports", "containers"
   add_foreign_key "reports", "headers"
 end
