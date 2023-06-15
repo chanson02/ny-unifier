@@ -8,6 +8,10 @@ class BaseParser
     raise NotImplementedError if self.class.instance_of?(BaseParser)
   end
 
+  def execute
+    raise NotImplementedError
+  end
+
   def parse_row?(row)
     return true unless @instruction.condition
 

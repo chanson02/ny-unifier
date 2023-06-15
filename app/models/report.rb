@@ -137,6 +137,8 @@ class Report < ApplicationRecord
     case ins.structure
     when 'row'
       RowParser
+    when 'reuse_retailer'
+      ReuseRetailerParser
     end
   end
 end

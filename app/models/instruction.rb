@@ -1,7 +1,8 @@
 class Instruction < ApplicationRecord
   has_many :header
   enum structure: {
-    row: 'row'
+    row: 'row',
+    reuse_retailer: 'row (reuse retailer if none)'
   }
   serialize :brand, Array
   serialize :address, Array
