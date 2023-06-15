@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/reports/:id/head', to: 'reports#select_head', as: 'select_head'
   patch '/reports/:id/head', to: 'reports#save_head', as: 'save_head'
   get '/reports/:id/parse', to: 'reports#parse', as: 'parse_report'
+  get '/reports/:id/partial-rows', to: 'reports#partial_rows', as: 'partial_rows'
 
   resources :retailers, only: %i[edit update]
 

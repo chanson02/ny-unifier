@@ -52,6 +52,11 @@ class ReportsController < ApplicationController
     render json: { status: 'ok' }
   end
 
+  def partial_rows
+    @report = Report.find(params[:id])
+    render partial: 'reports/partial_rows'
+  end
+
   private
 
   def report_params

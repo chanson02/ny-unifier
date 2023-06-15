@@ -1,16 +1,12 @@
 %select
   - if @report
-    %option{value: @report.raw_head, data: @report.header.id}= @report.name
+    %option{value: @report.id}= @report.name
   - else
     %option{value: '', data: ''} Report Select
   - @reports.each do |report|
-    %option{value: report.raw_head, data: report.header.id}= report.name
+    %option{value: report.id}= report.name
 
-%table{:border=>1}
-  %thead
-    %tr
-  %tbody
-    %tr
+#preview
 
 = form_with(model: @instruction) do |form|
   = form.hidden_field :header_id
@@ -81,31 +77,17 @@
   = form.submit 'Create'
 
 :javascript
-  function clear_table() {
-    document.getElementsByTagName('thead')[0].children[0].innerHTML = '';
-    document.getElementsByTagName('tbody')[0].children[0].innerHTML = '';
-    return;
-  }
+  async function report_changed() {
+    const container = document.getElementById('preview');
+    container.innerHTML = '';
 
-  function report_changed() {
-    clear_table();
     const select = document.getElementsByTagName('select')[0];
-    const head_id = select.selectedOptions[0].getAttribute('data');
-    document.getElementById('instruction_header_id').value = head_id;
+    const report_id = select.value;
+    if (!report_id) { return; }
 
-    const head = JSON.parse(select.value);
-    const table = document.getElementsByTagName('table')[0];
-
-    for (let i=0; i<head.length; i++) {
-      const ndx = document.createElement('td');
-      ndx.innerHTML = i;
-
-      const col = document.createElement('td');
-      col.innerHTML = head[i];
-
-      table.children[0].children[0].appendChild(ndx);
-      table.children[1].children[0].appendChild(col);
-    }
+    const request = await fetch(`/reports/${report_id}/partial-rows`, { method: 'GET' });
+    const html = await request.text();
+    container.innerHTML = html;
     return;
   }
 

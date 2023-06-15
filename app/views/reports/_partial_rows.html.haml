@@ -1,0 +1,11 @@
+%table{:border=>1}
+  %thead
+    %tr
+      - @report.raw_head.each_index do |i|
+        %td= i
+  %tbody
+    - rows = @report.csv_rows(@report.blob)[@report.head_row..@report.head_row + 10]
+    - rows.each do |row|
+      %tr
+        - row.each do |v|
+          %td= v
