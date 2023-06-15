@@ -24,10 +24,7 @@ class ReuseRetailerParser < BaseParser
           brand = Brand.find_or_create_by(name: brand)
           brand.save
         end
-
-        d = Distribution.new(report_id: @report.id, retailer_id: retailer.id)
-        d.brand_id = brand.id if brand&.id
-        d.save
+        distribute(retailer, brand, account, brands_from_row(row))
       end
     end
     @report.parsed = true

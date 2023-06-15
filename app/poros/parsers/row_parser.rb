@@ -20,7 +20,6 @@ class RowParser < BaseParser
       retailer = find_or_create_retailer(account, addressor)
       next unless retailer # something failed
 
-      debugger
       add_address_to_retailer(row, retailer, addressor)
       brands = brands_from_row(row)
       brands.each do |brand|
@@ -29,9 +28,7 @@ class RowParser < BaseParser
           brand = Brand.find_or_create_by(name: brand)
           brand.save
         end
-        d = Distribution.new(report_id: @report.id, retailer_id: retailer.id)
-        d.brand_id = brand.id if brand&.id
-        d.save
+        distribute(retailer, brand, account, brands_from_row(row))
       end
     end
     @report.parsed = true

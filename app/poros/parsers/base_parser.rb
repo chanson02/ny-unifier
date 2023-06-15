@@ -100,4 +100,13 @@ class BaseParser
     end
     result.flatten(&:strip)
   end
+
+  def distribute(retailer, brand, raw_retailer = nil, raw_brand = nil)
+    d = Distribution.new(report_id: @report.id, retailer_id: retailer.id)
+    d.brand_id = brand.id if brand&.id
+    d.address = raw_retailer.to_s
+    d.brands = raw_brand.to_s
+    d.save
+    d
+  end
 end
