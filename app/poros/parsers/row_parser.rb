@@ -20,6 +20,7 @@ class RowParser < BaseParser
       retailer = find_or_create_retailer(account, addressor)
       next unless retailer # something failed
 
+      debugger
       add_address_to_retailer(row, retailer, addressor)
       brands = brands_from_row(row)
       brands.each do |brand|
