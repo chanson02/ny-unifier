@@ -1,2 +1,8 @@
 %h1 Container reports
 = render 'shared/reports_table', reports: @container.reports
+
+%h1 Change container date
+= form_for @container do |f|
+  = f.label :date
+  = f.date_field :date, value: @container.date
+  = f.submit 'Update'

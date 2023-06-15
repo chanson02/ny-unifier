@@ -19,6 +19,11 @@ class ContainersController < ApplicationController
     @container.save ? redirect_to(containers_path) : render(:new)
   end
 
+  def update
+    @container = Container.find(params[:id])
+    render :show
+  end
+
   private
 
   def allowed_params
