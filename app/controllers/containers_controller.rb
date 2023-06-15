@@ -6,6 +6,10 @@ class ContainersController < ApplicationController
     @containers = Container.all
   end
 
+  def show
+    @container = Container.find(params[:id])
+  end
+
   def new
     @container = Container.new
   end
