@@ -31,8 +31,6 @@ class Report < ApplicationRecord
     return files.blobs.first if files.blobs.length == 1
   end
 
-  # private
-
   def xl_to_csv
     return unless files.attached? & files.blobs.present?
 

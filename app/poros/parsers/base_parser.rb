@@ -43,8 +43,10 @@ class BaseParser
   def find_or_create_retailer(name, address, row=nil)
     addressor = NYAddressor.new(address)
     retailer = Retailer.find_by(adr_hash: addressor.hash) if addressor.hash
-    retailer ||= Retailer.find_by(slug: name.parameterize)
+    retailer ||= Retailer.find_by(slug: name.parameterize) if name&.parameterize
     return retailer if retailer
+
+    return unless name&.parameterize
 
     retailer = Retailer.new(name: name, slug: name.parameterize, adr_hash: addressor.hash)
     retailer.save
@@ -55,10 +57,10 @@ class BaseParser
   def brands_from_row(row)
     return unless @instruction.brand
 
-    [@instruction.brand] unless @instruction.brand.is_a?(Array)
+    @instruction.brand = [@instruction.brand] unless @instruction.brand.is_a?(Array)
     result = []
     @instruction.brand.each do |i|
-      result << row[i].split(',')
+      result << row[i]&.split(',')
     end
     result.flatten(&:strip)
   end

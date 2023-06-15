@@ -9,6 +9,7 @@ class RowParser < BaseParser
 
     rows.each do |row|
       next unless parse_row?(row)
+
       # start with address, the hash may lead us to a retailer
       # Then look for the retailer name
       account = row[@instruction.retailer]
@@ -16,7 +17,7 @@ class RowParser < BaseParser
       next if (account.nil? || account&.empty?) && (adr.nil? || adr&.empty?)
 
       retailer = find_or_create_retailer(account, adr)
-
+      next unless retailer # something failed
 
       brands = brands_from_row(row)
       brands.each do |brand|
