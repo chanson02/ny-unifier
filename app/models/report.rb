@@ -18,9 +18,17 @@ class Report < ApplicationRecord
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ]
 
+  # unparse this file
+  def reset
+    distributions.destroy_all
+    self.parsed = false
+    save
+  end
+
   def parse
     return unless files.attached? && files.blobs.present?
     return unless blob && header&.instruction
+    reset
 
     parser = find_parser
     return unless parser
