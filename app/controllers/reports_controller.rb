@@ -3,21 +3,18 @@ class ReportsController < ApplicationController
     @reports = Report.all
   end
 
-  def new
-    @report = Report.new
-  end
-
   def create
     upload = params[:report][:file]
     @report = Report.new
+    @report.container_id = params[:report][:container_id]
     @report.name = upload.original_filename
     @report.files.attach(upload)
 
     if @report.save
-      redirect_to reports_path, notice: "Uploaded #{@report.name}"
+      render json: { status: 'ok' }
       @report.xl_to_csv
     else
-      render :new
+      render json: @report.errors, status: :unprocessable_entity
     end
   end
 
