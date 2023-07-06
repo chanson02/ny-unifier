@@ -9,7 +9,7 @@
 #preview
 
 = form_with(model: @instruction) do |form|
-  = form.hidden_field :header_id
+  = form.hidden_field :header_id, value: @report.header.id || nil
   .field
     = form.label :structure
     = form.select :structure, ['row', 'row (reuse retailer if none)']
