@@ -73,7 +73,7 @@ class BaseParser
       retailer.unit = row[parts[1]] if parts[1] && retailer.unit.nil?
       retailer.city = row[parts[2]] if parts[2] && retailer.city.nil?
       retailer.state = row[parts[3]] if parts[3] && retailer.state.nil?
-      retailer.postal = row[parts[4]] if parts[4] && retailer.postlal.nil?
+      retailer.postal = row[parts[4]] if parts[4] && retailer.postal.nil?
     end
 
     unless addressor&.parts
