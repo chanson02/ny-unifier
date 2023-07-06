@@ -103,7 +103,7 @@ class BaseParser
 
     @instruction.brand = [@instruction.brand] unless @instruction.brand.is_a?(Array)
     result = []
-    @instruction.brand.each do |i|
+    @instruction.brand.compact.each do |i|
       result << row[i]&.split(',')
     end
     result.flatten(&:strip)
