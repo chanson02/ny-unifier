@@ -22,13 +22,18 @@ class RowParser < BaseParser
 
       add_address_to_retailer(row, retailer, addressor)
       brands = brands_from_row(row)
-      brands.each do |brand|
-        # Create the distribution
-        unless brand.nil?
-          brand = Brand.find_or_create_by(name: brand)
-          brand.save
+
+      if brands.empty?
+        distribute(retailer, nil, account)
+      else
+        brands.each do |brand|
+          # Create the distribution
+          unless brand.nil?
+            brand = Brand.find_or_create_by(name: brand)
+            brand.save
+          end
+          distribute(retailer, brand, account, brands_from_row(row))
         end
-        distribute(retailer, brand, account, brands_from_row(row))
       end
     end
     @report.parsed = true
