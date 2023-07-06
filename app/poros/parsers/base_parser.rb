@@ -44,11 +44,11 @@ class BaseParser
     # no street address, probably state and city
     return mask.map { |i| row[i] }.compact.join(', ') if parts[0].nil?
 
-    full_address = row[parts[0]]
-    full_address += " #{row[parts[1]]}" if parts[1]
-    full_address += ", #{row[parts[2]]}" if parts[2]
-    full_address += " #{row[parts[3]]}" if parts[3]
-    full_address += ", #{row[parts[4]]}" if parts[4]
+    full_address = row[parts[0]].strip
+    full_address += " #{row[parts[1]].strip}" if parts[1]
+    full_address += ", #{row[parts[2]].strip}" if parts[2]
+    full_address += " #{row[parts[3]].strip}" if parts[3]
+    full_address += ", #{row[parts[4]].strip}" if parts[4]
     full_address
   end
 

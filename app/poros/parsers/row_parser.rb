@@ -12,7 +12,7 @@ class RowParser < BaseParser
 
       # start with address, the hash may lead us to a retailer
       # Then look for the retailer name
-      account = row[@instruction.retailer]
+      account = row[@instruction.retailer].strip
       adr = address_from_row(row)
       next if (account.nil? || account&.empty?) && (adr.nil? || adr&.empty?)
 
