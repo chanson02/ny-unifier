@@ -4,19 +4,24 @@ class ReportsController < ApplicationController
   end
 
   def create
-    upload = params[:report][:file]
-    @report = Report.new
-    @report.container_id = params[:report][:container_id]
-    @report.name = upload.original_filename
-    @report.files.attach(upload)
+    uploads = Array(params[:report][:file])
 
-    if @report.save
-      render json: { status: 'ok' }
-      @report.xl_to_csv
-      @report.find_head
-    else
-      render json: @report.errors, status: :unprocessable_entity
+    uploads.each do |upload|
+      next if upload == ''
+      @report = Report.new
+      @report.container_id = params[:report][:container_id]
+      @report.name = upload.original_filename
+      @report.files.attach(upload)
+
+      if @report.save
+        @report.xl_to_csv
+        @report.find_head
+      else
+        render json: @report.errors, status: :unprocessable_entity
+      end
     end
+
+    render json: { status: 'ok' }
   end
 
   def show
