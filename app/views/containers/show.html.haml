@@ -1,12 +1,14 @@
 %h1 Container reports
 = button_tag 'Parse all', onclick: 'parse_all();'
+= link_to 'Unifier Report', unifier_report_path(@container)
+
 = render 'shared/reports_table', reports: @container.reports
 
-%h1 Upload Report
+%h1 Upload Reports
 = form_with(model: Report, url: reports_path, multipart: true) do |f|
   = f.hidden_field :container_id, value: @container.id
   = f.label :file
-  = f.file_field :file
+  = f.file_field :file, multiple: true
   = f.submit 'Upload'
 
 %h1 Change container date
