@@ -55,8 +55,8 @@ class Report < ApplicationRecord
         tf.write(blob.download)
       end
 
-      # convert to csv
       wb = Roo::Spreadsheet.open(path)
+      # convert to csv
       wb.sheets.each do |sheet|
         new_name = "#{fname.rpartition('.').first}###{sheet}"
         csv = wb.sheet(sheet).to_csv

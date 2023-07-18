@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   resources :reports
-  get '/reports/:id/unifier-report', to: 'reports#unifier_report', as: 'unifier_report'
+  #get '/reports/:id/unifier-report', to: 'reports#unifier_report', as: 'unifier_report'
   get '/reports/:id/head', to: 'reports#select_head', as: 'select_head'
   patch '/reports/:id/head', to: 'reports#save_head', as: 'save_head'
   get '/reports/:id/parse', to: 'reports#parse', as: 'parse_report'
@@ -15,5 +15,6 @@ Rails.application.routes.draw do
 
   resources :containers
   get 'containers/:id/parse', to: 'containers#parse', as: 'parse_container'
+  get 'containers/:id/unifier-report', to: 'containers#unifier_report', as: 'unifier_report'
   root 'containers#index'
 end
