@@ -1,5 +1,10 @@
 # README
 
+## TODO
+Make containers range?
+Optionally overwrite container date with file date?
+distribution.brands needs to be fixed
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
