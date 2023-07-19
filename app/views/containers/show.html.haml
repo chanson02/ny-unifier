@@ -1,6 +1,7 @@
 %h1 Container reports
 = button_tag 'Parse all', onclick: 'parse_all();'
 = link_to 'Unifier Report', unifier_report_path(@container)
+= link_to 'Unknown Report', unknown_report_path(@container)
 
 = render 'shared/reports_table', reports: @container.reports
 

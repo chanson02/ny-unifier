@@ -16,5 +16,6 @@ Rails.application.routes.draw do
   resources :containers
   get 'containers/:id/parse', to: 'containers#parse', as: 'parse_container'
   get 'containers/:id/unifier-report', to: 'containers#unifier_report', as: 'unifier_report'
+  get 'containers/:id/unknown-report', to: 'containers#unknown_report', as: 'unknown_report'
   root 'containers#index'
 end

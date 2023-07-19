@@ -36,31 +36,51 @@ class ContainersController < ApplicationController
       csv << %w[Source Account\ ID Account\ Name Street Unit City State Postal Brand Phone Website Premise RAW]
       container.reports.each do |report|
         report.distributions.each do |dist|
-          retailer = Retailer.find(dist.retailer_id)
-          csv << [
-            report.name,
-            dist.retailer_id,
-            retailer.name,
-            retailer.street,
-            retailer.unit,
-            retailer.city,
-            retailer.state,
-            retailer.postal,
-            dist.brands,
-            'Not yet implemented',
-            'Not yet implemented',
-            'Not yet implemented',
-            dist.address
-          ]
+          csv << generate_csv_row(report, dist)
         end
       end
     end
+
     send_data data, filename: "#{container.name}_unifier_report.csv", type: 'text/csv'
+  end
+
+  def unknown_report
+    container = Container.find(params[:id])
+    data = CSV.generate do |csv|
+      csv << %w[Source Account\ ID Account\ Name Street Unit City State Postal Brand Phone Website Premise RAW]
+
+      container.reports.each do |report|
+        dists = report.distributions.select { |d| d.retailer.unknown? }
+        dists.each do |dist|
+          csv << generate_csv_row(report, dist)
+        end
+      end
+    end
+    send_data data, filename: "#{container.name}unknown_report.csv", type: 'text/csv'
   end
 
   private
 
   def allowed_params
     params.require(:container).permit(:name, :date)
+  end
+
+  def generate_csv_row(report, distribution)
+    retailer = distribution.retailer
+    [
+      report.name,
+      retailer.id,
+      retailer.name,
+      retailer.street,
+      retailer.unit,
+      retailer.city,
+      retailer.state,
+      retailer.postal,
+      distribution.brands,
+      'Not yet implemented',
+      'Not yet implemented',
+      'Not yet implemented',
+      distribution.address
+    ]
   end
 end
