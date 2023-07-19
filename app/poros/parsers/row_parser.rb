@@ -24,7 +24,7 @@ class RowParser < BaseParser
       brands = brands_from_row(row)
 
       if brands.empty?
-        distribute(retailer, nil, account)
+        distribute(retailer, nil, adr, account)
       else
         brands.each do |brand|
           # Create the distribution
@@ -32,7 +32,7 @@ class RowParser < BaseParser
             brand = Brand.find_or_create_by(name: brand)
             brand.save
           end
-          distribute(retailer, brand, account, brands_from_row(row))
+          distribute(retailer, brand, adr, account, brands_from_row(row))
         end
       end
     end
