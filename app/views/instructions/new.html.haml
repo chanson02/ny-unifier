@@ -12,7 +12,7 @@
   = form.hidden_field :header_id, value: @report.header.id || nil
   .field
     = form.label :structure
-    = form.select :structure, ['row', 'row (reuse retailer if none)']
+    = form.select :structure, ['row', 'row (reuse retailer if none)', 'row (brand in header)']
 
   .field
     = form.label :retailer
@@ -20,7 +20,7 @@
 
   .field
     = form.label :brand
-    = form.number_field :brand
+    = form.text_field :brand
 
   .field
     = form.label :street1
@@ -66,6 +66,7 @@
       %p You have access to a `head` array of all the columns
       %p You have access to a `row` array of all the columns
       %p You have access to a `date` ruby object that comes from the container
+      %p You have access to a `col` index for brand in header parser. This parser checks the condition for each brand, not each row
       %pre
         Example: Parse this row if the column contains a date that is in the containers month
         col = head.each_index.find { |i| Date.parse(raw_head[i]).month == date.month rescue false };

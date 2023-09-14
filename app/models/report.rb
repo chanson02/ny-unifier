@@ -147,6 +147,8 @@ class Report < ApplicationRecord
       RowParser
     when 'reuse_retailer'
       ReuseRetailerParser
+    when 'header_brand'
+      HeaderBrandParser
     end
   end
 end
