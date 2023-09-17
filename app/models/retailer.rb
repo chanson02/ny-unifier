@@ -2,6 +2,7 @@
 
 # Retailer model
 class Retailer < ApplicationRecord
+  belongs_to :chain, optional: true
   before_save :generate_slug
 
   def known?

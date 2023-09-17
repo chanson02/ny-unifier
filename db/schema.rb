@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_15_183138) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_17_200209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_183138) do
   end
 
   create_table "brands", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "chains", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -116,6 +122,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_15_183138) do
     t.string "postal"
     t.string "country"
     t.string "unit"
+    t.integer "chain_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
