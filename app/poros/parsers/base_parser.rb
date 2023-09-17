@@ -52,14 +52,29 @@ class BaseParser
     full_address
   end
 
+  def find_or_create_chain(retailer)
+    return retailer.chain if retailer.chain
+
+    chain = Chain.new(name: retailer.name)
+    chain.save
+
+    retailer.chain_id = chain.id
+    retailer.save
+    chain
+  end
+
   def find_or_create_retailer(name, addressor)
-    retailer = Retailer.find_by(adr_hash: addressor.hash) if addressor.hash
-    retailer ||= Retailer.find_by(slug: name.parameterize) if name&.parameterize
-    return retailer if retailer
+    return unless name&.parameterize || addressor&.hash
 
-    return unless name&.parameterize
+    retailer = Retailer.find_or_initialize_by(slug: name.parameterize)
+    if retailer.persisted?
+      return retailer if retailer.adr_hash && addressor&.hash && retailer.adr_hash == addressor&.hash
 
-    retailer = Retailer.new(name: name, slug: name.parameterize, adr_hash: addressor.hash)
+      chain = find_or_create_chain(retailer)
+      retailer = Retailer.new(slug: name.parameterize, chain_id: chain.id)
+    end
+
+    retailer.assign_attributes(name: name, adr_hash: addressor&.hash)
     retailer.save
     retailer
   end
